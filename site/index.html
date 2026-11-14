@@ -1,18 +1,174 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#102d38"><meta name="description" content="CERES Ventures by NOFI Labs: apoyo a la rotación y salud del suelo en Moquegua con datos de la NASA, explicado por CERES, con registros verificables.">
-<title>CERES Ventures — Rotación y suelo con datos NASA</title>
-<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./si.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d303e">
+  <meta name="description" content="CERES Ventures turns NASA Earth-observation evidence into clearer crop rotation, soil health, and water decisions for farms in Moquegua, Peru.">
+  <meta property="og:title" content="CERES Ventures — Grow smarter with Earth data">
+  <meta property="og:description" content="Compare crop rotations, understand soil and water trade-offs, and inspect the evidence behind every recommendation.">
+  <meta property="og:type" content="website">
+  <title>CERES Ventures — Crop intelligence from space</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/landing.css">
+  <script src="/config.js" defer></script>
+  <script src="/landing.js" defer></script>
 </head>
-<body><div id="app"><div class="loading-shell"><div class="loading-symbol">◈</div><h1>CERES VENTURES</h1><p>Cargando datos de la NASA…</p></div></div>
-<script src="./config.js" defer></script>
-<script src="./ceres-nasa-data.js" defer></script>
-<script src="./si-data.js" defer></script>
-<script src="./si.js" defer></script>
-<script src="./records.js" defer></script>
-<script src="./ceres.js" defer></script>
-<script src="./real-data.js" defer></script>
-<script src="./app.js" defer></script>
-</body></html>
+<body>
+  <a class="skip-link" href="#main" data-t="skip">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="CERES Ventures home">
+        <svg class="brand-icon" viewBox="0 0 80 80" aria-hidden="true">
+          <rect width="80" height="80" rx="20" fill="#087c79"/>
+          <path d="M40 11C30 24 22 34 22 46a18 18 0 0 0 36 0C58 34 50 24 40 11Z" fill="none" stroke="#e8fff8" stroke-width="3.8"/>
+          <path d="M28 49q12-6 24 0M31 56q9-4 18 0" fill="none" stroke="#76ebd6" stroke-width="3" stroke-linecap="round"/>
+          <path d="M40 46V31M39 38c-7 0-10-4-10-9 7 0 10 4 10 9Zm2-4c0-7 4-11 11-11-1 7-5 10-11 11Z" fill="#e8fff8" stroke="#e8fff8" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="40" cy="43" rx="33" ry="12" transform="rotate(-25 40 43)" fill="none" stroke="#e8fff8" stroke-width="3.8"/>
+          <circle cx="67" cy="31" r="4" fill="#7ef6d9"/>
+        </svg>
+        <span class="brand-copy"><span class="brand-name">ceres<span>ventures.</span></span><span class="brand-credit"><span data-t="by">by</span> <span class="nofi-fallback">NØFI Labs</span><span class="nofi-asset" hidden><img src="/brand/nofi-wordmark-white.svg" alt="NØFI" width="69" height="27"> <span>LABS</span></span></span></span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#how" data-t="navHow">How it works</a>
+        <a href="#evidence" data-t="navEvidence">NASA data</a>
+        <a href="#verification" data-t="navVerify">Verifiable</a>
+        <a href="#builders" data-t="navBuilders">For builders</a>
+      </div>
+      <div class="nav-actions">
+        <button class="lang-toggle" type="button" id="lang-toggle" aria-label="Switch language" title="Switch language">ES</button>
+        <a class="button button-small" href="/app" data-t="openApp">Open dashboard <span aria-hidden="true">↗</span></a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="hero-grid wrap">
+        <div class="hero-content">
+          <div class="eyebrow"><span class="live-dot"></span><span data-t="heroEyebrow">NASA SPACE APPS 2026 · FIELD SHIFT · MOQUEGUA, PERU</span></div>
+          <h1><span data-t="heroTitle1">Better rotations.</span><br><span class="accent" data-t="heroTitle2">Healthier soil.</span><br><span data-t="heroTitle3">Smarter decisions.</span></h1>
+          <p class="hero-lead" data-t="heroLead">CERES turns Earth-observation data into practical crop rotation choices. Compare water, soil, income and resilience trade-offs—then ask CERES to explain the evidence in Spanish.</p>
+          <div class="cta-row">
+            <a class="button" href="/app?farm=algarrobal" data-t="exploreApp">Explore the dashboard <span aria-hidden="true">↗</span></a>
+            <a class="button button-outline" href="/app?farm=algarrobal&amp;ceres=1" data-t="talkCeres">Talk to CERES <span aria-hidden="true">◉</span></a>
+          </div>
+          <div class="hero-trust"><span data-t="trustTitle">EARTH DATA + LOCAL CONTEXT</span><div class="trust-chips"><span>NASA POWER</span><span>ECOSTRESS</span><span>HLS</span><span>SMAP</span><span>Sentinel-2 · ESA</span></div></div>
+        </div>
+        <div class="hero-art" role="img" aria-label="Illustrative agricultural fields with satellite observation lines, not a real satellite image">
+          <div class="art-top"><span class="art-tag"><span class="live-dot"></span><span data-t="artLabel">FIELD INTELLIGENCE / MOQUEGUA</span></span><span class="art-orbit">CERES / EARTH OBSERVATION</span></div>
+          <svg class="field-art" viewBox="0 0 620 460" aria-hidden="true">
+            <defs><linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#143f48"/><stop offset="1" stop-color="#082a35"/></linearGradient><linearGradient id="fieldA" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3bc5a8"/><stop offset="1" stop-color="#1b8b7e"/></linearGradient><linearGradient id="fieldB" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7acda5"/><stop offset="1" stop-color="#348e83"/></linearGradient></defs>
+            <rect width="620" height="460" rx="24" fill="url(#sky)"/>
+            <g opacity=".2" stroke="#74d8c7" stroke-width="1"><path d="M0 70H620M0 140H620M0 210H620M0 280H620M0 350H620M0 420H620"/><path d="M70 0V460M140 0V460M210 0V460M280 0V460M350 0V460M420 0V460M490 0V460M560 0V460"/></g>
+            <path d="M55 320 286 181 552 273 316 423Z" fill="#102d35" stroke="#8edccc" stroke-width="2"/>
+            <path d="M66 316 286 190 342 211 122 337Z" fill="url(#fieldA)"/><path d="M127 340 348 214 403 234 181 359Z" fill="#2f8075"/><path d="M186 363 407 238 461 257 239 383Z" fill="url(#fieldB)"/><path d="M245 386 466 260 541 278 316 411Z" fill="#12685f"/>
+            <g stroke="#d1ffe9" opacity=".5" stroke-width="2"><path d="M86 326 305 201M103 331 324 207M145 346 365 222M162 352 383 228M204 368 425 245M223 376 445 253M264 391 483 267M285 399 505 274"/></g>
+            <path d="M313 44c-98 25-178 79-207 145-25 56 35 96 110 76" fill="none" stroke="#80e9d6" stroke-width="2" stroke-dasharray="8 9" opacity=".8"/>
+            <circle cx="313" cy="44" r="8" fill="#91ffe0"/><circle cx="313" cy="44" r="18" fill="none" stroke="#91ffe0" opacity=".45"/>
+            <path d="M315 52 354 211" stroke="#86f6da" stroke-width="2" stroke-dasharray="5 8" opacity=".6"/>
+            <g transform="translate(292 18) rotate(-27)"><rect x="-10" y="-8" width="20" height="16" rx="3" fill="#d9fff4"/><rect x="-32" y="-9" width="18" height="18" rx="2" fill="#2fc4ae" stroke="#d9fff4" stroke-width="2"/><rect x="14" y="-9" width="18" height="18" rx="2" fill="#2fc4ae" stroke="#d9fff4" stroke-width="2"/></g>
+            <g><circle cx="354" cy="211" r="7" fill="#d9fff4"/><circle cx="354" cy="211" r="28" fill="none" stroke="#9bf2da" stroke-width="2" opacity=".6"/><circle cx="354" cy="211" r="54" fill="none" stroke="#9bf2da" stroke-width="1" opacity=".35"/></g>
+            <rect x="47" y="56" width="140" height="46" rx="10" fill="#0c303b" stroke="#427e7d"/><text x="61" y="75" font-size="10" fill="#9ad9cb" font-family="sans-serif" letter-spacing="2">OBSERVATION</text><text x="61" y="93" font-size="13" fill="#f3fffa" font-family="sans-serif">NASA + ESA</text>
+            <rect x="410" y="79" width="158" height="49" rx="10" fill="#0c303b" stroke="#427e7d"/><text x="424" y="99" font-size="10" fill="#9ad9cb" font-family="sans-serif" letter-spacing="1.4">SOIL + ROTATION</text><text x="424" y="117" font-size="13" fill="#f3fffa" font-family="sans-serif">Evidence layers</text>
+          </svg>
+          <div class="art-bottom"><span data-t="artDisclaimer">Conceptual visualization · not a satellite image</span><span class="signal"><span class="live-dot"></span>NASA / ESA</span></div>
+        </div>
+      </div>
+      <div class="hero-bottom wrap"><span data-t="heroBottom">A decision-support tool—not a replacement for local agronomic judgment.</span><a href="#how" data-t="discover">Discover how it works ↓</a></div>
+    </section>
+
+    <section class="section section-light" id="problem">
+      <div class="wrap">
+        <div class="section-head"><div><p class="kicker" data-t="problemKicker">THE CHALLENGE</p><h2 data-t="problemTitle">A farm is a system.<br>Every decision has trade-offs.</h2></div><p data-t="problemLead">In dry valleys, a good recommendation must account for water demand, soil cover, income, equipment and seasonal risk—not just a single satellite reading.</p></div>
+        <div class="problem-grid">
+          <article class="feature-card"><div class="feature-icon">≈</div><h3 data-t="problem1Title">Water pressure</h3><p data-t="problem1Text">Changing rainfall and irrigation constraints make every rotation decision matter.</p></article>
+          <article class="feature-card"><div class="feature-icon">✳</div><h3 data-t="problem2Title">Soil vulnerability</h3><p data-t="problem2Text">Bare soil, slope and changing cover affect long-term farm resilience.</p></article>
+          <article class="feature-card"><div class="feature-icon">↗</div><h3 data-t="problem3Title">Uncertain trade-offs</h3><p data-t="problem3Text">A strategy can save water yet add labor, cost or crop risk. CERES makes those trade-offs visible.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-mist" id="how">
+      <div class="wrap">
+        <p class="kicker" data-t="howKicker">HOW CERES WORKS</p><h2 data-t="howTitle">From satellite signals to farm decisions.</h2>
+        <div class="steps">
+          <article class="step"><span class="step-num">01</span><div class="step-visual">⌖</div><h3 data-t="step1Title">Choose a farm</h3><p data-t="step1Text">Start with El Algarrobal, Carumas or Samegua in Moquegua, Peru.</p></article>
+          <article class="step"><span class="step-num">02</span><div class="step-visual">◉</div><h3 data-t="step2Title">Set priorities</h3><p data-t="step2Text">Balance water, soil, income, resilience and practical constraints.</p></article>
+          <article class="step"><span class="step-num">03</span><div class="step-visual">≋</div><h3 data-t="step3Title">Compare rotations</h3><p data-t="step3Text">Review the current practice alongside alternative strategies and uncertainty.</p></article>
+          <article class="step"><span class="step-num">04</span><div class="step-visual">◇</div><h3 data-t="step4Title">Inspect the evidence</h3><p data-t="step4Text">See the sources, gaps, recommendation basis and record status.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-light" id="evidence">
+      <div class="wrap">
+        <div class="section-head"><div><p class="kicker" data-t="evidenceKicker">LIVE EVIDENCE / LOCAL FILES</p><h2 data-t="evidenceTitle">Not a made-up demo.<br>Inspectable farm evidence.</h2></div><p data-t="evidenceLead">These panels read the bundled evidence JSON directly. Missing, partial or unanchored data stays visibly marked.</p></div>
+        <div class="evidence-shell">
+          <div class="evidence-tabs" role="group" aria-label="Select farm"><button type="button" class="farm-tab active" data-farm="algarrobal">El Algarrobal</button><button type="button" class="farm-tab" data-farm="carumas">Carumas</button><button type="button" class="farm-tab" data-farm="samegua">Samegua</button></div>
+          <div class="evidence-main">
+            <div class="evidence-top"><div><span class="small-label" data-t="evidenceSelected">SELECTED FARM / EVIDENCE FILE</span><h3 id="farm-title">El Algarrobal</h3><p id="farm-period" class="muted" aria-live="polite">—</p></div><span class="status-badge warning" id="evidence-status" data-t="loading">Loading evidence…</span></div>
+            <div class="metric-grid">
+              <div class="metric"><span data-t="metricEt">Observed ET estimate</span><strong id="metric-et">—</strong><small id="source-et">—</small></div>
+              <div class="metric"><span data-t="metricNdvi">Vegetation index</span><strong id="metric-ndvi">—</strong><small id="source-ndvi">—</small></div>
+              <div class="metric"><span data-t="metricRain">Monthly precipitation</span><strong id="metric-rain">—</strong><small id="source-rain">—</small></div>
+            </div>
+            <div class="recommendation">
+              <div><span class="small-label" data-t="recommended">MODEL RECOMMENDATION</span><h4 id="strategy-name">—</h4><p id="strategy-basis" class="muted"></p></div>
+              <div class="saving"><span data-t="modeledDifference">Modeled water difference</span><strong id="water-difference">—</strong><small data-t="basisNote">Check the source methodology and units before use.</small></div>
+            </div>
+            <div class="caveat"><strong data-t="reviewRequired">Review required</strong><p id="farm-caveat" data-t="noEvidence">Evidence is loading. Do not treat unreviewed estimates as field measurements.</p></div>
+            <div class="evidence-actions"><a id="farm-dashboard-link" class="button button-dark" href="/app?farm=algarrobal" data-t="viewFarm">View this farm in dashboard ↗</a><span class="source-label" data-t="sourceFile">Source: bundled evidence JSON</span></div>
+          </div>
+        </div>
+        <div class="season-card"><div><p class="kicker" data-t="seasonKicker">SEASONAL SIGNALS</p><h3 data-t="seasonTitle">Ground cover, month by month</h3><p class="muted" data-t="seasonNote">Only months explicitly flagged in the evidence are highlighted. Unavailable data is not inferred.</p></div><div id="season-strip" class="season-strip" aria-label="Monthly ground cover status"></div><p class="season-status" id="season-status" aria-live="polite"></p></div>
+      </div>
+    </section>
+
+    <section class="section section-mist" id="data">
+      <div class="wrap"><div class="section-head"><div><p class="kicker" data-t="dataKicker">DATA, EXPLAINED</p><h2 data-t="dataTitle">Different sensors. Different questions.</h2></div><p data-t="dataLead">Satellite data supports decisions; it does not measure every field condition or replace ground truth.</p></div>
+        <div class="dataset-grid">
+          <article class="dataset"><span>NASA · ECOSTRESS</span><h3 data-t="ds1Title">Evapotranspiration</h3><p data-t="ds1Text">Thermal observations help estimate water loss from land and vegetation; coverage can be irregular.</p></article>
+          <article class="dataset"><span>NASA/USGS · HLS</span><h3 data-t="ds2Title">Vegetation cover</h3><p data-t="ds2Text">Harmonized Landsat and Sentinel imagery helps track vegetation signals and NDVI.</p></article>
+          <article class="dataset"><span>NASA · POWER</span><h3 data-t="ds3Title">Climate context</h3><p data-t="ds3Text">Weather and reference evapotranspiration provide broader climate context, not field-scale measurements.</p></article>
+          <article class="dataset"><span>NASA · SMAP</span><h3 data-t="ds4Title">Soil moisture</h3><p data-t="ds4Text">Regional soil moisture observations are useful but much coarser than individual farm plots.</p></article>
+          <article class="dataset"><span>ESA · Sentinel-2</span><h3 data-t="ds5Title">Crop cover detail</h3><p data-t="ds5Text">Partner imagery helps assess field vegetation, subject to cloud and pixel checks.</p></article>
+          <article class="dataset"><span>NASA · SRTM</span><h3 data-t="ds6Title">Terrain and slope</h3><p data-t="ds6Text">Elevation and slope support relative erosion-risk screening.</p></article>
+          <article class="dataset"><span>ISRIC · SoilGrids</span><h3 data-t="ds7Title">Soil properties</h3><p data-t="ds7Text">Modeled soil layers add context; local sampling remains important.</p></article>
+          <article class="dataset"><span>CHIRPS / GPM IMERG</span><h3 data-t="ds8Title">Rainfall signals</h3><p data-t="ds8Text">Sources and substitutes are disclosed in each evidence file, including pending access.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="verification">
+      <div class="wrap">
+        <div class="section-head"><div><p class="kicker mint" data-t="verifyKicker">VERIFIABLE BY DESIGN</p><h2 data-t="verifyTitle">A recommendation should have a traceable history.</h2></div><p data-t="verifyLead">CERES prepares evidence fingerprints for verification on the NØFI Avalanche L1. A record is called anchored only when a real transaction is available.</p></div>
+        <div class="chain-flow" aria-label="Evidence verification flow"><div><span>01</span><strong>NASA + ESA</strong><small data-t="flow1">Earth observations</small></div><b>→</b><div><span>02</span><strong>Earth oracle</strong><small data-t="flow2">Farm evidence JSON</small></div><b>→</b><div><span>03</span><strong>SHA-256</strong><small data-t="flow3">Evidence digest</small></div><b>→</b><div><span>04</span><strong>NØFI L1</strong><small data-t="flow4">Transaction if anchored</small></div></div>
+        <div class="verify-bar"><div><span class="small-label" data-t="latestRecord">LATEST SELECTED FARM RECORD</span><p id="record-summary" data-t="recordPending">Evidence is available; an on-chain transaction has not been verified here.</p><code id="record-hash">—</code></div><a class="button button-outline" id="verify-link" href="/verify/" data-t="inspectRecord">Inspect verification ↗</a></div>
+        <p class="dark-note" data-t="chainDisclosure">NØFI Avalanche L1 · chain ID 880024 · testnet. Network features and future interoperability are not represented as live unless independently confirmed.</p>
+      </div>
+    </section>
+
+    <section class="section section-light" id="builders">
+      <div class="wrap builders-grid"><div><p class="kicker" data-t="buildersKicker">FOR BUILDERS / JUDGES</p><h2 data-t="buildersTitle">Evidence as an API.<br>Payment per request.</h2><p class="builders-lead" data-t="buildersLead">The x402 architecture is designed to let authorized clients pay for individual farm-evidence requests. The farmer experience stays free of wallets and crypto terminology.</p><div class="api-flow"><span>HTTP 402</span><b>→</b><span data-t="apiPayment">Testnet payment</span><b>→</b><span>HTTP 200 + JSON</span></div><div class="cta-row"><a class="button button-dark" href="/api-docs" data-t="apiDocs">Explore API docs ↗</a><a class="button button-muted" id="x402-demo" href="/api-docs" data-t="tryDemo">Try x402 demo ↗</a></div><p class="tiny" id="x402-status" data-t="x402NotConfigured">The live payment demo is not configured on this static site.</p></div><div class="code-card"><div class="code-top"><span>TERMINAL / EXAMPLE FLOW</span><span class="code-dot"></span></div><pre><code>GET /v1/evidence?farm=algarrobal
+
+<span class="code-yellow">HTTP/1.1 402 Payment Required</span>
+Payment-Required: ...
+
+<span class="code-comment"># Client pays on configured testnet</span>
+
+<span class="code-mint">HTTP/1.1 200 OK</span>
+Content-Type: application/json
+{ "farm": "...", "evidence": "..." }</code></pre><p data-t="codeDisclaimer">Illustrative protocol sequence, not a live payment response.</p></div></div>
+    </section>
+
+    <section class="section section-mist" id="voice">
+      <div class="wrap voice-panel"><div class="voice-orb" aria-hidden="true"><span>◉</span></div><div><p class="kicker" data-t="voiceKicker">CERES VOICE ASSISTANT</p><h2 data-t="voiceTitle">The science, explained like a conversation.</h2><p data-t="voiceText">Ask why a rotation is recommended, what remains uncertain, and which risks to review with local agronomists. Spanish-first, with voice available when the service is configured.</p></div><a class="button" href="/app?farm=algarrobal&amp;ceres=1" data-t="startConversation">Open CERES ↗</a></div>
+    </section>
+
+    <section class="section section-light" id="roadmap"><div class="wrap"><div class="section-head"><div><p class="kicker" data-t="roadmapKicker">IMPACT & ROADMAP</p><h2 data-t="roadmapTitle">Built for real decisions. Honest about what's next.</h2></div></div><div class="roadmap-grid"><article><span class="roadmap-state" data-t="currentStage">PROTOTYPE</span><h3 data-t="roadmap1Title">Moquegua pilot farms</h3><p data-t="roadmap1Text">Explore the bundled evidence for El Algarrobal, Carumas and Samegua; verify farm coordinates and assumptions locally.</p></article><article><span class="roadmap-state" data-t="nextStage">NEXT</span><h3 data-t="roadmap2Title">Ground validation</h3><p data-t="roadmap2Text">Confirm crop calendars, field boundaries, irrigation practice and soil conditions with farmers and agronomists.</p></article><article><span class="roadmap-state" data-t="nextStage">NEXT</span><h3 data-t="roadmap3Title">Connected verification</h3><p data-t="roadmap3Text">Connect the live oracle, record registry, explorer and x402 demo once deployed and independently tested.</p></article></div></div></section>
+
+    <section class="section section-dark section-last" id="team"><div class="wrap team-grid"><div><p class="kicker mint" data-t="teamKicker">THE TEAM</p><h2 data-t="teamTitle">Built at NASA Space Apps Moquegua 2026.</h2><p data-t="teamText">CERES Ventures is a NØFI Labs project. Individual team names and roles will be added after confirmation.</p></div><a class="button button-outline" href="https://github.com/chris-nofi/nofi-space" target="_blank" rel="noopener noreferrer" data-t="viewCode">View project code ↗</a></div></section>
+  </main>
+  <footer class="footer"><div class="wrap footer-grid"><div><strong>ceres<span>ventures.</span></strong><p data-t="footerText">NASA data for more resilient farms.</p></div><div class="footer-links"><a href="/app" data-t="footerApp">Dashboard</a><a href="/api-docs">API</a><a href="#verification" data-t="footerVerify">Verification</a><a href="https://github.com/chris-nofi/nofi-space" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="wrap footer-legal"><p data-t="disclosure">Decision support only. Validate recommendations locally. AI-assisted development and explanations; underlying data and assumptions are disclosed. NASA does not endorse this project.</p><p data-t="attribution">Data: NASA, ESA Copernicus, CHIRPS, ECMWF ERA5, ISRIC SoilGrids and other attributed partners. © CERES Ventures / NØFI Labs.</p></div></footer>
+</body>
+</html>
