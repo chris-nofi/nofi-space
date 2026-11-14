@@ -1,0 +1,32 @@
+{
+  "_note": "SYNTHETIC monthly climatology used only until the NASA POWER cache exists (python -m earth_oracle.cli power). Shaped like each zone: highland bimodal-free rainy season Dec-Mar with winter frost (Carumas), hyper-arid inland valley (Samegua), foggy hyper-arid coast (El Algarrobal). sd = interannual standard deviation used by the Monte Carlo.",
+  "farms": {
+    "carumas": {
+      "tmax": [17, 17, 17, 18, 18, 17, 17, 18, 19, 19, 19, 18],
+      "tmin": [5, 5, 5, 3, 0, -2, -2, -1, 1, 3, 4, 5],
+      "rainMm": [85, 100, 70, 15, 2, 0, 0, 1, 3, 6, 15, 45],
+      "rh": [70, 72, 70, 55, 40, 35, 33, 35, 40, 45, 50, 60],
+      "u2": [2.5, 2.5, 2.5, 2.6, 2.8, 3.0, 3.0, 3.0, 2.9, 2.8, 2.7, 2.6],
+      "rsMj": [20, 19, 19, 20, 19, 18, 19, 21, 23, 24, 24, 22],
+      "sd": {"tmax": 1.0, "tmin": 1.3, "rainLog": 0.45}
+    },
+    "samegua": {
+      "tmax": [29, 29, 29, 28, 27, 25, 25, 25, 26, 27, 28, 29],
+      "tmin": [14, 15, 14, 12, 10, 8, 8, 9, 10, 11, 12, 13],
+      "rainMm": [3, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      "rh": [55, 57, 56, 52, 48, 46, 45, 45, 47, 48, 50, 52],
+      "u2": [2.5, 2.5, 2.4, 2.3, 2.2, 2.2, 2.3, 2.5, 2.7, 2.8, 2.7, 2.6],
+      "rsMj": [26, 25, 24, 21, 18, 16, 17, 19, 22, 25, 27, 27],
+      "sd": {"tmax": 0.9, "tmin": 1.0, "rainLog": 0.8}
+    },
+    "algarrobal": {
+      "tmax": [27, 28, 27, 25, 23, 21, 20, 20, 21, 22, 24, 25],
+      "tmin": [18, 19, 18, 16, 14, 13, 12, 12, 13, 14, 15, 17],
+      "rainMm": [1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+      "rh": [72, 72, 73, 75, 78, 80, 81, 80, 78, 76, 74, 73],
+      "u2": [3.0, 3.0, 2.9, 2.8, 2.6, 2.5, 2.5, 2.6, 2.8, 3.0, 3.1, 3.1],
+      "rsMj": [24, 24, 22, 19, 15, 12, 12, 14, 17, 20, 23, 24],
+      "sd": {"tmax": 0.9, "tmin": 0.8, "rainLog": 0.9}
+    }
+  }
+}

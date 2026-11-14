@@ -1,0 +1,43 @@
+{
+ "name": "Agua Clara SI water-use model",
+ "version": "0.1.0",
+ "trainedAt": "2026-11-14T03:21:27+00:00",
+ "target": "monthly mean field evapotranspiration, mm/day (ECOSTRESS-like)",
+ "features": [
+  "month_sin",
+  "month_cos",
+  "et0",
+  "tmax",
+  "tmin",
+  "rain_mm",
+  "ndvi",
+  "elev_km",
+  "irrigated"
+ ],
+ "trainingData": "SYNTHETIC physics-based simulation (replace with ECOSTRESS once cached)",
+ "rows": 1728,
+ "groups": 144,
+ "validation": "5-fold GroupKFold by farm-year (no leakage across years)",
+ "comparison": {
+  "physics": {
+   "mae": 0.716,
+   "r2": 0.715
+  },
+  "linear": {
+   "mae": 0.621,
+   "r2": 0.777
+  },
+  "gbm": {
+   "mae": 0.472,
+   "r2": 0.847,
+   "coverage80": 0.743
+  }
+ },
+ "selected": "gbm",
+ "uncertainty": "p10–p90 from quantile gradient boosting; 'coverage80' is the share of held-out values inside that band (target ≈ 0.80)",
+ "limits": [
+  "Trained on synthetic data until real ECOSTRESS overpasses are cached.",
+  "NDVI is a proxy for crop cover; it saturates in dense canopies.",
+  "ECOSTRESS measures water consumed, not water delivered by the canal."
+ ]
+}

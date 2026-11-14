@@ -13,3 +13,12 @@ Verified before handoff, November 13, 2026:
 | NØCHAIN deploy | Waiting on RPC URL, chain ID and test keys from the NOFI devs — Task T3.2 |
 
 Add new results below as tasks complete.
+
+## SI engine (branch feat/si-engine)
+
+| Check | Result |
+|---|---|
+| `oracle`: `pytest -q` | 26 passed (10 original + 16 SI) |
+| SI model comparison (synthetic data, GroupKFold 5) | physics MAE 0.72 · ridge 0.62 · GBM 0.47 mm/day; GBM 80 % band coverage 0.74 |
+| `web`: `npm run build` | Passes after Sofía → CERES rename |
+| Real-data training | Not yet: needs ECOSTRESS + POWER + HLS caches (T5.5) |

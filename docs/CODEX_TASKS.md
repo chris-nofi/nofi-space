@@ -124,3 +124,39 @@ Work top to bottom. Each task lists files, what to do, and how to know it's done
 
 ### T4.3 Video
 - Follow `docs/05_DEMO_SCRIPT.md`. Spanish audio, English subtitles, ≤ 2:00.
+
+---
+
+## Phase 5 — SI engine + CERES in the dashboard (see docs/07_SI_MODEL.md)
+
+The backend is done: `POST /v1/si/analyze` returns all four modules. Build the UI against `docs/examples/si_analyze_samegua.json` first (works offline), then call the oracle when `VITE_ORACLE_URL` is set.
+
+### T5.0 API client + offline fixture
+- `web/src/lib/si.ts`: `analyze({farmId, priorities, scenario, lang})` → POST `/v1/si/analyze`; fall back to the bundled example JSON for Samegua and the current example data for other farms.
+- **Done when:** the dashboard renders the SI panels with no oracle running.
+
+### T5.1 Module tabs — "Mission terminal" panel
+A tabbed panel under the water card, matching the challenge's four modules:
+1. **Comparar / Compare** — the strategy rows already exist; feed them from `compare.strategies` (water p50, soil, income, deltas).
+2. **Compensaciones / Trade-offs** — radar chart (4 axes: water, soil, income, resilience) overlaying current vs selected strategy from `tradeoffs.radar`; Pareto badge; show `tradeoffs.formula` in the Sources drawer.
+3. **Riesgo / Risk** — 12 × 5 heatmap from `risk.strategies[id].grid` (months × frost, heat, water, bare, salinity), cell opacity = probability; highlight `peak`; "todo el año" label when `yearRound`.
+4. **Incertidumbre / Uncertainty** — p10–p90 bars for water and income per strategy, "gana X de 100 años" from `rankFirstProbability`, a stacked bar of `drivers` (climate / crop model / market), and the confidence badge with `uncertainty.why.rule` in the drawer.
+- **Done when:** all four tabs render from the fixture at 390 px and 1280 px, in both themes and languages.
+
+### T5.2 Priority sliders and scenario sliders
+- "Mis prioridades": water, soil, income, resilience (0–100, normalized). "¿Y si…?": rain −50 % … +50 %, warming 0 … +3 °C.
+- Debounce 400 ms, re-call `/v1/si/analyze` with `draws: 200`. Show a subtle loading state; keep the last result visible.
+- **Done when:** moving rain to −40 % visibly raises water-deficit cells in the risk heatmap.
+
+### T5.3 CERES upgrade
+- The CERES card reads `voice[lang].text` from the API (fallback: farm example text). Keep the "Escuchar" button (Web Speech API, `es-PE`).
+- Optional LLM rephrasing (server-side only, e.g. Claude API): input = the `voice.bullets` + key numbers; system prompt must forbid new numbers and keep the Agencia Agraria reminder. Cache per request hash.
+- Optional: `/v1/ceres/brief` for the NOFI Telegram mini app.
+- **Done when:** CERES text changes when priorities change.
+
+### T5.4 Water-use band
+- On the water chart, draw the SI model p10–p90 band from `waterUse.current` and mark months by source (solid = ECOSTRESS, hollow = SI model).
+
+### T5.5 Train on real data
+- Implement `real_dataset()` in `oracle/earth_oracle/si/model.py`: join ECOSTRESS overpasses (T2.2) with POWER monthly (T2.1) and HLS NDVI (T2.4). Retrain with `python -m earth_oracle.cli train`; update the table in docs/07_SI_MODEL.md and the model card. Recalibrate quantiles if coverage80 is far from 0.80.
+- **Done when:** model card says "real ECOSTRESS + POWER + HLS".

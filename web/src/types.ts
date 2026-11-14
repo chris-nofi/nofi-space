@@ -49,7 +49,8 @@ export interface Farm {
   refLabel: L;
   rainYear: number; // mm
   tminCold: number; // °C, coldest month mean minimum
-  sofia: L;
+  /** what CERES, the SI voice, says about this farm */
+  ceres: L;
   strategies: Strategy[];
   checks: Check[];
   /** where each card's numbers came from */

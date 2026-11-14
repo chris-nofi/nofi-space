@@ -6,7 +6,7 @@ import { loadFarm } from "./lib/api";
 import type { Farm, Lang } from "./types";
 import { BasinCard } from "./components/BasinCard";
 import { RewardFlow, type Stage } from "./components/RewardFlow";
-import { SofiaCard } from "./components/SofiaCard";
+import { CeresCard } from "./components/CeresCard";
 import { SourcesSheet } from "./components/SourcesSheet";
 import { Strategies } from "./components/Strategies";
 import { WaterCard } from "./components/WaterCard";
@@ -100,7 +100,7 @@ export default function App() {
           </div>
           <div className="col-side">
             <RewardFlow farm={farm} strategyId={strategyId} stage={st} setStage={(x) => setStageMap((m) => ({ ...m, [farmId]: x }))} onSources={() => setSheet("reward")} />
-            <SofiaCard farm={farm} />
+            <CeresCard farm={farm} />
             <BasinCard basin={BASIN} onSources={() => setSheet("basin")} />
           </div>
         </main>

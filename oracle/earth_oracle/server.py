@@ -150,3 +150,67 @@ def evidence_pack(request: Request, plot: str, season: int = 2027):
         pack = build_pack(farm, season)
         signed = {"pack": pack, "evidenceHash": evidence_hash(pack), "signature": None, "note": "unsigned: call POST /v1/attest first"}
     return JSONResponse(signed, headers={"PAYMENT-RESPONSE": _b64(settlement)})
+
+
+# ---------------- SI engine + CERES ----------------
+from pydantic import BaseModel, Field  # noqa: E402
+
+
+class Priorities(BaseModel):
+    water: float = Field(0.40, ge=0)
+    soil: float = Field(0.25, ge=0)
+    income: float = Field(0.25, ge=0)
+    resilience: float = Field(0.10, ge=0)
+
+
+class Scenario(BaseModel):
+    rainPct: float = Field(0, ge=-60, le=60, description="rain change, %")
+    tempDeltaC: float = Field(0, ge=0, le=4, description="warming, °C")
+
+
+class AnalyzeRequest(BaseModel):
+    farmId: str
+    priorities: Priorities = Priorities()
+    scenario: Scenario = Scenario()
+    draws: int = Field(300, ge=50, le=2000)
+    lang: str = Field("es", pattern="^(es|en)$")
+
+
+@app.post("/v1/si/analyze")
+def si_analyze(req: AnalyzeRequest):
+    """All four modules (compare, trade-offs, risk, uncertainty) + seasons + CERES narrative."""
+    from .si.engine import analyze
+
+    if req.farmId not in FARMS:
+        raise HTTPException(404, "unknown farm")
+    return analyze(req.farmId, req.priorities.model_dump(), req.scenario.model_dump(), draws=req.draws, lang=req.lang)
+
+
+@app.get("/v1/si/model")
+def si_model_card():
+    """Model card: training data, features, three-way comparison, limits."""
+    from .si.model import load
+
+    _, card = load()
+    return card
+
+
+@app.post("/v1/si/train")
+def si_train():
+    """Retrain the SI water-use model (uses real ECOSTRESS data when cached)."""
+    from .si import model
+
+    card = model.train(save=True)
+    model._LOADED = None
+    return card
+
+
+@app.post("/v1/ceres/brief")
+def ceres_brief(req: AnalyzeRequest):
+    """Just what CERES says, for voice clients (Telegram, TTS)."""
+    from .si.engine import analyze
+
+    if req.farmId not in FARMS:
+        raise HTTPException(404, "unknown farm")
+    a = analyze(req.farmId, req.priorities.model_dump(), req.scenario.model_dump(), draws=min(req.draws, 300), lang=req.lang)
+    return a["voice"][req.lang]

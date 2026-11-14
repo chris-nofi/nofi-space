@@ -10,12 +10,25 @@ from .evidence import plot_hash
 
 def main() -> None:
     ap = argparse.ArgumentParser(prog="earth_oracle")
-    ap.add_argument("cmd", choices=["power", "ecostress", "hls", "dswx", "plots"])
+    ap.add_argument("cmd", choices=["power", "ecostress", "hls", "dswx", "plots", "train", "analyze"])
     ap.add_argument("--farm", default="all")
     args = ap.parse_args()
     farms = load_farms()
     targets = list(farms.values()) if args.farm == "all" else [farms[args.farm]]
 
+    if args.cmd == "train":
+        from .si.model import train
+
+        card = train(save=True)
+        print(json.dumps({k: card[k] for k in ("trainingData", "rows", "comparison", "selected")}, indent=2))
+        return
+    if args.cmd == "analyze":
+        from .si.engine import analyze
+
+        for f in targets:
+            a = analyze(f.id)
+            print(f"== {f.id}: {a['voice']['es']['text']}")
+        return
     if args.cmd == "plots":
         for f in targets:
             print(f.id, plot_hash(f))

@@ -1,6 +1,6 @@
 /* Agua Clara — design tokens.
    Water teal is the accent. NASA blue, desert ochre and payout green are semantic.
-   Layout: calm single-farm dashboard; main column (water + strategies), side column (reward, Sofía, basin). */
+   Layout: calm single-farm dashboard; main column (water + strategies), side column (reward, CERES voice, basin). */
 :root {
   --bg: #f4f2ee;
   --surface: #ffffff;
@@ -202,12 +202,12 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--nasa); outline-
 .btn.small { padding: 6px 12px; font-size: 13px; }
 .sim { font: 500 11px var(--f-mono); color: var(--muted); text-align: center; }
 
-/* Sofía */
-.sofia { grid-template-columns: 40px minmax(0, 1fr); align-items: start; }
+/* CERES voice */
+.ceres { grid-template-columns: 40px minmax(0, 1fr); align-items: start; }
 .avatar { width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #9be8ef, var(--water)); }
-.sofia-body { display: grid; gap: 4px; }
-.sofia-head { display: flex; justify-content: space-between; align-items: center; }
-.sofia p { font-size: 14px; }
+.ceres-body { display: grid; gap: 4px; }
+.ceres-head { display: flex; justify-content: space-between; align-items: center; }
+.ceres p { font-size: 14px; }
 
 /* basin */
 .signals { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }

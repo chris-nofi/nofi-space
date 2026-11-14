@@ -19,7 +19,7 @@ export const FARMS: Farm[] = [
     ref: [2.8, 3.3, 2.3, 0.5, 0.07, 0, 0, 0.03, 0.1, 0.2, 0.5, 1.5],
     refLabel: { es: "Lluvia disponible", en: "Available rain" },
     rainYear: 342, tminCold: -2,
-    sofia: {
+    ceres: {
       es: "Tu cultivo usa más agua de la que llueve en octubre, noviembre, marzo y abril. En esos meses vive del agua guardada en el suelo y en la qocha. Si el suelo queda desnudo de mayo a septiembre, esa agua se pierde.",
       en: "Your crop uses more water than falls as rain in October, November, March and April. In those months it lives on water stored in the soil and the qocha. If the soil stays bare from May to September, that water is lost.",
     },
@@ -82,7 +82,7 @@ export const FARMS: Farm[] = [
     ref: [4.9, 5.1, 4.7, 3.9, 3.1, 2.6, 2.6, 3.1, 3.9, 4.5, 4.9, 5.2],
     refLabel: { es: "Mediana del valle", en: "Valley median" },
     rainYear: 15, tminCold: 5,
-    sofia: {
+    ceres: {
       es: "Tu alfalfa consume unos 17 mil m³ por hectárea al año, más que la mediana del valle. Casi no llueve aquí: todo sale del canal de Pasto Grande. Te muestro rotaciones que usan menos agua sin dejar la chacra vacía.",
       en: "Your alfalfa uses about 17,000 m³ per hectare a year, more than the valley median. It barely rains here: all of it comes from the Pasto Grande canal. Here are rotations that use less water without leaving the field empty.",
     },
@@ -144,7 +144,7 @@ export const FARMS: Farm[] = [
     ref: [3.7, 3.9, 3.6, 3.2, 2.7, 2.3, 2.2, 2.4, 2.8, 3.1, 3.4, 3.6],
     refLabel: { es: "Mediana del valle", en: "Valley median" },
     rainYear: 5, tminCold: 12,
-    sofia: {
+    ceres: {
       es: "El olivo no se rota, pero sí se puede regar distinto. ECOSTRESS muestra que tu olivar consume más que el promedio del valle en verano. Te muestro tres estrategias, incluida una cobertura que cuida el suelo pero gasta algo más de agua.",
       en: "Olive trees aren't rotated, but they can be irrigated differently. ECOSTRESS shows your grove uses more than the valley average in summer. Here are three strategies, including a cover crop that protects soil but uses a bit more water.",
     },

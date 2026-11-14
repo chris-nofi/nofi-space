@@ -12,3 +12,6 @@ contracts/cache/
 contracts/broadcast/
 contracts/lib/
 .DS_Store
+
+oracle/data/models/
+web/tsconfig.tsbuildinfo
