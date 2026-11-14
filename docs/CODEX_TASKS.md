@@ -1,5 +1,7 @@
 # Codex build plan
 
+> **Frontend target changed:** `site/` (static, Netlify drag-and-drop, no build step) is now the deployable frontend. It already has the SI view (`site/si.js`) and the CERES panel (`site/ceres.js`). Apply UI tasks from Phases 1, 5 and 6 to `site/` first. `web/` (React) is kept as reference.
+
 Work top to bottom. Each task lists files, what to do, and how to know it's done. Stop and leave a note in `docs/STATUS.md` if a task is blocked (missing key, RPC, etc.) and move to the next one. Respect every rule in `AGENTS.md`.
 
 ---

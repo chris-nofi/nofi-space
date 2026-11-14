@@ -32,7 +32,8 @@ The dashboard runs on example data with no network. To use live NASA data, run t
 | `docs/06_SUBMISSION.md` | English project description and references for the Space Apps page |
 | `docs/07_SI_MODEL.md` | SI engine and water-use model |
 | `docs/08_CERES.md` | CERES text chat (Claude API) and voice calls (Retell): setup, knowledge pack, models |
-| `web/` | Dashboard (Vite + React + TypeScript) |
+| `site/` | **Deployable site (Netlify drag-and-drop, no build):** dashboard + SI view + CERES panel. Edit `site/config.js`. |
+| `web/` | Earlier React dashboard (reference; the Netlify site in `site/` is the deploy target) |
 | `oracle/` | Earth oracle (Python + FastAPI) |
 | `contracts/` | Foundry contracts |
 

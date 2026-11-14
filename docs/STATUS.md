@@ -30,3 +30,11 @@ Add new results below as tasks complete.
 | `oracle`: `pytest -q` | 37 passed (11 new CERES tests, Claude and Retell faked) |
 | `web`: `npm run build` | Passes with CERES chat + Retell web call (retell-client-js-sdk 3.0.3) |
 | Live Claude API / Retell call | Not run: needs keys (Tasks T6.1, T6.2) |
+
+## Netlify site (site/)
+
+| Check | Result |
+|---|---|
+| Imported `agua-clara-netlify-fixed.zip` unchanged | commit "Import Netlify static site" |
+| Added SI view, CERES panel, config.js, bundled SI results | headless DOM click-through: 5 pages render, 4 SI tabs render, farm/lang switching, CERES panel opens; no runtime errors |
+| Live oracle / Claude / Retell from the deployed site | Not run: needs HTTPS oracle URL and keys in `site/config.js` |
