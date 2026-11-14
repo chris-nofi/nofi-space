@@ -1,5 +1,10 @@
 {
   "_comment": "Fill after anchoring on Fuji. Key = <farm>/<period>. The site badge and /verify read this; the live registry check is authoritative.",
-  "registry": "",
-  "records": {}
+  "registry": "0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d",
+  "records": {
+    "algarrobal/202610": {
+      "tx": "0x9bd56d2d5a944ef51b222385ac3a8b001b5b7848db03526ef559f96846ec9f21",
+      "block": 61085653
+    }
+  }
 }

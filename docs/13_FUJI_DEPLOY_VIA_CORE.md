@@ -29,15 +29,21 @@ DATA=${SALT}${INIT#0x}
 cast create2 --deployer 0x4e59b44847b379578588920cA78FbF26c0B4956C --salt $SALT --init-code $INIT   # → bootstrap address
 ```
 
-1. **Deploy**: Core `sign_and_send_evm_tx` { caip2Id `eip155:43113`, fromAddress OWNER, to `0x4e59…956C`, data `$DATA`, gasLimit `3200000` }.
+1. **Deploy**: Core `sign_and_send_evm_tx` { caip2Id `eip155:43113`, fromAddress OWNER, to `0x4e59…956C`, data `$DATA`, gasLimit `0x30d400` (3.2M; Core rejects decimal) }.
    Or from a machine with a keystore: `cast send 0x4e59b44847b379578588920cA78FbF26c0B4956C $DATA --rpc-url fuji --account <acct>`.
 2. **Check**: `cast call 0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d "owner()(address)" --rpc-url fuji` = OWNER; `farmCount()` = 3.
 3. **Anchor El Algarrobal 202610**:
    `node oracle/build-attestation.mjs oracle/evidence/algarrobal-202610.json --chain 43113 --registry 0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d`
    → take the printed tuple → `cast calldata "attest((bytes32,uint32,uint32,int32,int32,int32,int16,uint8,uint32,bytes32,bytes32,string))" '<tuple>'`
-   → Core `sign_and_send_evm_tx` { to registry, data, gasLimit `400000` }. dataHash `0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84`.
+   → Core `sign_and_send_evm_tx` { to registry, data, gasLimit `0x61a80` (400k) }. dataHash `0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84`.
 4. **Wire it**: Netlify env `WATERPROOF_REGISTRY=0xa03c…892d` and `X402_PAY_TO=<treasury>` on `ceres-ventures-preview` and
-   `gleaming-sunflower-16cdde`; `ceres-web/attestations.json` → `{"registry": "0x3238…", "records": {"algarrobal/202610": {"tx": "0x…", "block": N}}}`.
+   `gleaming-sunflower-16cdde`; `ceres-web/attestations.json` → `{"registry": "0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d", "records": {"algarrobal/202610": {"tx": "0x…", "block": N}}}`.
 
 Core MCP gotcha (14 Nov): `list_accounts` returned "Account not available. Enable the account in the policy." until the account
 and Fuji testnet were enabled in the connection's policy; a running session may need a new session to pick up a changed policy.
+
+## Result (2026-11-14)
+
+- Registry `0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d` live on Fuji: owner/oracle `0xA5a9…1D96`, `farmCount()` = 3.
+- `algarrobal-202610` anchored in tx `0x9bd56d2d5a944ef51b222385ac3a8b001b5b7848db03526ef559f96846ec9f21` (block 61085653); `verify()` = true.
+- Core's MCP signer failed with `cannot execute INSERT in a read-only transaction`, so the anchor was signed through the Core browser extension instead (signer page on ceres-fuji-signer.netlify.app). Core must be in Testnet Mode.
