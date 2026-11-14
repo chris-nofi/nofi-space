@@ -38,3 +38,14 @@ Add new results below as tasks complete.
 | Imported `agua-clara-netlify-fixed.zip` unchanged | commit "Import Netlify static site" |
 | Added SI view, CERES panel, config.js, bundled SI results | headless DOM click-through: 5 pages render, 4 SI tabs render, farm/lang switching, CERES panel opens; no runtime errors |
 | Live oracle / Claude / Retell from the deployed site | Not run: needs HTTPS oracle URL and keys in `site/config.js` |
+
+## Plan v2 alignment (Sat 14 Nov 2026, ~01:30 Peru, before the 09:00 start)
+
+| Check | Result |
+|---|---|
+| `oracle`: `pytest -q` | **45 passed**: new `test_v2.py` covers deterministic, tamper-evident records; no coordinates or timestamps in the hash; export files; x402 buyer signs a valid EIP-3009 auth that a fake facilitator recovers; price cap; wrong network; key never echoed; CERES paid path; farmer-safe records API; admin-only package |
+| `export-evidence` | 9 files (3 farms × Aug–Oct 2026), all `placeholder: true` (synthetic climate, no ECOSTRESS/HLS yet) |
+| Site headless click-through | 5 pages incl. new "Registro verificable"; 3 records per farm with dataHash and "Ejemplo · no anclado" chip; SI tabs, farm/lang switch, CERES panel OK; no runtime errors; no USDC/rewards copy in farmer views |
+| `avalanche/` (Apollo's contracts + x402 server) | **Not in this repo yet**: merge and reconcile the record schema |
+| NØFI L1 | Not touched from here. Plan v2 §0 says validator balance 0, last block #200 |
+| Nothing deployed, signed with a real key, or sent | ✔ |

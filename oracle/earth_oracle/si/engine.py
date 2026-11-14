@@ -1,4 +1,4 @@
-"""Agua Clara SI engine: one call → the four modules + seasons + the CERES narrative."""
+"""CERES Ventures SI engine: one call → the four modules + seasons + the CERES narrative."""
 from __future__ import annotations
 
 import json

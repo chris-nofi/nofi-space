@@ -1,4 +1,4 @@
-/* Agua Clara — SI view: compare · trade-offs · risk · uncertainty.
+/* CERES Ventures — SI view: compare · trade-offs · risk · uncertainty.
    Live from the oracle (POST /v1/si/analyze) when config.oracleUrl is set; otherwise the
    bundled engine results in si-data.js (default priorities, no scenario). */
 (() => {

@@ -1,16 +1,18 @@
 # AGENTS.md — instructions for Codex
 
-You are improving **Agua Clara Moquegua**, a NASA Space Apps 2026 entry (challenge: Field Shift, local event: Moquegua, Perú). Read `docs/01_PROJECT_BREAKDOWN.md` first, then work through `docs/CODEX_TASKS.md` in order.
+You are improving **CERES Ventures, by NOFI Labs**, a NASA Space Apps 2026 entry (challenge: Field Shift, local event: Moquegua, Perú). Read `docs/09_PLAN_V2.md` first (it overrides older docs on chain and money), then `docs/01_PROJECT_BREAKDOWN.md`, then work through `docs/CODEX_TASKS.md` in order.
 
 ## What this project is
-A crop-rotation explorer focused on water. NASA ECOSTRESS measures how much water each field uses; the farmer compares the existing rotation with three alternatives (evidence, gaps, risks); a satellite-verified, NØCHAIN-settled reward pays farmers for water saved; institutions buy the evidence over x402.
+A crop-rotation explorer focused on water. NASA ECOSTRESS measures how much water each field uses; the farmer compares the existing rotation with three alternatives (evidence, gaps, risks), and CERES explains it by voice or chat. Each monthly record is hashed and anchored in `WaterProofRegistry` on the NØFI L1 (chain 880024); the CERES agent, cooperatives and buyers pay per query with x402. Farmers never pay and never see crypto.
 
 ## Ground rules (do not break these)
 1. **NASA data first.** The decision tool is the product. Chain, wallet and x402 are plumbing and must stay visually secondary.
 2. **Always four strategies per farm**, including the existing one, each with `why`, `evidence`, `gaps`, `risks`. Never remove the "revisar con la Agencia Agraria / INIA" reminder or the "support, not replace" disclaimer.
 3. **Label uncertainty.** Every number shows its source and a confidence level: `field` (ECOSTRESS, HLS, SRTM), `regional` (POWER, IMERG, SMAP, GRACE-FO), `transferred` (literature from elsewhere). Example values stay marked "Datos de ejemplo / Example data" until replaced by oracle output.
-4. **Anti-gaming:** no payout unless `cropAlive == true` (HLS NDVI). Keep this in UI, oracle and contract.
-5. **Farmers never pay** per query or per attestation. x402 is only for institutional or agent buyers.
+4. **Anti-gaming:** no water-saving credit when NDVI < 0.20 (bare or dead field). Keep this in UI, oracle and contract.
+5. **Farmers never pay and never see a wallet, token or fee.** x402 is only for agent, cooperative and buyer screens.
+5b. **Never attest a `placeholder: true` record.** Only real NASA pulls go on chain.
+5c. **v2 chain code lives in `avalanche/`.** `contracts/` (WaterEscrow) is legacy reference: don't deploy it.
 6. **Privacy:** never put coordinates or farmer names on-chain. On-chain only `keccak256(polygon + salt)`.
 7. **No token speculation.** No prices, no $NO token UI, no "investment" language. Testnet amounts are labeled "testnet / simulated".
 8. **Neutral on water allocation.** The tool shows evidence; it never recommends who should get Pasto Grande water.

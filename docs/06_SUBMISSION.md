@@ -1,10 +1,10 @@
 # Space Apps project page (English)
 
 ## Project name
-Agua Clara Moquegua
+CERES Ventures (by NOFI Labs)
 
 ## High-level summary (≤ 150 words)
-In Moquegua, Peru, it almost never rains: farms depend on highland water stored in reservoirs shared with towns and mining. Agua Clara is a crop-rotation explorer focused on water. For each field it shows actual water use measured by NASA ECOSTRESS, places it in basin context (OPERA DSWx reservoir extent, GPM IMERG headwater rain, GRACE-FO storage), and compares the existing rotation with three alternatives, each with its reasoning, evidence, information gaps and risks, plus a reminder to review with local experts. Because adoption needs an incentive, the oracle turns satellite evidence into a signed record on an Avalanche L1 testnet: if water use falls and HLS shows the crop is alive, a reward from downstream water users reaches the farmer's wallet. Institutions buy evidence packs per request over x402; farmers never pay.
+In Moquegua, Peru, it almost never rains: farms depend on highland water shared with towns and mining. CERES Ventures turns NASA data into water advice a farmer can hear. For each field it combines ECOSTRESS water use, HLS NDVI, NASA POWER climate and GPM IMERG rain, and compares the existing rotation with three alternatives. Each option comes with its trade-offs, month-by-month risk, uncertainty ranges, evidence, data gaps and a reminder to check with local experts. CERES, an AI voice, explains the result in Spanish by phone or chat. Every monthly record is hashed and anchored on our own Avalanche L1 testnet, so nobody can inflate water savings. Cooperatives, buyers and the CERES agent itself pay per query with x402. Farmers never pay and never see crypto.
 
 ## Link to demo / repo / video
 - Demo: TODO
@@ -24,7 +24,8 @@ TODO if used (e.g. ESA Sentinel-1 SAR for cloud/fog periods).
 - NASA datasets above (add DOIs from each DAAC landing page).
 - FAO Irrigation and Drainage Paper 56 (Allen et al., 1998).
 - ProActivo; Agraria; El Búho; Energiminas (see docs/01_PROJECT_BREAKDOWN.md §11).
-- Tools: React, Vite, FastAPI, earthaccess, rasterio, Foundry, x402.
+- Tools: FastAPI, NumPy, scikit-learn, earthaccess, rasterio, Claude API, Retell AI, Foundry, viem, x402 (coinbase/x402 v2 spec), Avalanche L1 (Subnet-EVM, ACP-77).
+- Pre-existing team infrastructure: NØFI Chain testnet (chain 880024, built Oct 2026) and nofiscan.io explorer.
 
 ## AI use disclosure
-Built with AI coding assistants (Claude, Codex). All data sources and outputs listed; NASA data is not altered.
+Built with AI coding assistants (Claude, Codex, Apollo). The code scaffold (SI engine, CERES, site, contracts, x402 oracle) was AI-drafted on Fri 13 and Sat 14 Nov before the start, then reviewed and completed by the team during the hackathon. CERES's voice and text answers are AI-generated (Claude via Retell) and labeled "AI voice". All data sources and outputs are listed; NASA data is not altered.

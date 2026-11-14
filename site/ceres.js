@@ -1,4 +1,4 @@
-/* CERES — voice of the Agua Clara SI. Floating panel on every page:
+/* CERES — voice of the CERES Ventures SI. Floating panel on every page:
    summary (read aloud in the browser) · text chat (Claude via the oracle) · voice call (Retell).
    Lives outside #app so app.js re-renders never wipe it. */
 (() => {
@@ -32,7 +32,7 @@
   function panel() {
     if (!S.open) return "";
     const c = ctx(), log = S.chats[c.farm] || [];
-    const chips = [T("¿Cuánto puedo ganar?", "How much could I earn?"), T("¿Por qué esa rotación?", "Why that rotation?"), T("¿Qué es ECOSTRESS?", "What is ECOSTRESS?"), T("¿Cómo cobro en soles?", "How do I cash out in soles?")];
+    const chips = [T("¿Cuánto puedo ganar?", "How much could I earn?"), T("¿Por qué esa rotación?", "Why that rotation?"), T("¿Qué es ECOSTRESS?", "What is ECOSTRESS?"), T("¿Cómo sé que el dato es real?", "How do I know the data is real?")];
     return `<section id="ceres-panel" class="ceres-panel" role="dialog" aria-label="CERES">
       <header><span class="ceres-orb" aria-hidden="true"></span><div><b>CERES</b><small>${T("Voz de la superinteligencia", "Voice of the superintelligence")} · ${E(FARM_NAMES[c.farm] || c.farm)}</small></div>
         <button type="button" class="ceres-x" data-ceres="close" aria-label="${T("Cerrar", "Close")}">×</button></header>
@@ -46,7 +46,7 @@
         ${S.callStatus ? `<p class="ceres-status">${E(S.callStatus)}</p>` : ""}
         ${S.call && S.live.length ? `<div class="ceres-live">${S.live.map((l) => `<p class="${l.role === "agent" ? "c" : "u"}">${E(l.content)}</p>`).join("")}</div>` : ""}
         <div class="ceres-log" id="ceres-log">
-          ${log.length ? log.map((m) => `<p class="${m.role === "assistant" ? "c" : "u"}">${E(m.content)}</p>`).join("") : `<p class="ceres-hint">${ORACLE ? T("Pregúntame sobre tu agua, tus rotaciones o cómo se cobra la recompensa.", "Ask me about your water, your rotations or how the reward is paid.") : T("Para conversar, conecta el oráculo en config.js. Mientras tanto, puedes escuchar el resumen.", "To chat, connect the oracle in config.js. Meanwhile you can listen to the summary.")}</p>`}
+          ${log.length ? log.map((m) => `<p class="${m.role === "assistant" ? "c" : "u"}">${E(m.content)}</p>${proofChips(m.proofs)}`).join("") : `<p class="ceres-hint">${ORACLE ? T("Pregúntame sobre tu agua, tus rotaciones o cómo se guarda tu registro.", "Ask me about your water, your rotations or how your record is kept.") : T("Para conversar, conecta el oráculo en config.js. Mientras tanto, puedes escuchar el resumen.", "To chat, connect the oracle in config.js. Meanwhile you can listen to the summary.")}</p>`}
           ${S.busy ? `<p class="c thinking">${T("Revisando los datos del satélite…", "Checking the satellite data…")}</p>` : ""}
           ${S.err ? `<p class="ceres-err">${E(S.err)}</p>` : ""}
         </div>
@@ -54,8 +54,20 @@
         <form class="ceres-form" data-ceres-form><label for="ceres-q" class="ceres-sr">${T("Tu pregunta", "Your question")}</label>
           <input id="ceres-q" maxlength="600" autocomplete="off" placeholder="${T("Escribe tu pregunta", "Type your question")}" ${!ORACLE || S.busy ? "disabled" : ""}>
           <button type="submit" class="ceres-btn primary" ${!ORACLE || S.busy ? "disabled" : ""}>${T("Enviar", "Send")}</button></form>
-        <p class="ceres-safe">${T("CERES nunca te pedirá tu frase de recuperación ni tus claves. Recompensas simuladas en testnet.", "CERES will never ask for your recovery phrase or keys. Rewards are simulated on testnet.")}</p>
+        <p class="ceres-safe">${T("Para ti es gratis. CERES nunca te pedirá tu frase de recuperación ni tus claves.", "It's free for you. CERES will never ask for your recovery phrase or keys.")}</p>
       </div></section>`;
+  }
+
+  // Proof behind an answer: the record fingerprint and, when CERES paid the oracle via x402, the settlement tx.
+  function proofChips(proofs) {
+    if (!proofs || !proofs.length) return "";
+    return `<div class="ceres-proofs">${proofs.map((p) => {
+      const label = p.placeholder ? T("Datos de ejemplo", "Example data") : T("Registro verificable ✔", "Verifiable record ✔");
+      const tx = p.payment && p.payment.txUrl;
+      return tx
+        ? `<a class="ceres-proof" href="${E(tx)}" target="_blank" rel="noopener noreferrer" title="${T("CERES compró este dato al oráculo con x402", "CERES bought this data from the oracle via x402")}${p.payment.roundTripMs ? ` · ${p.payment.roundTripMs} ms` : ""}">${label} · ${T("ver prueba", "view proof")}</a>`
+        : `<span class="ceres-proof" title="${E(p.dataHash || "")}">${label} · ${E((p.dataHash || "").slice(0, 10))}…</span>`;
+    }).join("")}</div>`;
   }
 
   function paint(focusInput = false) {
@@ -71,10 +83,10 @@
     const log = (S.chats[c.farm] = [...(S.chats[c.farm] || []), { role: "user", content: text }]);
     S.busy = true; S.err = ""; paint();
     try {
-      const r = await fetch(`${ORACLE}/v1/ceres/chat`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ farmId: c.farm, lang: c.lang, messages: log.slice(-30) }) });
+      const r = await fetch(`${ORACLE}/v1/ceres/chat`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ farmId: c.farm, lang: c.lang, messages: log.slice(-30).map(({ role, content }) => ({ role, content })) }) });
       if (!r.ok) throw new Error(r.status === 503 ? "off" : "http");
       const data = await r.json();
-      S.chats[c.farm] = [...log, { role: "assistant", content: data.reply }];
+      S.chats[c.farm] = [...log, { role: "assistant", content: data.reply, proofs: data.proofs || [] }];
     } catch (e) {
       S.err = e.message === "off" ? T("CERES aún no tiene su clave de Claude configurada en el oráculo.", "CERES doesn't have its Claude key configured on the oracle yet.") : T("CERES no pudo responder. Intenta de nuevo.", "CERES couldn't answer. Please try again.");
     } finally {

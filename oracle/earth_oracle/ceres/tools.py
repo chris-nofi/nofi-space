@@ -2,15 +2,15 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from functools import lru_cache
 
-from ..config import load_farms
+from ..config import env
+from ..proof import package
 from ..si.engine import analyze
-from ..si.library import farm_rotations
+from ..x402_client import X402Error, fetch_paid
 
 FARM_IDS = ["carumas", "samegua", "algarrobal"]
-RATE_PER_M3 = 0.015          # example tariff, USDC per m³ (matches dashboard and contract tests)
-PRACTICE_COMPLIANCE = 0.90   # example verified compliance for the practice rule
 DRAWS = 200
 
 _priority_props = {
@@ -25,7 +25,7 @@ _priority_props = {
 TOOLS = [
     {
         "name": "get_farm_analysis",
-        "description": "Corre el motor SI de Agua Clara para una parcela: compara la práctica actual con tres alternativas (agua, suelo, ingreso, riesgo), ranking según prioridades, probabilidad de que cada una sea la mejor, riesgo pico, confianza y calidad de datos. Úsala antes de dar cualquier número o recomendación.",
+        "description": "Corre el motor SI de CERES Ventures para una parcela: compara la práctica actual con tres alternativas (agua, suelo, ingreso, riesgo), ranking según prioridades, probabilidad de que cada una sea la mejor, riesgo pico, confianza y calidad de datos. Úsala antes de dar cualquier número o recomendación.",
         "input_schema": {
             "type": "object",
             "properties": {"farm_id": {"type": "string", "enum": FARM_IDS}, **_priority_props},
@@ -33,15 +33,15 @@ TOOLS = [
         },
     },
     {
-        "name": "estimate_reward",
-        "description": "Estima la recompensa por agua (USDC, simulada en testnet) para una estrategia de una parcela, con la regla de pago, el máximo y el cálculo paso a paso. Úsala cuando pregunten cuánto pueden ganar o cómo se calcula el pago.",
+        "name": "get_verified_record",
+        "description": "Trae el registro verificable de datos NASA de una parcela para un mes (ET de ECOSTRESS, ET0 y lluvia de POWER, NDVI de HLS, estrategia recomendada, agua ahorrada) con su huella dataHash. CERES le compra este dato al oráculo de la Tierra por x402 (pago por consulta, en la L1 de NOFI) y el registro queda anclado en la cadena. Úsala cuando des cifras del mes, cuando pregunten si el dato es confiable o cómo se puede comprobar.",
         "input_schema": {
             "type": "object",
             "properties": {
                 "farm_id": {"type": "string", "enum": FARM_IDS},
-                "strategy_id": {"type": "string", "description": "id de la estrategia, p. ej. 'maiz-arveja', 'haba-avena', 'drip'"},
+                "period": {"type": "string", "pattern": "^[0-9]{6}$", "description": "mes AAAAMM; por defecto el último mes cerrado"},
             },
-            "required": ["farm_id", "strategy_id"],
+            "required": ["farm_id"],
         },
     },
     {
@@ -95,40 +95,41 @@ def get_farm_analysis(farm_id: str, **kw) -> dict:
     }
 
 
-def estimate_reward(farm_id: str, strategy_id: str) -> dict:
-    farm = load_farms()[farm_id]
-    rot = farm_rotations(farm_id)
-    a = _run(farm_id)
-    rows = {s["id"]: s for s in a["compare"]["strategies"]}
-    if strategy_id not in rows:
-        return {"error": f"estrategia desconocida; opciones: {list(rows)}"}
-    s = rows[strategy_id]
-    cur = next(r for r in rows.values() if r["current"])
-    if s["current"]:
-        return {"strategy_id": strategy_id, "reward_usdc": 0, "why": "La práctica actual no recibe recompensa: la recompensa premia un cambio verificado."}
-    note = "Simulado en testnet; tarifas de ejemplo. Ningún pago real está garantizado hasta que un financiador firme un programa."
-    if rot["water"] == "irrigated":
-        base, plan = cur["water"]["p50"], s["water"]["p50"]
-        saved_ha = max(0.0, base - plan)
-        total = saved_ha * farm.area_ha
-        reward = round(total * RATE_PER_M3, 2)
+def default_period(today: date | None = None) -> str:
+    d = today or date.today()
+    y, m = (d.year, d.month - 1) if d.month > 1 else (d.year - 1, 12)
+    return env("CERES_DEFAULT_PERIOD") or f"{y:04d}{m:02d}"
+
+
+def get_verified_record(farm_id: str, period: str | None = None) -> dict:
+    """Paid path (plan v2): the CERES agent buys the record from the x402 Earth oracle.
+    Local path: same record built here, clearly marked as not paid and not anchored."""
+    period = period or default_period()
+    url = env("X402_EARTH_URL")
+    if url:
+        try:
+            res = fetch_paid(f"{url.rstrip('/')}/v1/earth/{farm_id}/{period}")
+        except X402Error as e:
+            return {"error": f"no se pudo comprar el dato: {e}", "farm_id": farm_id, "period": period}
+        data = res.data
+        rec = data.get("record") or data.get("evidence") or data
+        proof = data.get("proof") or {}
         return {
-            "strategy_id": strategy_id, "rule": "por m³ ahorrado frente a tu propia línea base",
-            "baseline_m3_ha": round(base), "planned_m3_ha": round(plan), "saved_m3_total": round(total),
-            "area_ha": farm.area_ha, "rate_usdc_per_m3": RATE_PER_M3, "reward_usdc_if_met": reward,
-            "calculation": f"({round(base)} − {round(plan)}) m³/ha × {farm.area_ha} ha × {RATE_PER_M3} = {reward} USDC",
-            "condition": "Solo paga si HLS confirma que el cultivo sigue vivo y la rotación cambió (cropAlive).",
-            "note": note,
+            "farm_id": farm_id, "period": period, "values": rec.get("values", rec),
+            "dataHash": data.get("dataHash") or proof.get("dataHash"),
+            "placeholder": bool(data.get("placeholder", proof.get("placeholder", True))),
+            "recorded_on_chain": proof.get("recordedOnChain"),
+            "paid_via_x402": res.payment is not None,
+            "payment": res.payment,
+            "note_for_farmer": "Di solo: 'tu registro verificable de agua está guardado'. No hables de pagos, tokens ni billeteras con el agricultor.",
         }
-    rate = farm.raw.get("rate_usdc_per_ha", 70)
-    reward = round(rate * farm.area_ha * PRACTICE_COMPLIANCE, 2)
+    pkg = package(farm_id, period)
     return {
-        "strategy_id": strategy_id, "rule": "por hectárea × cumplimiento verificado",
-        "rate_usdc_per_ha": rate, "area_ha": farm.area_ha, "example_compliance": PRACTICE_COMPLIANCE,
-        "reward_usdc_example": reward,
-        "calculation": f"{rate} USDC/ha × {farm.area_ha} ha × {int(PRACTICE_COMPLIANCE * 100)} % = {reward} USDC",
-        "checks": ["leguminosa sembrada (HLS)", "suelo cubierto en época seca (HLS)", "qocha con agua (OPERA DSWx)", "humedad retenida (SMAP/ECOSTRESS, baja confianza)"],
-        "note": note,
+        "farm_id": farm_id, "period": period, "values": pkg["record"]["values"], "dataHash": pkg["dataHash"],
+        "datasets_used": [s["dataset"] for s in pkg["record"]["sources"] if s["used"]],
+        "placeholder": pkg["placeholder"], "recorded_on_chain": False, "paid_via_x402": False, "payment": None,
+        "note": "Oráculo x402 no configurado: registro calculado localmente, sin pago ni anclaje en la cadena.",
+        "note_for_farmer": "Si placeholder es true, di que son datos de ejemplo hasta tener las mediciones reales de la NASA.",
     }
 
 
@@ -148,7 +149,7 @@ def get_risk_calendar(farm_id: str, strategy_id: str | None = None) -> dict:
             "bare_soil_windows": seasons.get("bareWindows", [])}
 
 
-HANDLERS = {"get_farm_analysis": get_farm_analysis, "estimate_reward": estimate_reward, "get_risk_calendar": get_risk_calendar}
+HANDLERS = {"get_farm_analysis": get_farm_analysis, "get_verified_record": get_verified_record, "get_risk_calendar": get_risk_calendar}
 
 
 def run_tool(name: str, args: dict) -> str:

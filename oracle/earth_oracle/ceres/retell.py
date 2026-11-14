@@ -16,8 +16,8 @@ from .agent import get_ceres
 router = APIRouter()
 
 GREETING = {
-    "es": "Hola, soy CERES, la voz de Agua Clara. Puedo contarte cuánta agua usa tu parcela, qué rotaciones te convienen y cómo funcionan las recompensas. ¿Por dónde empezamos?",
-    "en": "Hi, I'm CERES, the voice of Agua Clara. I can tell you how much water your field uses, which rotations fit you, and how the water rewards work. Where shall we start?",
+    "es": "Hola, soy CERES, de CERES Ventures. Puedo contarte cuánta agua usa tu parcela según los satélites de la NASA, qué rotaciones te convienen y cómo queda guardado tu registro de agua. ¿Por dónde empezamos?",
+    "en": "Hi, I'm CERES, from CERES Ventures. I can tell you how much water your field uses according to NASA satellites, which rotations fit you, and how your water record is kept. Where shall we start?",
 }
 REMINDER = {
     "es": "(El agricultor lleva un rato en silencio. Pregúntale con amabilidad, en una frase, si sigue ahí o si quiere saber algo más.)",

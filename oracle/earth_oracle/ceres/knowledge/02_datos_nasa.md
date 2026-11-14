@@ -2,7 +2,7 @@
 
 | Dato | Qué mide | Qué tan fino ve | Para qué lo usamos |
 |---|---|---|---|
-| **ECOSTRESS** (Estación Espacial) | El agua que el campo devuelve al aire: evapotranspiración | Cuadros de 70 m: ve tu parcela | Cuánta agua usa tu cultivo; es la base de la recompensa |
+| **ECOSTRESS** (Estación Espacial) | El agua que el campo devuelve al aire: evapotranspiración | Cuadros de 70 m: ve tu parcela | Cuánta agua usa tu cultivo; es el dato central del registro verificable |
 | **HLS** (satélites Landsat y Sentinel-2) | Qué tan verde está el campo (NDVI) | 30 m, cada 2–3 días | Saber si hay cultivo vivo, si cambiaste de cultivo y cuándo el suelo queda desnudo |
 | **NASA POWER** | Temperatura, lluvia, sol, humedad, viento | Zona de ~50 km | Calcular cuánta agua "debería" pedir cada cultivo y los meses de helada |
 | **GPM IMERG** | Lluvia diaria | ~10 km | La lluvia en la cabecera que llena Pasto Grande |

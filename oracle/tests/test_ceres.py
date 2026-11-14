@@ -7,7 +7,7 @@ from earth_oracle.ceres import agent as agent_mod
 from earth_oracle.ceres import retell as retell_mod
 from earth_oracle.ceres.agent import Ceres, clean_history
 from earth_oracle.ceres.prompt import knowledge_pack, system_prompt
-from earth_oracle.ceres.tools import TOOLS, estimate_reward, get_farm_analysis, get_risk_calendar, run_tool
+from earth_oracle.ceres.tools import TOOLS, get_farm_analysis, get_risk_calendar, get_verified_record, run_tool
 
 
 # ---------- fake Anthropic client (no network) ----------
@@ -56,16 +56,16 @@ def tool_then_answer():
     return [
         (["Déjame revisar. "], Block(stop_reason="tool_use", content=[
             Block(type="text", text="Déjame revisar. ", citations=None),
-            Block(type="tool_use", id="t1", name="estimate_reward", input={"farm_id": "samegua", "strategy_id": "maiz-arveja"}),
+            Block(type="tool_use", id="t1", name="get_verified_record", input={"farm_id": "samegua", "period": "202610"}),
         ])),
-        (["Podrías ganar ", "unos 96 USDC."], Block(stop_reason="end_turn", content=[Block(type="text", text="Podrías ganar unos 96 USDC.")])),
+        (["Tu registro ", "está guardado."], Block(stop_reason="end_turn", content=[Block(type="text", text="Tu registro está guardado.")])),
     ]
 
 
 # ---------- knowledge + prompt ----------
 def test_knowledge_pack_covers_product_data_rotations_money():
     k = knowledge_pack()
-    for phrase in ("ECOSTRESS", "MERESE", "nunca paga", "frase de recuperación", "No es un seguro", "x402", "NØCHAIN", "Agencia Agraria"):
+    for phrase in ("ECOSTRESS", "MERESE", "nunca paga", "frase de recuperación", "No es un seguro", "x402", "880024", "WaterProofRegistry", "nofiscan", "0.20", "Agencia Agraria"):
         assert phrase in k, phrase
 
 
@@ -76,16 +76,19 @@ def test_system_prompt_has_grounding_and_voice_rules():
 
 
 # ---------- tools (real engine) ----------
-def test_estimate_reward_irrigated_matches_rule():
-    r = estimate_reward("samegua", "maiz-arveja")
-    expected = round(r["saved_m3_total"] * r["rate_usdc_per_m3"], 2)
-    assert abs(r["reward_usdc_if_met"] - expected) < 0.02 and "cropAlive" in r["condition"]
+def test_verified_record_local_path_is_honest(monkeypatch):
+    monkeypatch.delenv("X402_EARTH_URL", raising=False)
+    r = get_verified_record("samegua", "202610")
+    assert r["dataHash"].startswith("0x") and len(r["dataHash"]) == 66
+    assert r["paid_via_x402"] is False and r["recorded_on_chain"] is False
+    assert r["placeholder"] is True  # synthetic inputs until the real NASA pulls land
+    assert set(r["values"]) >= {"etMmDay", "et0MmDay", "rainMm", "ndvi", "strategy", "waterSavedM3"}
 
 
-def test_estimate_reward_practice_and_current():
-    r = estimate_reward("carumas", "haba-avena")
-    assert r["reward_usdc_example"] == 63.0
-    assert estimate_reward("samegua", "current")["reward_usdc"] == 0
+def test_knowledge_and_tools_never_promise_farmer_rewards():
+    k = knowledge_pack().lower()
+    assert "recompensa máxima" not in k and "retiras a soles" not in k
+    assert "estimate_reward" not in {t["name"] for t in TOOLS}
 
 
 def test_risk_calendar_and_analysis_shapes():
@@ -97,17 +100,17 @@ def test_risk_calendar_and_analysis_shapes():
 
 def test_run_tool_rejects_unknown_farm_and_never_raises():
     assert "error" in json.loads(run_tool("get_farm_analysis", {"farm_id": "lima"}))
-    assert "error" in json.loads(run_tool("estimate_reward", {"farm_id": "samegua", "strategy_id": "nope"}))
-    assert {t["name"] for t in TOOLS} == {"get_farm_analysis", "estimate_reward", "get_risk_calendar"}
+    assert "error" in json.loads(run_tool("get_verified_record", {"farm_id": "samegua", "period": "2026-10"}))
+    assert {t["name"] for t in TOOLS} == {"get_farm_analysis", "get_verified_record", "get_risk_calendar"}
 
 
 # ---------- agent loop ----------
 def test_agent_runs_tool_loop_and_grounds_numbers(monkeypatch):
     monkeypatch.delenv("CERES_TEXT_MODEL", raising=False)
     fake = FakeClient(tool_then_answer())
-    turn = Ceres(client=fake).reply([{"role": "user", "content": "¿Cuánto puedo ganar con maíz y arveja?"}], "samegua", "es")
-    assert turn.text.endswith("unos 96 USDC.")
-    assert turn.tool_calls[0]["name"] == "estimate_reward" and "reward_usdc_if_met" in turn.tool_calls[0]["output"]
+    turn = Ceres(client=fake).reply([{"role": "user", "content": "¿Mi dato de agua es confiable?"}], "samegua", "es")
+    assert turn.text.endswith("está guardado.")
+    assert turn.tool_calls[0]["name"] == "get_verified_record" and "dataHash" in turn.tool_calls[0]["output"]
     first, second = fake.messages.calls
     assert first["model"] == "claude-sonnet-5-5" and first["output_config"] == {"effort": "medium"}
     assert first["system"][0]["cache_control"] == {"type": "ephemeral"}
@@ -168,5 +171,7 @@ def test_chat_endpoint_requires_key_then_works(monkeypatch):
     assert c.post("/v1/ceres/chat", json={"messages": [{"role": "user", "content": "hola"}]}).status_code == 503
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test")
     monkeypatch.setattr(agent_mod, "_SINGLETON", Ceres(client=FakeClient(tool_then_answer())))
-    r = c.post("/v1/ceres/chat", json={"farmId": "samegua", "messages": [{"role": "user", "content": "¿Cuánto gano?"}]})
-    assert r.status_code == 200 and r.json()["toolCalls"][0]["name"] == "estimate_reward"
+    r = c.post("/v1/ceres/chat", json={"farmId": "samegua", "messages": [{"role": "user", "content": "¿Mi registro?"}]})
+    body = r.json()
+    assert r.status_code == 200 and body["toolCalls"][0]["name"] == "get_verified_record"
+    assert body["proofs"][0]["dataHash"].startswith("0x") and body["proofs"][0]["payment"] is None

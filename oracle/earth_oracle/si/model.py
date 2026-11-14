@@ -116,7 +116,7 @@ def train(save: bool = True) -> dict:
     models = {a: GradientBoostingRegressor(loss="quantile", alpha=a, n_estimators=150, max_depth=3, learning_rate=0.08, subsample=0.8, random_state=1).fit(X, y) for a in QUANTILES}
     best = min(cv, key=lambda k: cv[k]["mae"])
     card = {
-        "name": "Agua Clara SI water-use model",
+        "name": "CERES Ventures SI water-use model",
         "version": "0.1.0",
         "trainedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "target": "monthly mean field evapotranspiration, mm/day (ECOSTRESS-like)",

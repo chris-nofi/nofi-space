@@ -35,7 +35,7 @@ def main() -> None:
         sys.exit("PUBLIC_WSS_URL must start with wss:// (Retell connects over TLS)")
 
     body = {
-        "agent_name": "CERES · Agua Clara (NOFI Space)",
+        "agent_name": "CERES · CERES Ventures (NOFI Labs)",
         "voice_id": voice,
         "language": os.getenv("RETELL_LANGUAGE", "es-419"),  # Spanish, Latin America (no Peru-specific code)
         "response_engine": {"type": "custom-llm", "llm_websocket_url": f"{wss}/v1/ceres/retell"},

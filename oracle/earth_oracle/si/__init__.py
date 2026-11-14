@@ -1,4 +1,4 @@
-"""Agua Clara SI engine.
+"""CERES Ventures SI engine.
 
 Four modules, matching the Field Shift challenge brief:
   1. compare   — water, soil and income for the existing rotation and three alternatives

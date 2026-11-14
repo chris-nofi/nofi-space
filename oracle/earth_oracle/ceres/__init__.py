@@ -1,4 +1,4 @@
-"""CERES — conversational voice of the Agua Clara SI engine.
+"""CERES — conversational voice of the CERES Ventures SI engine.
 
 One brain, two channels:
   * text  — POST /v1/ceres/chat (Claude Sonnet 5.5 by default)

@@ -1,5 +1,7 @@
 # Contracts (NØCHAIN testnet, Fuji fallback)
 
+> **Legacy (plan v1).** Superseded by `docs/09_PLAN_V2.md` and the v2 plan's pitch (§6). Kept for reference.
+
 NØCHAIN is NOFI's Avalanche L1 (Subnet-EVM), so standard Solidity deploys unchanged.
 
 ## PlotRegistry

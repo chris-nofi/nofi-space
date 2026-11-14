@@ -1,5 +1,7 @@
 # 2-minute video (Spanish audio, English subtitles)
 
+> **Legacy (plan v1).** Superseded by `docs/09_PLAN_V2.md` and the v2 plan's pitch (§6). Kept for reference.
+
 | Time | Screen | Voice-over (ES) | Subtitle (EN) |
 |---|---|---|---|
 | 0:00–0:12 | Satellite zoom from Moquegua coast to Samegua valley (GIBS) | "En Moquegua casi no llueve. Cada gota viene de la sierra, y todos la necesitamos." | "In Moquegua it almost never rains. Every drop comes from the highlands, and everyone needs it." |

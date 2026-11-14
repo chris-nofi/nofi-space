@@ -1,4 +1,4 @@
-/* Agua Clara site config — edit before dragging the folder into Netlify.
+/* CERES Ventures site config — edit before dragging the folder into Netlify.
    Leave values empty to run fully offline (bundled SI results, no chat, no calls).
    Never put secret keys here: this file is public. */
 window.AGUA_CLARA_CONFIG = {
@@ -7,6 +7,11 @@ window.AGUA_CLARA_CONFIG = {
   // Retell PUBLIC key (domain-restricted, starts with "public_key_") and the agent id from oracle/scripts/retell_setup.py
   retellPublicKey: "",
   retellAgentId: "",
+  // Plan v2 (NØFI L1 + x402). Explorer for links, WaterProofRegistry address once deployed,
+  // and the public URL of the x402 payment demo (avalanche/x402/web/pagar.html) once it is online.
+  explorerUrl: "https://nofiscan.io",
+  registryAddress: "",
+  x402PayUrl: "",
 };
 
 /* Hooks so si.js and ceres.js can redraw after app.js renders (app.js replaces #app on every render). */

@@ -1,4 +1,6 @@
-# Agua Clara Moquegua — Project Breakdown
+# CERES Ventures (formerly Agua Clara Moquegua) — Project Breakdown
+
+> **Plan v2 (Sat 14 Nov):** the reward/escrow sections below are superseded. Farmers no longer receive rewards; NASA data is sold per query with x402 on the NØFI L1 and each monthly record is anchored in WaterProofRegistry. See `docs/09_PLAN_V2.md`.
 
 NASA Space Apps Challenge 2026 · Challenge: **Field Shift: Adapting Farms with NASA Data** · Local event: **Moquegua, Perú** · Hackathon: November 14–15, 2026.
 

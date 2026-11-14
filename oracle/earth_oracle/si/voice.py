@@ -1,4 +1,4 @@
-"""CERES — the voice of the Agua Clara SI engine.
+"""CERES — the voice of the CERES Ventures SI engine.
 
 Named after Ceres, Roman goddess of grain and the dwarf planet where NASA's Dawn mission
 found briny water. CERES only says what the engine computed: every sentence is built from

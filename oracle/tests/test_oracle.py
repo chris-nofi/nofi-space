@@ -71,23 +71,6 @@ def test_evidence_hash_canonical():
     assert evidence_hash({"b": 1, "a": 2}) == evidence_hash({"a": 2, "b": 1})
 
 
-def test_x402_gate_demo_mode(monkeypatch):
-    monkeypatch.setenv("X402_MODE", "demo")
-    from earth_oracle.server import app
-
-    c = TestClient(app)
-    plot = next(f["plotId"] for f in c.get("/v1/farms").json() if f["id"] == "samegua")
-    r = c.get(f"/v1/evidence-pack?plot={plot}&season=2027")
-    assert r.status_code == 402
-    req = json.loads(base64.b64decode(r.headers["PAYMENT-REQUIRED"]))
-    assert req["accepts"][0]["scheme"] == "exact" and req["accepts"][0]["amount"] == "50000"
-    pay = base64.b64encode(b'{"demo":true}').decode()
-    r2 = c.get(f"/v1/evidence-pack?plot={plot}&season=2027", headers={"PAYMENT-SIGNATURE": pay})
-    assert r2.status_code == 200
-    assert json.loads(base64.b64decode(r2.headers["PAYMENT-RESPONSE"]))["simulated"] is True
-    assert r2.json()["evidenceHash"].startswith("0x")
-
-
 def test_water_endpoint_without_cache():
     from earth_oracle.server import app
 

@@ -3,25 +3,25 @@
 GET  /health
 GET  /v1/farms
 GET  /v1/farms/{id}/water            → numbers the dashboard shows (from cache)
-POST /v1/attest/{id}?season=2027     → evidence pack + EIP-712 signature
-GET  /v1/evidence-pack?plot=&season= → x402-gated pack for institutions/agents (never farmers)
+GET  /v1/records/{id}?periods=202608,202609,202610 → farmer-safe summaries of the monthly earth records (hash + status)
+GET  /v1/records/{id}/{YYYYMM}/package → full record + dataHash, for the x402 oracle/attest scripts (set ORACLE_ADMIN_TOKEN)
+POST /v1/attest/{id}                 → LEGACY (WaterEscrow EIP-712, plan v1). Plan v2 attests to WaterProofRegistry.
+
+Plan v2: the paid x402 endpoint GET /v1/earth/{farm}/{YYYYMM} is served by the Node oracle in
+avalanche/x402/ (self-hosted facilitator on eip155:880024). This service builds the records it sells.
 """
 from __future__ import annotations
 
-import base64
 import json
-import secrets
 
-import requests
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 from .config import CACHE, env, load_farms
 from .evidence import build_pack, evidence_hash, plot_hash
 from .sign import sign_attestation
 
-app = FastAPI(title="Agua Clara Earth oracle", version="0.1.0")
+app = FastAPI(title="CERES Ventures Earth oracle", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"], expose_headers=["PAYMENT-REQUIRED", "PAYMENT-RESPONSE"])
 
 FARMS = load_farms()
@@ -33,13 +33,9 @@ def _cache(name: str) -> dict | None:
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
 
-def _b64(obj: dict) -> str:
-    return base64.b64encode(json.dumps(obj, separators=(",", ":")).encode()).decode()
-
-
 @app.get("/health")
 def health():
-    return {"ok": True, "farms": list(FARMS), "x402Mode": env("X402_MODE", "demo")}
+    return {"ok": True, "farms": list(FARMS), "x402": "avalanche/x402 (Node, eip155:880024)", "x402EarthUrl": env("X402_EARTH_URL")}
 
 
 @app.get("/v1/farms")
@@ -94,62 +90,41 @@ def attest(farm_id: str, season: int = 2027, measured: float | None = None, comp
     return signed
 
 
-# ---------------- x402 ----------------
-
-def _requirements(resource: str) -> dict:
-    price = float(env("X402_PRICE_USDC", "0.05"))
-    return {
-        "x402Version": 2,
-        "error": "payment required",
-        "accepts": [{
-            "scheme": "exact",
-            "network": env("X402_NETWORK", f"eip155:{env('NOCHAIN_CHAIN_ID', '43113')}"),
-            "asset": env("USDC_ADDRESS", "0x0000000000000000000000000000000000000000"),
-            "amount": str(int(round(price * 1_000_000))),  # USDC has 6 decimals
-            "payTo": env("X402_PAY_TO", "0x0000000000000000000000000000000000000000"),
-            "resource": resource,
-            "description": "Agua Clara signed evidence pack (one plot, one season)",
-            "mimeType": "application/json",
-            "maxTimeoutSeconds": 60,
-        }],
-    }
+# ---------------- earth records (plan v2) ----------------
+from .proof import package as record_package, summary as record_summary  # noqa: E402
 
 
-def _facilitator(path: str, payment: str, reqs: dict) -> dict:
-    """TODO(T3.5): confirm the facilitator request body against https://docs.x402.org."""
-    url = env("X402_FACILITATOR_URL")
-    if not url:
-        raise HTTPException(500, "X402_FACILITATOR_URL not set")
-    payload = json.loads(base64.b64decode(payment))
-    r = requests.post(f"{url.rstrip('/')}/{path}", json={"x402Version": 2, "paymentPayload": payload, "paymentRequirements": reqs["accepts"][0]}, timeout=30)
-    r.raise_for_status()
-    return r.json()
+def _periods(periods: str | None) -> list[str]:
+    from .ceres.tools import default_period
+
+    ps = [p.strip() for p in (periods or default_period()).split(",") if p.strip()]
+    if not ps or len(ps) > 12 or not all(len(p) == 6 and p.isdigit() for p in ps):
+        raise HTTPException(422, "periods must be up to 12 comma-separated YYYYMM values")
+    return ps
 
 
-@app.get("/v1/evidence-pack")
-def evidence_pack(request: Request, plot: str, season: int = 2027):
-    reqs = _requirements(str(request.url.path))
-    payment = request.headers.get("PAYMENT-SIGNATURE") or request.headers.get("X-PAYMENT")
-    if not payment:
-        return JSONResponse(reqs, status_code=402, headers={"PAYMENT-REQUIRED": _b64(reqs)})
+@app.get("/v1/records/{farm_id}")
+def records(farm_id: str, periods: str | None = None):
+    """What the farmer screen shows: hash, status, strategy, water saved. No values for sale, no prices."""
+    if farm_id not in FARMS:
+        raise HTTPException(404, "unknown farm")
+    out = [record_summary(record_package(farm_id, p)) for p in _periods(periods)]
+    return {"farmId": farm_id, "registry": env("WATER_PROOF_REGISTRY"), "explorer": env("X402_EXPLORER_URL", "https://nofiscan.io"),
+            "chainId": int(env("NOFI_CHAIN_ID", "880024")), "records": out}
 
-    mode = env("X402_MODE", "demo")
-    if mode == "facilitator":
-        v = _facilitator("verify", payment, reqs)
-        if not v.get("isValid"):
-            return JSONResponse({**reqs, "error": v.get("invalidReason", "invalid payment")}, status_code=402, headers={"PAYMENT-REQUIRED": _b64(reqs)})
-        settlement = _facilitator("settle", payment, reqs)
-    else:  # demo: accept any payload, clearly marked simulated
-        settlement = {"success": True, "transaction": "0x" + secrets.token_hex(32), "network": reqs["accepts"][0]["network"], "simulated": True}
 
-    signed = _PACKS.get(f"{plot}:{season}")
-    if not signed:
-        farm = next((f for f in FARMS.values() if plot_hash(f) == plot), None)
-        if not farm:
-            raise HTTPException(404, "unknown plot")
-        pack = build_pack(farm, season)
-        signed = {"pack": pack, "evidenceHash": evidence_hash(pack), "signature": None, "note": "unsigned: call POST /v1/attest first"}
-    return JSONResponse(signed, headers={"PAYMENT-RESPONSE": _b64(settlement)})
+@app.get("/v1/records/{farm_id}/{period}/package")
+def record_full(farm_id: str, period: str, request: Request):
+    """Full package for the x402 oracle and the attest script. Not public: it is what x402 sells."""
+    token = env("ORACLE_ADMIN_TOKEN")
+    if not token or request.headers.get("Authorization") != f"Bearer {token}":
+        raise HTTPException(401, "admin token required")
+    if farm_id not in FARMS:
+        raise HTTPException(404, "unknown farm")
+    try:
+        return record_package(farm_id, period)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
 
 
 # ---------------- SI engine + CERES ----------------
@@ -242,4 +217,25 @@ def ceres_chat(req: ChatRequest):
         raise HTTPException(503, "set ANTHROPIC_API_KEY to enable CERES chat")
     turn = get_ceres().reply([m.model_dump() for m in req.messages], req.farmId, req.lang, mode="text")
     return {"agent": "CERES", "reply": turn.text, "model": turn.model,
-            "toolCalls": [{"name": t["name"], "input": t["input"]} for t in turn.tool_calls]}
+            "toolCalls": [{"name": t["name"], "input": t["input"]} for t in turn.tool_calls],
+            "proofs": _proofs(turn.tool_calls)}
+
+
+def _proofs(tool_calls: list[dict]) -> list[dict]:
+    """x402 payments and record hashes behind this answer, for the 'Pagado por x402 · ver tx' chip."""
+    out = []
+    for t in tool_calls:
+        if t["name"] != "get_verified_record":
+            continue
+        o = t.get("output") or {}
+        if isinstance(o, str):
+            try:
+                o = json.loads(o)
+            except ValueError:
+                continue
+        if o.get("error"):
+            continue
+        out.append({"farmId": o.get("farm_id"), "period": o.get("period"), "dataHash": o.get("dataHash"),
+                    "placeholder": o.get("placeholder"), "recordedOnChain": o.get("recorded_on_chain"),
+                    "payment": o.get("payment")})
+    return out
