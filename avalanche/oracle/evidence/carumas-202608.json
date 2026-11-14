@@ -1,5 +1,5 @@
 {
-  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: WaterProofRegistry on Avalanche Fuji C-Chain testnet (chainId 43113).",
   "_context": {
     "soilMoisture": {
       "value_m3m3": 0.089,

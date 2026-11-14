@@ -1,0 +1,35 @@
+# Ceres Ventures site. Deploy from this folder (ceres-web/):
+#   npm ci && npm run build && npx netlify-cli deploy --dir dist --functions netlify/functions          (draft)
+#   ... add --prod when Chris approves replacing the live site.
+# Or connect the repo with Base directory = ceres-web; Netlify then runs the build below.
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # The Google Maps JavaScript API key is a BROWSER key: it is public by design in the page source and is protected by
+  # HTTP-referrer restrictions in Google Cloud. Tell Netlify's secret scanner it is expected in the output.
+  SECRETS_SCAN_OMIT_KEYS = "GOOGLE_MAPS_API_KEY,GOOGLE_MAPS_MAP_ID"
+
+[functions]
+  node_bundler = "esbuild"
+
+# /verify/<dataHash> deep links
+[[redirects]]
+  from = "/verify/*"
+  to = "/verify/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), geolocation=()"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300"

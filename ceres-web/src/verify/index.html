@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06171d">
+<title>Ceres · Registro verificable</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">
+<style>main{padding:28px 0 64px;max-width:760px} label{display:block;font-size:.88rem;color:var(--muted);margin-top:10px} input,select{display:block;width:100%;margin-top:4px;padding:10px;border-radius:9px;border:1px solid var(--line2);background:var(--bg2);color:var(--ink);font:inherit} .res{margin-top:16px}</style>
+<script src="/assets/config.js"></script>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="/"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#103a49"/><path d="M32 9C24 21 16 29 16 40a16 16 0 0 0 32 0C48 29 40 21 32 9Z" fill="none" stroke="#9df5e4" stroke-width="3.5"/><path d="M22 41c4-5 7-5 10 0 4 5 8 5 12 0" stroke="#83d7dc" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>CERES</a>
+  <div class="nav-actions"><a class="btn ghost sm" href="/app/">Mapa</a></div>
+</div></header>
+<main class="wrap">
+  <p class="eyebrow">Registro verificable · Verifiable record</p>
+  <h1>Comprueba que la evidencia no cambió</h1>
+  <p class="muted">Cada mes, Ceres guarda la huella (sha256) del archivo de evidencia de cada chacra en el contrato WaterProofRegistry de Avalanche (red de prueba Fuji). Aquí cualquiera puede comprobarla, sin billetera.</p>
+  <div class="card">
+    <label>Chacra / Field <select id="farm"></select></label>
+    <label>Mes / Month <select id="period"></select></label>
+    <label>Huella / dataHash <input id="hash" spellcheck="false" autocomplete="off"></label>
+    <p style="margin-top:14px"><button class="btn" id="check" type="button">Comprobar / Check</button>
+      <a class="btn ghost" id="dl" href="#" download>Descargar evidencia</a></p>
+    <div class="res" id="res" aria-live="polite"></div>
+  </div>
+  <p class="note" style="margin-top:16px"><small>Re-calcula tú mismo: <code>sha256</code> del JSON con las claves ordenadas recursivamente y sin espacios. Debe dar la misma huella. · Recompute it yourself: sha256 of the JSON with keys sorted recursively and no whitespace.</small></p>
+  <p class="muted"><small id="reg"></small></p>
+</main>
+<script type="module">
+import { verifyOnChain, esc } from "/assets/data.js";
+const cfg = window.CERES_CONFIG ?? {};
+const $ = (id) => document.getElementById(id);
+const index = await (await fetch("/data/index.json")).json();
+const farms = Object.values(index.farms);
+$("farm").innerHTML = farms.map(f => `<option value="${esc(f.id)}">${esc(f.id)}</option>`).join("");
+const fillPeriods = () => { const f = index.farms[$("farm").value]; $("period").innerHTML = f.periods.slice().reverse().map(p => `<option>${p.period}</option>`).join(""); sync(); };
+const sync = () => { const f = index.farms[$("farm").value], p = f.periods.find(x => x.period === Number($("period").value)); $("hash").value = p.dataHash; $("dl").href = p.file; };
+$("farm").onchange = fillPeriods; $("period").onchange = sync;
+$("reg").innerHTML = cfg.registry ? `Contrato: <a href="${esc(cfg.explorer)}/address/${esc(cfg.registry)}" target="_blank" rel="noopener" class="mono">${esc(cfg.registry)}</a> · Avalanche Fuji (43113)` : "Registro aún no desplegado en Fuji.";
+// /verify/<dataHash> deep link
+const fromPath = location.pathname.split("/").filter(Boolean)[1];
+fillPeriods();
+if (fromPath && /^0x[0-9a-fA-F]{64}$/.test(fromPath)) {
+  for (const f of farms) { const p = f.periods.find(x => x.dataHash.toLowerCase() === fromPath.toLowerCase()); if (p) { $("farm").value = f.id; fillPeriods(); $("period").value = String(p.period); sync(); break; } }
+  $("hash").value = fromPath; check();
+}
+$("check").onclick = check;
+async function check() {
+  const f = $("farm").value, p = Number($("period").value), h = $("hash").value.trim();
+  const known = index.farms[f].periods.find(x => x.period === p);
+  const att = index.attestations?.[`${f}/${p}`];
+  $("res").innerHTML = '<p class="muted">Comprobando…</p>';
+  const r = await verifyOnChain(cfg, index, f, p, h);
+  const match = known && known.dataHash.toLowerCase() === h.toLowerCase();
+  const msg = {
+    anchored: `<p><span class="pill ok">✓ anclado</span> La huella coincide con el registro en Avalanche. Los datos no cambiaron.</p>`,
+    not_anchored: `<p><span class="pill low">no anclado</span> El registro no tiene esta huella para ${esc(f)} ${p}. ${match ? "La huella corresponde al archivo publicado; ese mes aún no se guardó." : "Esta huella no corresponde al archivo publicado."}</p>`,
+    no_registry: `<p><span class="pill low">sin registro</span> El contrato aún no está desplegado. ${match ? "La huella corresponde al archivo publicado." : ""}</p>`,
+    error: `<p><span class="pill warn">error</span> No se pudo leer Fuji: ${esc(r.detail ?? "")}</p>`,
+  }[r.status];
+  $("res").innerHTML = msg + (att?.tx ? `<p><a href="${esc(cfg.explorer)}/tx/${esc(att.tx)}" target="_blank" rel="noopener">Ver transacción en Snowtrace ↗</a></p>` : "");
+}
+</script>
+</body>
+</html>

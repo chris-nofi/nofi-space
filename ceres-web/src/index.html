@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06171d">
+<title>Ceres Ventures · NASA field scores for Moquegua</title>
+<meta name="description" content="A map of Moquegua farms, scored with NASA data and recorded so it can be checked. Free for farmers; pay-per-lookup API for insurers, lenders, co-ops and exporters on Avalanche (Fuji testnet).">
+<meta property="og:title" content="Ceres Ventures · NASA field scores for Moquegua">
+<meta property="og:description" content="Each field gets a NASA soil-and-water score and a verifiable record. NASA Space Apps 2026 · Moquegua.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:center}
+  .hero .mapbox{height:min(62vh,560px);min-height:360px}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .trust{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .step{counter-increment:s}
+  .step::before{content:counter(s);display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--deep);color:var(--mint);font-weight:800;margin-bottom:10px}
+  .steps{counter-reset:s}
+  .ex{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+  .ex .badge{min-width:76px;height:76px;font-size:2.2rem;border-radius:20px}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+  .cmp .card{padding:12px}
+  .tile h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .tile .res{font:600 .74rem var(--mono);color:var(--teal)}
+  .api{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:900px){.hero,.api{grid-template-columns:1fr}.hero .mapbox{height:52vh}}
+  @media (max-width:520px){.ex{grid-template-columns:1fr}.cmp{grid-template-columns:1fr}}
+</style>
+<script src="/assets/config.js"></script>
+</head>
+<body>
+<a class="sr-only" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#103a49"/><path d="M32 9C24 21 16 29 16 40a16 16 0 0 0 32 0C48 29 40 21 32 9Z" fill="none" stroke="#9df5e4" stroke-width="3.5"/><path d="M22 41c4-5 7-5 10 0 4 5 8 5 12 0" stroke="#83d7dc" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>CERES VENTURES</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#how" data-i="nav.how">How it works</a><a href="#example" data-i="nav.map">The map</a><a href="#data" data-i="nav.data">NASA data</a>
+      <a href="#buyers" data-i="nav.buyers">For buyers</a><a href="#verifiable" data-i="nav.ver">Verifiable</a><a href="#api" data-i="nav.builders">For builders</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="lang" id="lang" type="button" aria-label="Cambiar a español / Switch to English">ES</button>
+      <a class="btn sm" href="/app/" data-i="nav.open">Open map</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="first">
+  <div class="wrap hero">
+    <div>
+      <p class="eyebrow" data-i="hero.eyebrow">NASA Space Apps 2026 · Field Shift · Moquegua, Peru</p>
+      <h1 data-i="hero.h1">A map of Moquegua farms, scored with NASA data, recorded so it can be checked.</h1>
+      <p class="lead" data-i="hero.sub">Each field gets a NASA soil-and-water score and a verifiable record. Farmers compare crop-rotation and soil-health options and can ask CERES by voice in Spanish, free. Insurers, lenders, co-ops and agro-exporters are who the pay-per-lookup API is for.</p>
+      <div class="cta">
+        <a class="btn" href="/app/" data-i="hero.open">Open the map</a>
+        <a class="btn ghost" href="/legacy/" data-i="hero.ceres">Talk to CERES</a>
+        <a class="btn ghost" href="#buyers" data-i="hero.buyers">For buyers</a>
+      </div>
+      <div class="trust" aria-label="Datasets">
+        <span class="chip"><b>ECOSTRESS</b> ET</span><span class="chip"><b>HLS</b> NDVI</span><span class="chip"><b>SMAP</b> soil moisture</span>
+        <span class="chip"><b>NASA POWER</b> ET₀ · climate</span><span class="chip"><b>MODIS</b> NDVI</span><span class="chip"><b>SRTM</b> slope</span>
+        <span class="chip"><b>GPM IMERG</b> <span data-i="trust.pending">pending</span></span><span class="chip"><b>Sentinel-2</b> ESA</span>
+      </div>
+    </div>
+    <div class="mapbox" id="heroMap"></div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="wrap">
+    <p class="eyebrow" data-i="prob.eyebrow">The problem</p>
+    <h2 data-i="prob.h2">Water is short, soil is tired, and one crop carries all the risk.</h2>
+    <div class="grid g4" id="facts" style="margin-top:18px"></div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="eyebrow" data-i="how.eyebrow">How it works</p>
+    <h2 data-i="how.h2">Four steps, from satellite to a decision you can check.</h2>
+    <div class="grid g4 steps" style="margin-top:18px">
+      <div class="card step"><h3 data-i="how.s1h">Pick a field</h3><p class="muted" data-i="how.s1">Open the map and choose one of the pilot fields: an olive grove on the Ilo coast, alfalfa in Samegua, potato in the Carumas highlands.</p></div>
+      <div class="card step"><h3 data-i="how.s2h">Read its score</h3><p class="muted" data-i="how.s2">The Ceres Field Score combines water, vegetation, soil, climate and erosion from named NASA and partner datasets, with its uncertainty shown.</p></div>
+      <div class="card step"><h3 data-i="how.s3h">Compare options</h3><p class="muted" data-i="how.s3">See three or more rotations or management strategies, including what you do today, and re-rank them by your own priorities.</p></div>
+      <div class="card step"><h3 data-i="how.s4h">Keep a record</h3><p class="muted" data-i="how.s4">The evidence behind the score gets a fingerprint anchored on Avalanche, so anyone can check later that it was not changed.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="example">
+  <div class="wrap">
+    <p class="eyebrow" data-i="ex.eyebrow">Live example</p>
+    <h2 data-i="ex.h2">El Algarrobal olive grove, computed from the evidence file.</h2>
+    <div class="card" id="exCard" style="margin-top:16px"><p class="muted">Loading…</p></div>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap">
+    <p class="eyebrow" data-i="data.eyebrow">NASA data, explained</p>
+    <h2 data-i="data.h2">What each dataset measures and how the score uses it.</h2>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card tile"><h3>ECOSTRESS <span class="res">70 m</span></h3><p class="muted" data-i="data.eco">Actual evapotranspiration (ET) from the space station. Divided by reference ET₀ it gives the water-stress part of the score.</p></div>
+      <div class="card tile"><h3>NASA POWER <span class="res">0.5°</span></h3><p class="muted" data-i="data.power">Daily weather since 1981. Feeds FAO-56 reference ET₀, frost climatology and the 2001–2025 water model behind each strategy.</p></div>
+      <div class="card tile"><h3>HLS (Landsat + Sentinel) <span class="res">30 m</span></h3><p class="muted" data-i="data.hls">Harmonized surface reflectance for NDVI greenness at the field pixel, cross-checked with ESA Sentinel-2 at 10 m.</p></div>
+      <div class="card tile"><h3>SMAP <span class="res">9 km</span></h3><p class="muted" data-i="data.smap">Soil moisture against its 2015–2025 baseline. Used for Carumas today; a regional signal, not a field reading.</p></div>
+      <div class="card tile"><h3>SRTM <span class="res">30 m</span></h3><p class="muted" data-i="data.srtm">Elevation and slope around each field. Combined with heavy-rain intensity it gives a relative erosion proxy, not soil loss.</p></div>
+      <div class="card tile"><h3>MODIS · CHIRPS · ERA5-Land <span class="res">250 m · 5 km · 9 km</span></h3><p class="muted" data-i="data.other">Long NDVI history, rainfall (CHIRPS stands in while GPM IMERG access is pending) and frost series where POWER's grid cell is too high.</p></div>
+    </div>
+    <p class="note" style="margin-top:16px" data-i="data.note">Satellites see a 30 m to 9 km pixel; a chacra is 1–2 ha. Ceres shows its gaps and confidence on every score. It supports, and does not replace, the farmer's judgment. Soil texture and carbon come from ISRIC SoilGrids, which is not a NASA product.</p>
+  </div>
+</section>
+
+<section id="verifiable">
+  <div class="wrap">
+    <p class="eyebrow" data-i="ver.eyebrow">Verifiable by design · Avalanche</p>
+    <h2 data-i="ver.h2">Every score points to evidence nobody can quietly change.</h2>
+    <p class="lead" data-i="ver.lead">Farmers see a simple "registro verificable" badge. Underneath, the evidence file is hashed and the fingerprint is written to a WaterProofRegistry contract on Avalanche's Fuji C-Chain testnet.</p>
+    <div class="flow" style="margin-top:18px" aria-label="Data flow">
+      <div class="node"><b data-i="ver.n1h">NASA + partner data</b><span class="muted" data-i="ver.n1">ECOSTRESS, HLS, SMAP, POWER, SRTM, Sentinel-2</span></div><span class="arrow" aria-hidden="true">→</span>
+      <div class="node"><b data-i="ver.n2h">Earth oracle</b><span class="muted" data-i="ver.n2">one evidence JSON per field-month</span></div><span class="arrow" aria-hidden="true">→</span>
+      <div class="node"><b data-i="ver.n3h">Fingerprint</b><span class="muted" data-i="ver.n3">sha256 of the canonical JSON</span></div><span class="arrow" aria-hidden="true">→</span>
+      <div class="node"><b>WaterProofRegistry</b><span class="muted">Avalanche Fuji C-Chain (43113)</span></div><span class="arrow" aria-hidden="true">→</span>
+      <div class="node"><b>Snowtrace</b><span class="muted" data-i="ver.n5">anyone can check it</span></div>
+    </div>
+    <div class="card" style="margin-top:16px"><h3 data-i="ver.latest">Latest anchored records</h3><div id="records" class="scroll-x"></div></div>
+    <p class="note" style="margin-top:14px">Running on Fuji C-Chain today. The same contracts deploy unchanged to the NØFI L1 (880024), which gives us stablecoin gas and an oracle allowlist.</p>
+  </div>
+</section>
+
+<section id="buyers">
+  <div class="wrap">
+    <p class="eyebrow" data-i="buy.eyebrow">For buyers</p>
+    <h2 data-i="buy.h2">Look up a field. Pay per request. Check the record.</h2>
+    <p class="lead" data-i="buy.lead">Farmers use the map and CERES free. The API is designed for organizations that need a field-level view they can audit later. These are the users we designed it for; we do not have paying customers on this testnet.</p>
+    <div class="grid g4" style="margin-top:18px">
+      <div class="card"><h3 data-i="buy.c1h">Crop insurance</h3><p class="muted" data-i="buy.c1">Screen a named parcel before writing or renewing cover, with the same bytes re-checkable later.</p></div>
+      <div class="card"><h3 data-i="buy.c2h">Agri-lending</h3><p class="muted" data-i="buy.c2">File a score trend and recommended practice next to an input-credit review.</p></div>
+      <div class="card"><h3 data-i="buy.c3h">Co-ops and irrigation boards</h3><p class="muted" data-i="buy.c3">Plan water turns and extension visits across members with one shared record.</p></div>
+      <div class="card"><h3 data-i="buy.c4h">Exporters and ESG</h3><p class="muted" data-i="buy.c4">Show a buyer where a grove's water and cover story comes from, dataset by dataset.</p></div>
+    </div>
+    <p style="margin-top:16px"><a class="btn" href="/api-docs/" data-i="buy.cta">Read the API</a></p>
+  </div>
+</section>
+
+<section id="api">
+  <div class="wrap api">
+    <div>
+      <p class="eyebrow" data-i="api.eyebrow">x402 field API · for builders and judges</p>
+      <h2 data-i="api.h2">Pay-per-query NASA farm evidence.</h2>
+      <p class="muted" data-i="api.lead">Standard x402: the first request returns HTTP 402 with the price; the client signs an EIP-3009 USDC authorization (no gas for the payer); our facilitator settles on Fuji and the data comes back with the payment receipt and the registry proof.</p>
+      <table class="t" style="margin-top:12px"><thead><tr><th data-i="api.th1">Endpoint</th><th data-i="api.th2">Price</th></tr></thead><tbody>
+        <tr><td><code>GET /v1/field/{id}/score</code></td><td>0.02 USDC</td></tr>
+        <tr><td><code>GET /v1/field/{id}/evidence</code></td><td>0.05 USDC</td></tr>
+        <tr><td><code>GET /v1/farms</code> · <code>/health</code></td><td data-i="api.free">free</td></tr>
+      </tbody></table>
+      <p><small class="dim" data-i="api.pricing">Testnet demo pricing in Circle Fuji USDC (eip155:43113). Not a commercial offer.</small></p>
+      <p class="cta"><a class="btn" href="/pagar/" data-i="api.try">Try it with Core wallet</a><a class="btn ghost" href="/api-docs/">API docs</a></p>
+    </div>
+<pre class="code" aria-label="Example x402 exchange">GET /v1/field/algarrobal/score
+← 402 Payment Required
+  PAYMENT-REQUIRED: {"accepts":[{"scheme":"exact",
+    "network":"eip155:43113","amount":"20000",
+    "asset":"0x5425…Bc65","payTo":"0x…",
+    "extra":{"name":"USD Coin","version":"2"}}]}
+
+GET /v1/field/algarrobal/score
+  PAYMENT-SIGNATURE: &lt;EIP-3009 authorization, signed in Core&gt;
+← 200 OK
+  {"formulaVersion":"ceres-field-score.v1",
+   "score":58,"confidence":"medium",
+   "components":{…},"gaps":[…],
+   "proof":{"paymentTxUrl":"https://testnet.snowtrace.io/tx/…",
+            "recordedOnChain":true}}</pre>
+  </div>
+</section>
+
+<section id="ceres">
+  <div class="wrap grid g2" style="align-items:center">
+    <div>
+      <p class="eyebrow" data-i="ceres.eyebrow">CERES voice assistant</p>
+      <h2 data-i="ceres.h2">Ask in Spanish, by voice, at no charge.</h2>
+      <p class="muted" data-i="ceres.p">CERES reads the same evidence and explains the score and the options in plain Spanish. It works from a phone browser; farmers never see a wallet.</p>
+      <p><a class="btn" href="/legacy/" data-i="ceres.cta">Talk to CERES</a></p>
+    </div>
+    <div class="card">
+      <h3 data-i="road.h">Roadmap</h3>
+      <ul class="muted" style="margin:.3rem 0 0 1.1rem;padding:0">
+        <li data-i="road.1">Confirm each cultivation pixel with its farmer and trace the real field boundary.</li>
+        <li data-i="road.2">GPM IMERG rainfall once data access is approved; heat stress in the score (v2).</li>
+        <li data-i="road.3">More valleys in Moquegua, with farmer-traced field boundaries.</li>
+        <li data-i="road.4">Move the registry to the NØFI L1 for stablecoin gas.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <p class="eyebrow" data-i="team.eyebrow">Team</p>
+    <h2>Ceres Ventures</h2>
+    <p class="muted"><b style="color:var(--ink)">Christopher Garrido</b> · <span data-i="team.lead">team lead</span> · Ceres Ventures by NØFI Labs</p>
+    <p class="muted" data-i="team.built">Built at NASA Space Apps Challenge 2026, Moquegua local event.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap grid g2">
+    <div>
+      <p data-i="foot.attr">Data: NASA (ECOSTRESS, HLS, SMAP, POWER, MODIS, SRTM; GPM IMERG pending), ESA Copernicus Sentinel-2, ECMWF ERA5-Land, ISRIC SoilGrids, CHIRPS (UCSB CHC). Map imagery © Google.</p>
+      <p data-i="foot.nasa">NASA does not endorse this project. Testnet only: no real money moves.</p>
+    </div>
+    <div>
+      <p data-i="foot.ai">AI use: the team used Claude and other AI tools to write code, process data and draft text; the team reviewed the outputs. CERES uses an AI model to explain results; it does not change the data.</p>
+      <p><a href="/app/" data-i="nav.open">Open map</a> · <a href="/api-docs/">API</a> · <a href="/verify/" data-i="foot.verify">Verify a record</a> · <a href="/pagar/">x402 demo</a></p>
+    </div>
+  </div>
+</footer>
+<script type="module" src="/assets/landing.js"></script>
+</body>
+</html>

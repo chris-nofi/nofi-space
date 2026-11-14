@@ -1,0 +1,20 @@
+{
+  "_note": "PLACEHOLDER VALUES for wiring only. Replace with real numbers from data/pull_and_build.py before any Fuji write. Do not present these as observations.",
+  "farmKey": "moquegua:carumas",
+  "period": 202610,
+  "revision": 0,
+  "indicators": {
+    "et_mm": { "value": 81.2, "dataset": "ECOSTRESS_L3T_JET_v002", "granules": ["<granule-id-1>"], "scale": "70 m" },
+    "et0_mm": { "value": 140.5, "dataset": "NASA POWER AG daily (FAO-56 Penman-Monteith)", "point": [-16.81, -70.69] },
+    "precip_mm": { "value": 23.3, "dataset": "GPM_3IMERGDF_v07", "scale": "0.1 deg (regional signal)" },
+    "ndvi": { "value": 0.61, "dataset": "HLS_S30_v2.0", "granules": ["<granule-id-2>"], "stat": "monthly median" }
+  },
+  "engine": {
+    "version": "earth_oracle 0.1.0 (git <sha>)",
+    "priorities": { "water": 0.4, "soil": 0.25, "income": 0.25, "resilience": 0.1 },
+    "recommendedStrategyId": 2,
+    "recommendedStrategy": "haba-avena rotation",
+    "waterSavedM3": 0,
+    "confidence": "medium"
+  }
+}

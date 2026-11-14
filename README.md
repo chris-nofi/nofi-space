@@ -1,5 +1,9 @@
 # CERES Ventures, by NOFI Labs
 
+> **Start here (14 Nov 2026):** the website is `ceres-web/` (landing, Google Maps field dashboard, x402 API as a Netlify Function,
+> record verification). Architecture, deploy steps and open tasks: [`docs/12_CERES_SYSTEM_DESIGN.md`](docs/12_CERES_SYSTEM_DESIGN.md).
+> Demo chain: Avalanche Fuji C-Chain (43113). Contracts, attester and x402 oracle: `avalanche/` (`forge test`, `cd avalanche/x402 && npm test`).
+
 NASA Space Apps 2026 · Field Shift · Moquegua, Perú · Team1 LatAm Avalanche track.
 
 NASA satellite data turned into spoken water advice for Moquegua farmers. CERES compares the current rotation with three water-saving alternatives and explains it by voice or chat in Spanish. Every NASA data query is paid per request with **x402** on our own **Avalanche L1 (NØFI Chain, 880024)**, and every monthly record is anchored as a verifiable on-chain record. Farmers never pay and never see a wallet or token.

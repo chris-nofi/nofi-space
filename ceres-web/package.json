@@ -1,0 +1,12 @@
+{
+  "name": "ceres-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ceres Ventures website: landing + Google Maps field dashboard + x402 field API (Netlify Function) on Avalanche Fuji.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": { "viem": "^2.57.19" }
+}

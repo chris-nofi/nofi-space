@@ -1,5 +1,5 @@
 {
-  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: WaterProofRegistry on Avalanche Fuji C-Chain testnet (chainId 43113).",
   "_context": {
     "fieldPixel": {
       "lat": -17.6155,
@@ -12,15 +12,15 @@
   "revision": 0,
   "indicators": {
     "et_mm": {
-      "value": 26.4,
+      "value": 32.1,
       "dataset": "ECOSTRESS_L3T_JET_v002",
       "granules": [
         "ECOv002_L3T_JET_45304_018_19KBA_20260702T134926_0713_02",
-        "ECOv002_L3T_JET_45365_024_18KZF_20260706T121658_0713_02",
-        "ECOv002_L3T_JET_45432_007_19KBA_20260710T203653_0713_02",
+        "ECOv002_L3T_JET_45365_024_19KBA_20260706T121658_0713_02",
+        "ECOv002_L3T_JET_45432_007_18KZF_20260710T203653_0713_02",
         "ECOv002_L3T_JET_45493_017_18KZF_20260714T190333_0713_01",
-        "ECOv002_L3T_JET_45554_021_19KBA_20260718T173020_0713_02",
-        "ECOv002_L3T_JET_45616_026_19KBA_20260722T155744_0713_01",
+        "ECOv002_L3T_JET_45554_021_18KZF_20260718T173020_0713_02",
+        "ECOv002_L3T_JET_45616_026_18KZF_20260722T155744_0713_01",
         "ECOv002_L3T_JET_45677_023_19KBA_20260726T142342_0713_01"
       ],
       "scale": "70 m",
@@ -50,12 +50,13 @@
       "reason": "GES DISC returned 403 'EULA Acceptance Failure' for this Earthdata token"
     },
     "ndvi": {
-      "value": 0.059,
+      "value": 0.398,
       "dataset": "HLS_L30_v2.0",
       "granules": [
-        "HLS.L30.T19KBA.2026199T144728.v2.0"
+        "HLS.L30.T19KBA.2026199T144728.v2.0",
+        "HLS.L30.T19KBA.2026207T144723.v2.0"
       ],
-      "stat": "monthly median of 1 clear 30 m scenes (Fmask)",
+      "stat": "monthly median of 2 clear 30 m scenes (Fmask)",
       "pixel": [
         -17.6155,
         -71.2588
@@ -73,7 +74,7 @@
     "recommendedStrategyId": 4,
     "recommendedStrategy": "drip + strip cover",
     "waterSavedM3": 78,
-    "waterSavedBasis": "this month's POWER ET0 95.4 mm x olive Kc 0.65: gravity 1034 - drip+strip 994 m3/ha x 2.0 ha (same method as data/fix/apply_algarrobal_fix.mjs); NDVI 0.059 < 0.20 -> contract anti-abandonment rule would block a credit",
+    "waterSavedBasis": "this month's POWER ET0 95.4 mm x olive Kc 0.65: gravity 1034 - drip+strip 994 m3/ha x 2.0 ha (same method as data/fix/apply_algarrobal_fix.mjs)",
     "recommendationBasis": "reconciled El Algarrobal method (data/fix/apply_algarrobal_fix.mjs): top of re-scored ranking",
     "confidence": "medium"
   },
@@ -153,6 +154,6 @@
       "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
       "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
     },
-    "fieldPixelStatus": "PENDING/PARTIAL: field-pixel HLS+ECOSTRESS re-sampling still running; indicators.ndvi / et_mm here are from the bare app point and understate the crop. extensions.cover (Sentinel-2) already uses the field pixel."
+    "fieldPixelStatus": "complete"
   }
 }
