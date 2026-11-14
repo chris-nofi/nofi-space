@@ -1,0 +1,36 @@
+{
+  "_note": "Coordinates are real places; farm names are fictional. polygon is a rough demo square; salt is a demo value (real salts stay with the farmer).",
+  "basin": "Osmore-Moquegua",
+  "farms": [
+    {
+      "id": "carumas",
+      "name": "Parcela Familia Quispe",
+      "lat": -16.81, "lon": -70.69, "elevation_m": 3000, "area_ha": 1.0,
+      "mode": "practice", "rate_usdc_per_ha": 70,
+      "baseline_mm_season": 380,
+      "polygon": [[-70.6905, -16.8095], [-70.6895, -16.8095], [-70.6895, -16.8105], [-70.6905, -16.8105], [-70.6905, -16.8095]],
+      "salt": "demo-salt-carumas"
+    },
+    {
+      "id": "samegua",
+      "name": "Chacra Los Ángeles",
+      "lat": -17.18, "lon": -70.90, "elevation_m": 1550, "area_ha": 1.2,
+      "mode": "m3", "rate_usdc_per_m3": 0.015,
+      "baseline_m3_ha_year": 17250,
+      "polygon": [[-70.9006, -17.1795], [-70.8994, -17.1795], [-70.8994, -17.1805], [-70.9006, -17.1805], [-70.9006, -17.1795]],
+      "salt": "demo-salt-samegua"
+    },
+    {
+      "id": "algarrobal",
+      "name": "Olivar Santa Rosa",
+      "lat": -17.62, "lon": -71.26, "elevation_m": 150, "area_ha": 2.0,
+      "mode": "m3", "rate_usdc_per_m3": 0.015,
+      "baseline_m3_ha_year": 12500,
+      "polygon": [[-71.2607, -17.6193], [-71.2593, -17.6193], [-71.2593, -17.6207], [-71.2607, -17.6207], [-71.2607, -17.6193]],
+      "salt": "demo-salt-algarrobal"
+    }
+  ],
+  "reservoirs": [
+    {"id": "pasto_grande", "name": "Pasto Grande", "bbox": [-70.32, -16.75, -70.18, -16.62], "_note": "rough bbox, refine with a polygon in reservoirs.geojson"}
+  ]
+}

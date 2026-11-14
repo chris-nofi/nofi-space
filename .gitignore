@@ -1,0 +1,14 @@
+.env
+**/.env
+node_modules/
+web/dist/
+oracle/.venv/
+oracle/data/cache/
+oracle/data/granules/
+__pycache__/
+*.pyc
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/lib/
+.DS_Store

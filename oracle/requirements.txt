@@ -1,0 +1,11 @@
+fastapi==0.115.6
+uvicorn==0.32.1
+requests==2.32.3
+eth-account==0.13.4
+python-dotenv==1.0.1
+httpx==0.28.1
+pytest==8.3.4
+# NASA granule access (Phase 2). Imported lazily so tests run without them.
+earthaccess==0.12.0
+rasterio==1.4.3
+numpy==2.1.3
