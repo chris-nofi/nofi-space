@@ -95,9 +95,9 @@ from .proof import package as record_package, summary as record_summary  # noqa:
 
 
 def _periods(periods: str | None) -> list[str]:
-    from .ceres.tools import default_period
+    from .cli import _periods as last_months
 
-    ps = [p.strip() for p in (periods or default_period()).split(",") if p.strip()]
+    ps = [p.strip() for p in (periods or ",".join(last_months(None))).split(",") if p.strip()]
     if not ps or len(ps) > 12 or not all(len(p) == 6 and p.isdigit() for p in ps):
         raise HTTPException(422, "periods must be up to 12 comma-separated YYYYMM values")
     return ps

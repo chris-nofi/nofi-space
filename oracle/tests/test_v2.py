@@ -19,7 +19,7 @@ def test_record_is_deterministic_and_tamper_evident():
     assert a["dataHash"] == b["dataHash"] and a["dataHash"] == sha256_hex(a["record"])
     assert verify_bytes(a["record"], a["dataHash"])
     bad = json.loads(json.dumps(a["record"]))
-    bad["values"]["waterSavedM3"] += 1
+    bad["engine"]["waterSavedM3"] += 1  # inflate the water saved by one m³
     assert not verify_bytes(bad, a["dataHash"])
 
 
@@ -45,7 +45,8 @@ def test_export_writes_one_file_per_farm_month(tmp_path):
     files = export(tmp_path, ["202609", "202610"], ["samegua"])
     assert [f.name for f in files] == ["samegua-202609.json", "samegua-202610.json"]
     pkg = json.loads(files[1].read_text())
-    assert pkg["onchain"]["period"] == 202610 and isinstance(pkg["onchain"]["etMmDayX100"], int)
+    assert pkg["onchain"]["period"] == 202610 and isinstance(pkg["onchain"]["et0MmX10"], int)
+    assert pkg["source"] == "evidence"
 
 
 def _requirements(amount="50000", network="eip155:880024"):

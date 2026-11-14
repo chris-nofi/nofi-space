@@ -14,9 +14,10 @@ HAZARD_WEIGHTS = {"frost": 0.25, "heat": 0.15, "water": 0.35, "bare": 0.15, "sal
 
 
 def effective_rain(p_mm: np.ndarray) -> np.ndarray:
-    """USDA-SCS monthly effective rainfall (FAO CROPWAT simplification)."""
+    """FAO/AGLW dependable-rain formula (CROPWAT): 0.8P - 25 if P > 75 mm/month, else max(0.6P - 10, 0).
+    Same formula as the real-data pipeline (data/pull_and_build.py), so engine and evidence agree."""
     p = np.asarray(p_mm, float)
-    return np.where(p <= 250, p * (125 - 0.2 * p) / 125, 125 + 0.1 * p)
+    return np.where(p > 75, 0.8 * p - 25, np.maximum(0.6 * p - 10, 0.0))
 
 
 def _sig(x: np.ndarray | float) -> np.ndarray:
@@ -65,12 +66,20 @@ def simulate(
     yield_factor: float = 1.0,
     supply_factor: float = 1.0,
     infiltration_bonus: float = 0.0,
+    efficiency: float = 1.0,
+    cover_efficiency: float = 1.0,
+    supply: np.ndarray | None = None,
 ) -> SimResult:
+    """Monthly water balance. Irrigated `need_m3` is GROSS water applied at the field:
+    net crop need / application efficiency (FAO Training Manual 4: surface 0.60, sprinkler 0.75,
+    drip 0.90), plus any irrigated inter-row cover (crop `coverKcMonthly`) / `cover_efficiency`."""
     lib = crops()["crops"]
     bare = crops()["bare"]
     irrigated = rot["water"] == "irrigated"
     peff = effective_rain(clim.rain_mm)
-    supply = np.array(rot.get("supplyM3HaMonth", [0] * 12), float) * supply_factor
+    if supply is None:
+        supply = np.array(rot.get("supplyM3HaMonth", [1e9] * 12), float)
+    supply = np.asarray(supply, float) * supply_factor
     farm_salinity = rot.get("irrigationSalinity", "low")
 
     agg = {k: np.zeros(12) for k in ("etc", "act", "def", "need", "rech", "cover")}
@@ -97,11 +106,13 @@ def simulate(
             else:
                 kc = bare["kcWet"] if clim.rain_mm[m] > 20 else bare["kcDry"]
             etc[m] = kc * et0[m] * DAYS[m] * calib
+            cover_mm = (lib[s.crop].get("coverKcMonthly") or [0.0] * 12)[m] * kc_scale * et0[m] * DAYS[m] * calib if s.crop else 0.0
             if irrigated:
                 need_mm = max(0.0, etc[m] - peff[m]) if s.crop else 0.0
-                need[m] = need_mm * 10
+                need[m] = (need_mm / efficiency + cover_mm / cover_efficiency) * 10
                 short_m3 = max(0.0, need[m] - supply[m])
-                dfc[m] = short_m3 / 10
+                dfc[m] = min(need_mm, short_m3 / 10 * efficiency)
+                etc[m] += cover_mm
                 act[m] = etc[m] - dfc[m]
             else:
                 p_in = peff[m] * (1 + (infiltration_bonus if s.cover >= 0.5 or not s.crop else 0.0))

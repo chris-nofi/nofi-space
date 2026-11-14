@@ -1,0 +1,413 @@
+{
+ "farmId": "samegua",
+ "point": {
+  "lat": -17.18,
+  "lon": -70.9,
+  "app_js_m": 1550,
+  "srtm30m_m": 1575.0,
+  "power_grid_cell_m": 3851.1,
+  "lapse_shift_degC": 14.79,
+  "slope_deg_30m": 4.6,
+  "slope_deg_90m": 5.2
+ },
+ "climatology1991_2020": {
+  "t2m_ann": 7.15,
+  "precip_mm_yr": 123.7,
+  "chirps_mm_yr": 105.3,
+  "frost_days_yr": 154.3
+ },
+ "trends": {
+  "t2m": {
+   "ols_per_decade": 0.297,
+   "ols_p": 0.0,
+   "sen_per_decade": 0.275,
+   "mann_kendall_tau": 0.606,
+   "mann_kendall_p": 0.0,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "tmax": {
+   "ols_per_decade": 0.339,
+   "ols_p": 0.0,
+   "sen_per_decade": 0.317,
+   "mann_kendall_tau": 0.549,
+   "mann_kendall_p": 0.0,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "tmin": {
+   "ols_per_decade": 0.23,
+   "ols_p": 0.0,
+   "sen_per_decade": 0.197,
+   "mann_kendall_tau": 0.515,
+   "mann_kendall_p": 0.0,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "precip_mm": {
+   "ols_per_decade": 3.326,
+   "ols_p": 0.5267,
+   "sen_per_decade": 2.535,
+   "mann_kendall_tau": 0.051,
+   "mann_kendall_p": 0.6248,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "chirps_mm": {
+   "ols_per_decade": -2.524,
+   "ols_p": 0.5745,
+   "sen_per_decade": -4.537,
+   "mann_kendall_tau": -0.095,
+   "mann_kendall_p": 0.3578,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "frost_days_lt0": {
+   "ols_per_decade": -11.082,
+   "ols_p": 0.0001,
+   "sen_per_decade": -10.426,
+   "mann_kendall_tau": -0.398,
+   "mann_kendall_p": 0.0001,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "era5land_t2m": {
+   "ols_per_decade": 0.331,
+   "ols_p": 0.0,
+   "sen_per_decade": 0.342,
+   "mann_kendall_tau": 0.547,
+   "mann_kendall_p": 0.0,
+   "years": "1981-2025",
+   "n": 45
+  }
+ },
+ "extremes": {
+  "hottest_year": {
+   "year": 2024,
+   "t2m": 8.77
+  },
+  "coldest_year": {
+   "year": 1984,
+   "t2m": 6.25
+  },
+  "wettest_year_power": {
+   "year": 1984,
+   "mm": 237.4
+  },
+  "driest_year_power": {
+   "year": 1983,
+   "mm": 28.3
+  },
+  "wettest_year_chirps": {
+   "year": 2000,
+   "mm": 178.7
+  },
+  "driest_year_chirps": {
+   "year": 1983,
+   "mm": 6.6
+  },
+  "record_tmax": {
+   "date": "2026-11-05",
+   "c": 24.22
+  },
+  "record_tmin": {
+   "date": "2000-11-13",
+   "c": -4.71
+  },
+  "record_daily_precip": {
+   "date": "2023-07-26",
+   "mm": 43.07
+  },
+  "most_frost_days": {
+   "year": 1992,
+   "days": 216
+  },
+  "mean_frost_days_per_year_1991_2020": 154.3
+ },
+ "ensoDecApr": {
+  "1982-83 El Nino": {
+   "dec_apr_t2m_anom": 0.67,
+   "dec_apr_precip_mm": 17.4,
+   "base_precip_mm": 101.7,
+   "dec_apr_chirps_mm": 1.6,
+   "base_chirps_mm": 87.2,
+   "tmax_anom": 1.33
+  },
+  "1997-98 El Nino": {
+   "dec_apr_t2m_anom": 1.31,
+   "dec_apr_precip_mm": 74.5,
+   "base_precip_mm": 101.7,
+   "dec_apr_chirps_mm": 38.6,
+   "base_chirps_mm": 87.2,
+   "tmax_anom": 1.79
+  },
+  "2015-16 El Nino": {
+   "dec_apr_t2m_anom": 1.11,
+   "dec_apr_precip_mm": 81.9,
+   "base_precip_mm": 101.7,
+   "dec_apr_chirps_mm": 45.0,
+   "base_chirps_mm": 87.2,
+   "tmax_anom": 1.4
+  },
+  "2023-24 El Nino": {
+   "dec_apr_t2m_anom": 2.01,
+   "dec_apr_precip_mm": 93.4,
+   "base_precip_mm": 101.7,
+   "dec_apr_chirps_mm": 74.1,
+   "base_chirps_mm": 87.2,
+   "tmax_anom": 1.85
+  },
+  "1998-99 La Nina": {
+   "dec_apr_t2m_anom": -0.52,
+   "dec_apr_precip_mm": 89.7,
+   "base_precip_mm": 101.7,
+   "dec_apr_chirps_mm": 132.3,
+   "base_chirps_mm": 87.2,
+   "tmax_anom": -0.54
+  },
+  "2010-11 La Nina": {
+   "dec_apr_t2m_anom": -0.56,
+   "dec_apr_precip_mm": 91.9,
+   "base_precip_mm": 101.7,
+   "dec_apr_chirps_mm": 120.9,
+   "base_chirps_mm": 87.2,
+   "tmax_anom": -0.74
+  }
+ },
+ "crossChecks": {
+  "power_vs_chirps_precip_1991_2020_mm_yr": [
+   123.7,
+   105.2
+  ],
+  "power_vs_era5_precip_1991_2020_mm_yr": [
+   123.7,
+   183.6
+  ],
+  "power_vs_era5land_t2m_1991_2020": [
+   7.15,
+   19.08
+  ],
+  "grid_points": {
+   "power_cell_elev_m": 3851.1,
+   "chirps_cell": [
+    -17.18,
+    -70.9
+   ],
+   "era5land_cell": [
+    -17.199997,
+    -70.9,
+    1564.0
+   ],
+   "era5_cell": [
+    -17.25,
+    -71.0,
+    1564.0
+   ]
+  }
+ },
+ "era5Et0MmYr": 1629.5,
+ "last12": [
+  {
+   "month": "2025-11",
+   "t2m": 8.89,
+   "t2m_anom": 0.37,
+   "precip_mm": 3.1,
+   "precip_base_mm": 4.4,
+   "et0_mm": 166.9,
+   "et0_anom_mm": 4.3
+  },
+  {
+   "month": "2025-12",
+   "t2m": 8.35,
+   "t2m_anom": -0.29,
+   "precip_mm": 8.0,
+   "precip_base_mm": 16.5,
+   "et0_mm": 158.3,
+   "et0_anom_mm": 5.1
+  },
+  {
+   "month": "2026-01",
+   "t2m": 8.84,
+   "t2m_anom": 0.32,
+   "precip_mm": 33.6,
+   "precip_base_mm": 29.3,
+   "et0_mm": 123.6,
+   "et0_anom_mm": -11.4
+  },
+  {
+   "month": "2026-02",
+   "t2m": 9.14,
+   "t2m_anom": 0.67,
+   "precip_mm": 40.9,
+   "precip_base_mm": 34.8,
+   "et0_mm": 100.8,
+   "et0_anom_mm": -12.7
+  },
+  {
+   "month": "2026-03",
+   "t2m": 8.69,
+   "t2m_anom": 0.2,
+   "precip_mm": 7.5,
+   "precip_base_mm": 20.6,
+   "et0_mm": 124.6,
+   "et0_anom_mm": -1.0
+  },
+  {
+   "month": "2026-04",
+   "t2m": 8.33,
+   "t2m_anom": 0.57,
+   "precip_mm": 5.8,
+   "precip_base_mm": 5.5,
+   "et0_mm": 109.5,
+   "et0_anom_mm": -6.6
+  },
+  {
+   "month": "2026-05",
+   "t2m": 7.42,
+   "t2m_anom": 1.53,
+   "precip_mm": 4.6,
+   "precip_base_mm": 1.6,
+   "et0_mm": 112.0,
+   "et0_anom_mm": 1.8
+  },
+  {
+   "month": "2026-06",
+   "t2m": 5.36,
+   "t2m_anom": -0.11,
+   "precip_mm": 0.4,
+   "precip_base_mm": 0.7,
+   "et0_mm": 101.9,
+   "et0_anom_mm": 2.5
+  },
+  {
+   "month": "2026-07",
+   "t2m": 6.57,
+   "t2m_anom": 1.45,
+   "precip_mm": 1.8,
+   "precip_base_mm": 3.1,
+   "et0_mm": 112.1,
+   "et0_anom_mm": 6.0
+  },
+  {
+   "month": "2026-08",
+   "t2m": 6.37,
+   "t2m_anom": 0.44,
+   "precip_mm": 13.2,
+   "precip_base_mm": 2.0,
+   "et0_mm": 120.9,
+   "et0_anom_mm": -4.2
+  },
+  {
+   "month": "2026-09",
+   "t2m": 7.74,
+   "t2m_anom": 0.77,
+   "precip_mm": 7.8,
+   "precip_base_mm": 3.7,
+   "et0_mm": 130.6,
+   "et0_anom_mm": -8.5
+  },
+  {
+   "month": "2026-10",
+   "t2m": 11.46,
+   "t2m_anom": 3.58,
+   "precip_mm": 18.9,
+   "precip_base_mm": 6.2,
+   "et0_mm": 164.7,
+   "et0_anom_mm": 5.1
+  }
+ ],
+ "et0MmYr": 1546,
+ "cropWater": {
+  "crop": "alfalfa",
+  "kc_monthly": [
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95,
+   0.95
+  ],
+  "etc_mm_monthly": [
+   128.2,
+   108.3,
+   117.8,
+   110.9,
+   104.7,
+   94.4,
+   101.9,
+   119.2,
+   132.0,
+   151.9,
+   153.5,
+   145.4
+  ],
+  "etc_mm_yr": 1468.3,
+  "eff_rain_mm_monthly": [
+   6.8,
+   9.0,
+   2.2,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "net_irrigation_mm_yr": 1450.3,
+  "net_irrigation_m3_ha_yr": 14503,
+  "gross_m3_ha_yr": {
+   "gravity": 24171,
+   "sprinkler": 19337,
+   "drip": 16114
+  }
+ },
+ "strategiesRecomputed": null,
+ "rainRangeMmYr": {
+  "chirps": 105.2,
+  "power": 123.7,
+  "era5": 183.6
+ },
+ "temperatureRule": "POWER 2001-2025 shifted to ERA5-Land 1991-2020 monthly means (POWER cell at 3,851 m)",
+ "representative": {
+  "ecostress": false,
+  "ndvi": false
+ },
+ "offFieldNote": {
+  "es": "El punto del mapa probablemente cae en desierto o en un píxel mixto, no en la chacra; se reporta pero no se usa como medición de la parcela.",
+  "en": "The map point probably falls on desert or a mixed pixel, not the field; reported but not used as the field's measurement."
+ },
+ "qc": {
+  "power_precip_days_removed": [
+   {
+    "date": "2022-09-12",
+    "power_mm": 259.63,
+    "chirps_month_mm": 3.037792205810547
+   },
+   {
+    "date": "2022-09-13",
+    "power_mm": 54.88,
+    "chirps_month_mm": 3.037792205810547
+   }
+  ]
+ },
+ "generated": "2026-11-14T01:22:24",
+ "sources": {
+  "power": "NASA POWER Daily API v2, community AG (MERRA-2/GEOS-IT; CERES radiation) https://power.larc.nasa.gov/",
+  "modis": "MOD13Q1 v061 NDVI 250 m 16-day, ORNL DAAC MODIS Web Service https://modis.ornl.gov/rst/api/v1/",
+  "hls": "HLS L30/S30 v2.0 30 m (NASA LP DAAC) https://doi.org/10.5067/HLS/HLSS30.002",
+  "ecostress": "ECOSTRESS L3T JET v002 ETdaily 70 m (NASA LP DAAC) https://doi.org/10.5067/ECOSTRESS/ECO_L3T_JET.002",
+  "smap": "SMAP L3 Enhanced 9 km SPL3SMP_E v006 (NSIDC DAAC) https://doi.org/10.5067/M20OXIZHY3RJ",
+  "srtm": "NASA SRTM GL1 30 m via OpenTopoData https://www.opentopodata.org/datasets/srtm/",
+  "chirps": "CHIRPS v3.0 monthly, UCSB Climate Hazards Center https://data.chc.ucsb.edu/products/CHIRPS/v3.0/",
+  "era5": "Copernicus ERA5 / ERA5-Land via Open-Meteo Historical API https://open-meteo.com/en/docs/historical-weather-api"
+ }
+}

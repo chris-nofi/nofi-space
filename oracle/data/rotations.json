@@ -1,56 +1,351 @@
 {
-  "_note": "Each strategy is an average year of a multi-year rotation: `years` are weighted (weights sum to 1). A segment is {crop, start (month 1-12), months}; segments may wrap past December. Months with no crop are bare (or residue-covered). `current: true` marks the existing practice.",
-  "farms": {
-    "carumas": {
-      "water": "rainfed", "units": "mm", "soilBucketMm": 100,
-      "strategies": [
-        {"id": "current", "current": true, "name": {"es": "Papa → papa", "en": "Potato → potato"},
-         "years": [{"weight": 1, "segments": [{"crop": "potato", "start": 11, "months": 5}]}]},
-        {"id": "haba-avena", "recommended": true, "name": {"es": "Papa → haba → avena-vicia", "en": "Potato → faba bean → oat-vetch"},
-         "years": [
-           {"weight": 0.34, "segments": [{"crop": "potato", "start": 11, "months": 5}]},
-           {"weight": 0.33, "segments": [{"crop": "faba", "start": 11, "months": 5}]},
-           {"weight": 0.33, "segments": [{"crop": "oat_vetch", "start": 12, "months": 4}]}]},
-        {"id": "tarwi", "name": {"es": "Papa → tarwi → cebada", "en": "Potato → tarwi → barley"},
-         "years": [
-           {"weight": 0.34, "segments": [{"crop": "potato", "start": 11, "months": 5}]},
-           {"weight": 0.33, "segments": [{"crop": "tarwi", "start": 11, "months": 6}]},
-           {"weight": 0.33, "segments": [{"crop": "barley", "start": 12, "months": 5}]}]},
-        {"id": "descanso", "name": {"es": "Papa → haba → descanso con zanjas", "en": "Potato → faba → fallow with trenches"},
-         "years": [
-           {"weight": 0.34, "segments": [{"crop": "potato", "start": 11, "months": 5}]},
-           {"weight": 0.33, "segments": [{"crop": "faba", "start": 11, "months": 5}]},
-           {"weight": 0.33, "segments": [{"crop": "pasture", "start": 1, "months": 12}]}],
-         "infiltrationBonus": 0.15}
-      ]
+ "_note": "Each strategy is an average year of a multi-year rotation: `years` are weighted (weights sum to 1). A segment is {crop, start (month 1-12), months}; segments may wrap past December. Months with no crop are bare (or residue-covered). `current: true` marks the existing practice. Irrigated water = gross applied at the field: net need / efficiency (FAO Training Manual 4: surface 0.60, drip 0.90, micro/sprinkler strips 0.75). supply='current': no canal delivery records, so supply = what the current practice applies (Kepler, CONNECT-REAL-DATA §4.3).",
+ "farms": {
+  "carumas": {
+   "water": "rainfed",
+   "units": "mm",
+   "soilBucketMm": 100,
+   "strategies": [
+    {
+     "id": "current",
+     "current": true,
+     "name": {
+      "es": "Papa → papa",
+      "en": "Potato → potato"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "potato",
+         "start": 11,
+         "months": 5
+        }
+       ]
+      }
+     ]
     },
-    "samegua": {
-      "water": "irrigated", "units": "m3", "supplyM3HaMonth": [1500, 1500, 1500, 1450, 1400, 1350, 1350, 1350, 1400, 1450, 1500, 1500], "supplyRainSensitivity": 0.8,
-      "strategies": [
-        {"id": "current", "current": true, "name": {"es": "Alfalfa continua", "en": "Continuous alfalfa"},
-         "years": [{"weight": 1, "segments": [{"crop": "alfalfa", "start": 1, "months": 12}]}]},
-        {"id": "maiz-arveja", "recommended": true, "name": {"es": "Alfalfa → maíz chala → arveja", "en": "Alfalfa → forage maize → pea"},
-         "years": [{"weight": 1, "segments": [{"crop": "maize_forage", "start": 10, "months": 5}, {"crop": "pea", "start": 4, "months": 4}]}]},
-        {"id": "cebada-frijol", "name": {"es": "Alfalfa → cebada forrajera → frijol", "en": "Alfalfa → forage barley → bean"},
-         "years": [{"weight": 1, "segments": [{"crop": "barley_forage", "start": 5, "months": 4}, {"crop": "bean", "start": 10, "months": 4}]}]},
-        {"id": "quinua", "name": {"es": "Alfalfa 3 años → quinua → alfalfa", "en": "Alfalfa 3 yrs → quinoa → alfalfa"},
-         "years": [
-           {"weight": 0.75, "segments": [{"crop": "alfalfa", "start": 1, "months": 12}]},
-           {"weight": 0.25, "segments": [{"crop": "quinoa", "start": 4, "months": 5}, {"crop": "bean", "start": 10, "months": 4}]}]}
-      ]
+    {
+     "id": "haba-avena",
+     "name": {
+      "es": "Papa → haba → avena-vicia",
+      "en": "Potato → faba bean → oat-vetch"
+     },
+     "years": [
+      {
+       "weight": 0.34,
+       "segments": [
+        {
+         "crop": "potato",
+         "start": 11,
+         "months": 5
+        }
+       ]
+      },
+      {
+       "weight": 0.33,
+       "segments": [
+        {
+         "crop": "faba",
+         "start": 11,
+         "months": 5
+        }
+       ]
+      },
+      {
+       "weight": 0.33,
+       "segments": [
+        {
+         "crop": "oat_vetch",
+         "start": 12,
+         "months": 4
+        }
+       ]
+      }
+     ]
     },
-    "algarrobal": {
-      "water": "irrigated", "units": "m3", "supplyM3HaMonth": [1050, 1050, 1050, 1000, 950, 900, 900, 900, 950, 1000, 1050, 1050], "supplyRainSensitivity": 0.6, "irrigationSalinity": "high",
-      "strategies": [
-        {"id": "current", "current": true, "name": {"es": "Riego por gravedad, suelo desnudo", "en": "Gravity irrigation, bare soil"},
-         "years": [{"weight": 1, "segments": [{"crop": "olive", "start": 1, "months": 12}]}]},
-        {"id": "deficit", "recommended": true, "name": {"es": "Riego deficitario guiado por ECOSTRESS", "en": "Deficit irrigation guided by ECOSTRESS"},
-         "years": [{"weight": 1, "segments": [{"crop": "olive_deficit", "start": 1, "months": 12}]}]},
-        {"id": "cover", "name": {"es": "Olivo + cobertura invernal de leguminosa", "en": "Olive + winter legume cover"},
-         "years": [{"weight": 1, "segments": [{"crop": "olive_cover", "start": 1, "months": 12}]}]},
-        {"id": "drip", "name": {"es": "Goteo + cobertura en franjas", "en": "Drip + strip cover"},
-         "years": [{"weight": 1, "segments": [{"crop": "olive_drip", "start": 1, "months": 12}]}]}
-      ]
+    {
+     "id": "tarwi",
+     "name": {
+      "es": "Papa → tarwi → cebada",
+      "en": "Potato → tarwi → barley"
+     },
+     "years": [
+      {
+       "weight": 0.34,
+       "segments": [
+        {
+         "crop": "potato",
+         "start": 11,
+         "months": 5
+        }
+       ]
+      },
+      {
+       "weight": 0.33,
+       "segments": [
+        {
+         "crop": "tarwi",
+         "start": 11,
+         "months": 6
+        }
+       ]
+      },
+      {
+       "weight": 0.33,
+       "segments": [
+        {
+         "crop": "barley",
+         "start": 12,
+         "months": 5
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "descanso",
+     "name": {
+      "es": "Papa → haba → descanso con zanjas",
+      "en": "Potato → faba → fallow with trenches"
+     },
+     "years": [
+      {
+       "weight": 0.34,
+       "segments": [
+        {
+         "crop": "potato",
+         "start": 11,
+         "months": 5
+        }
+       ]
+      },
+      {
+       "weight": 0.33,
+       "segments": [
+        {
+         "crop": "faba",
+         "start": 11,
+         "months": 5
+        }
+       ]
+      },
+      {
+       "weight": 0.33,
+       "segments": [
+        {
+         "crop": "pasture",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      }
+     ],
+     "infiltrationBonus": 0.15
     }
+   ]
+  },
+  "samegua": {
+   "water": "irrigated",
+   "units": "m3",
+   "supplyRainSensitivity": 0.8,
+   "strategies": [
+    {
+     "id": "current",
+     "current": true,
+     "name": {
+      "es": "Alfalfa continua",
+      "en": "Continuous alfalfa"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "alfalfa",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "maiz-arveja",
+     "name": {
+      "es": "Alfalfa → maíz chala → arveja",
+      "en": "Alfalfa → forage maize → pea"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "maize_forage",
+         "start": 10,
+         "months": 5
+        },
+        {
+         "crop": "pea",
+         "start": 4,
+         "months": 4
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cebada-frijol",
+     "name": {
+      "es": "Alfalfa → cebada forrajera → frijol",
+      "en": "Alfalfa → forage barley → bean"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "barley_forage",
+         "start": 5,
+         "months": 4
+        },
+        {
+         "crop": "bean",
+         "start": 10,
+         "months": 4
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "quinua",
+     "name": {
+      "es": "Alfalfa 3 años → quinua → alfalfa",
+      "en": "Alfalfa 3 yrs → quinoa → alfalfa"
+     },
+     "years": [
+      {
+       "weight": 0.75,
+       "segments": [
+        {
+         "crop": "alfalfa",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      },
+      {
+       "weight": 0.25,
+       "segments": [
+        {
+         "crop": "quinoa",
+         "start": 4,
+         "months": 5
+        },
+        {
+         "crop": "bean",
+         "start": 10,
+         "months": 4
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "supply": "current",
+   "efficiency": 0.6
+  },
+  "algarrobal": {
+   "water": "irrigated",
+   "units": "m3",
+   "supplyRainSensitivity": 0.6,
+   "irrigationSalinity": "high",
+   "strategies": [
+    {
+     "id": "current",
+     "current": true,
+     "name": {
+      "es": "Riego por gravedad, suelo desnudo",
+      "en": "Gravity irrigation, bare soil"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "olive",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "deficit",
+     "name": {
+      "es": "Riego deficitario guiado por ECOSTRESS",
+      "en": "Deficit irrigation guided by ECOSTRESS"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "olive_deficit",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cover",
+     "name": {
+      "es": "Olivo + cobertura invernal de leguminosa",
+      "en": "Olive + winter legume cover"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "olive_cover",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      }
+     ],
+     "coverEfficiency": 0.6
+    },
+    {
+     "id": "drip",
+     "name": {
+      "es": "Goteo + cobertura en franjas",
+      "en": "Drip + strip cover"
+     },
+     "years": [
+      {
+       "weight": 1,
+       "segments": [
+        {
+         "crop": "olive_drip",
+         "start": 1,
+         "months": 12
+        }
+       ]
+      }
+     ],
+     "efficiency": 0.9,
+     "coverEfficiency": 0.75
+    }
+   ],
+   "supply": "current",
+   "efficiency": 0.6
   }
+ }
 }

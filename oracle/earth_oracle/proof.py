@@ -166,19 +166,103 @@ def onchain_fields(record: dict) -> dict:
     }
 
 
+EVIDENCE_DIR = Path(__file__).resolve().parents[2] / "avalanche" / "oracle" / "evidence"
+STRATEGY_IDS = {"drip + strip cover": "drip", "deficit": "deficit", "cover": "cover", "current": "current"}
+
+
+def evidence_path(farm_id: str, period: str) -> Path:
+    return EVIDENCE_DIR / f"{farm_id}-{period}.json"
+
+
+def evidence_issues(ev: dict) -> list[dict]:
+    """Why a real evidence record must not be attested yet (Kepler §8)."""
+    ind, out = ev.get("indicators", {}), []
+    for k, v in ind.items():
+        if v.get("value") is None:
+            out.append({"code": f"{k}_missing", "es": f"{k}: sin observación válida este mes ({v.get('reason', 'sin dato')}); no se ancla como 0.",
+                        "en": f"{k}: no valid observation this month ({v.get('reason', 'no data')}); never encode it as 0."})
+    et = ind.get("et_mm") or {}
+    if et.get("value") == 0 and "1 valid overpass" in str(et.get("stat", "")):
+        out.append({"code": "et_single_zero", "es": "ECOSTRESS: una sola pasada válida este mes y marca 0 mm (probable pasada de madrugada); confirmar antes de anclar.",
+                    "en": "ECOSTRESS: a single valid overpass this month reading 0 mm (likely a pre-dawn pass); confirm before attesting."})
+    farm = str(ev.get("farmKey", "")).split(":")[-1]
+    from .real_data import REPRESENTATIVE
+
+    if REPRESENTATIVE.get(farm, {}).get("ecostress") is False:
+        out.append({"code": "point_off_field", "es": "El punto del mapa probablemente no está sobre la chacra (píxel de desierto o mixto): confirmar la ubicación real antes de anclar.",
+                    "en": "The map point is probably not on the field (desert or mixed pixel): confirm the real location before attesting."})
+    nd = (ind.get("ndvi") or {}).get("value")
+    if nd is not None and nd < 0.20:
+        out.append({"code": "ndvi_below_0.20", "es": f"NDVI {nd} < 0,20: la regla anti-abandono bloquearía el crédito; mover el punto a la chacra antes de anclar.",
+                    "en": f"NDVI {nd} < 0.20: the anti-abandonment rule would block a credit; move the point onto the field before attesting."})
+    return out
+
+
+def _from_evidence(farm_id: str, period: str) -> dict | None:
+    p = evidence_path(farm_id, period)
+    if not p.exists():
+        return None
+    ev = json.loads(p.read_text(encoding="utf-8"))
+    ind, eng = ev.get("indicators", {}), ev.get("engine", {})
+    sources = {k: {kk: v.get(kk) for kk in ("dataset", "granules", "composites", "substituteFor", "scale") if v.get(kk) is not None} for k, v in ind.items()}
+    issues = evidence_issues(ev)
+    val = lambda k, scale: None if (ind.get(k) or {}).get("value") is None else int(round(ind[k]["value"] * scale))  # noqa: E731
+    onchain = {
+        "farmKey": ev.get("farmKey"), "period": int(ev.get("period")), "revision": ev.get("revision", 0),
+        "etMmX10": val("et_mm", 10), "et0MmX10": val("et0_mm", 10), "precipMmX10": val("precip_mm", 10), "ndviX1000": val("ndvi", 1000),
+        "recommendedStrategyId": eng.get("recommendedStrategyId"), "waterSavedM3": eng.get("waterSavedM3"),
+        "creditEligible": not any(i["code"] == "ndvi_below_0.20" for i in issues),
+        "note": "null = no observation: skip or use a documented sentinel, never 0 (CONNECT-REAL-DATA §8)",
+    }
+    return {"record": ev, "dataHash": sha256_hex(ev), "sourcesHash": sha256_hex(sources), "onchain": onchain,
+            "placeholder": False, "source": "evidence", "issues": issues, "attestable": not issues,
+            "hashNote": "sha256 over canonical JSON of the whole file; confirm it matches avalanche/oracle/build-attestation.mjs before attesting"}
+
+
 def package(farm_id: str, period: str) -> dict:
-    """What the x402 oracle serves: the record plus its hashes and the integer fields to attest."""
+    """What the x402 oracle serves. Real evidence file (avalanche/oracle/evidence) when it exists for that
+    farm-month; otherwise an engine-built record from the climatology, always marked placeholder."""
+    real = _from_evidence(farm_id, period)
+    if real:
+        return real
     rec = build_record(farm_id, period)
     return {"record": rec, "dataHash": sha256_hex(rec), "sourcesHash": sha256_hex(rec["sources"]),
-            "onchain": onchain_fields(rec), "placeholder": rec["placeholder"]}
+            "onchain": onchain_fields(rec), "placeholder": True, "source": "engine", "attestable": False,
+            "issues": [{"code": "no_month_evidence", "es": "Sin archivo de evidencia real para este mes: valores de climatología.", "en": "No real evidence file for this month: climatology values."}]}
+
+
+def record_values(pkg: dict) -> dict:
+    """Same shape for both record kinds, for CERES and the site."""
+    r = pkg["record"]
+    if pkg.get("source") != "evidence":
+        return r["values"]
+    ind, eng = r.get("indicators", {}), r.get("engine", {})
+    g = lambda k: (ind.get(k) or {}).get("value")  # noqa: E731
+    return {
+        "etMm": g("et_mm"), "etDataset": (ind.get("et_mm") or {}).get("dataset"), "etStat": (ind.get("et_mm") or {}).get("stat"),
+        "et0Mm": g("et0_mm"), "precipMm": g("precip_mm"), "precipDataset": (ind.get("precip_mm") or {}).get("dataset"),
+        "ndvi": g("ndvi"), "ndviDataset": (ind.get("ndvi") or {}).get("dataset"),
+        "strategy": STRATEGY_IDS.get(eng.get("recommendedStrategy"), str(eng.get("recommendedStrategy", "")).removesuffix(" rotation")),
+        "strategyLabel": eng.get("recommendedStrategy"), "waterSavedM3": eng.get("waterSavedM3"),
+        "waterSavedBasis": eng.get("waterSavedBasis"), "confidence": eng.get("confidence"),
+    }
 
 
 def summary(pkg: dict) -> dict:
     """Farmer-safe summary for the 'Registro verificable' view: no wallet, token or price."""
-    r = pkg["record"]
-    return {"farmId": r["farmId"], "period": r["period"], "dataHash": pkg["dataHash"], "placeholder": pkg["placeholder"],
-            "strategy": r["values"]["strategy"], "waterSavedM3": r["values"]["waterSavedM3"],
-            "datasets": [s["dataset"] for s in r["sources"] if s["used"]]}
+    r, v = pkg["record"], record_values(pkg)
+    if pkg.get("source") == "evidence":
+        datasets = sorted({x.get("dataset") for x in r.get("indicators", {}).values() if x.get("value") is not None and x.get("dataset")})
+        farm, period = r.get("farmKey", "").split(":")[-1], str(r.get("period"))
+    else:
+        datasets = [s["dataset"] for s in r["sources"] if s["used"]]
+        farm, period = r["farmId"], r["period"]
+    return {"farmId": farm, "period": period, "dataHash": pkg["dataHash"], "placeholder": pkg["placeholder"],
+            "source": pkg.get("source"), "attestable": pkg.get("attestable", False),
+            "issues": [{"es": i["es"], "en": i["en"]} for i in pkg.get("issues", [])],
+            "strategy": v.get("strategy"), "waterSavedM3": v.get("waterSavedM3"),
+            "et0Mm": v.get("et0Mm"), "etMm": v.get("etMm"), "ndvi": v.get("ndvi"), "precipMm": v.get("precipMm"),
+            "datasets": datasets}
 
 
 def verify_bytes(record: dict, data_hash: str) -> bool:

@@ -50,8 +50,15 @@ def detect(ndvi_monthly: np.ndarray) -> dict:
 
 
 def observed_ndvi(farm_id: str) -> np.ndarray | None:
+    """HLS 30 m from a fresh pull first; else MODIS monthly from the real package, only where the
+    pixel represents the field (Kepler: not at Samegua / El Algarrobal)."""
     p = CACHE / f"{farm_id}_hls.json"
     if not p.exists():
+        from ..real_data import read_input
+
+        m = read_input(f"{farm_id}_ndvi.json")
+        if m and m.get("representative") and m.get("monthly") and all(v is not None for v in m["monthly"]):
+            return np.array(m["monthly"], float)
         return None
     series = json.loads(p.read_text(encoding="utf-8"))["series"]
     by_m: dict[int, list[float]] = {}

@@ -27,7 +27,7 @@ It isn't fine-tuned. It is **grounded**, which is more accurate and updatable by
    - No pesticide doses or tax advice.
    - Always remind the farmer to review with the Agencia Agraria or INIA.
    - Reply in the user's language.
-3. **Live tools** (`tools.py`): `get_farm_analysis` and `get_risk_calendar` call the SI engine; `get_verified_record` fetches the monthly earth record, **paying the x402 oracle from the CERES agent wallet** when `X402_EARTH_URL` and `CERES_AGENT_PRIVATE_KEY` are set (plan v2). The chat response carries `proofs[]` with the dataHash and the payment tx link.
+3. **Live tools** (`tools.py`): `get_farm_analysis` and `get_risk_calendar` call the SI engine (now on real NASA data); `get_climate_context` returns real climate facts (ET₀, rain by source, warming trend, ENSO, recent anomalies, data warnings); `get_verified_record` fetches the monthly earth record, **paying the x402 oracle from the CERES agent wallet** when `X402_EARTH_URL` and `CERES_AGENT_PRIVATE_KEY` are set (plan v2). The chat response carries `proofs[]` with the dataHash and the payment tx link.
 
 To teach CERES something new, add or edit a markdown file in `knowledge/`. It's picked up on restart.
 

@@ -1,0 +1,40 @@
+{
+ "source": "MOD13Q1 v061 NDVI, 250 m, 16-day (ORNL DAAC)",
+ "farmId": "algarrobal",
+ "monthly": [
+  0.185,
+  0.182,
+  0.177,
+  0.168,
+  0.19,
+  0.171,
+  0.174,
+  0.179,
+  0.152,
+  0.169,
+  0.173,
+  0.193
+ ],
+ "std": [
+  0.088,
+  0.076,
+  0.076,
+  0.07,
+  0.073,
+  0.087,
+  0.08,
+  0.082,
+  0.07,
+  0.071,
+  0.072,
+  0.082
+ ],
+ "first": "2001-01-01",
+ "last": "2026-10-16",
+ "latest": {
+  "date": "2026-10-16",
+  "ndvi": 0.179
+ },
+ "representative": false,
+ "note": "MODIS pixel (~6 ha) is larger than the 1-2 ha field; HLS 30 m not yet in the package."
+}

@@ -1,4 +1,4 @@
-/* CERES Ventures — SI view: compare · trade-offs · risk · uncertainty.
+/* CERES Ventures — SI view: compare · trade-offs · risk · uncertainty. Water headline = engine run on the real 2001-2025 climatology (water.expected); bands = Monte Carlo.
    Live from the oracle (POST /v1/si/analyze) when config.oracleUrl is set; otherwise the
    bundled engine results in si-data.js (default priorities, no scenario). */
 (() => {
@@ -82,7 +82,7 @@
         <span class="si-badges"><span class="si-badge">${badge}</span><span class="si-badge conf-${d.uncertainty.confidence}">${T(L, "Confianza", "Confidence")}: ${{ high: T(L, "alta", "high"), medium: T(L, "media", "medium"), low: T(L, "baja", "low") }[d.uncertainty.confidence]}</span>${busy ? `<span class="si-badge">${T(L, "Calculando…", "Calculating…")}</span>` : ""}</span></div>
       <p>${E(v?.text || "")}</p>
       <div class="si-ceres-actions"><button type="button" class="primary-btn" data-action="ceres-open">${T(L, "Hablar con CERES", "Talk to CERES")}</button>
-      <span class="si-dq">${T(L, "Clima", "Climate")}: ${d.dataQuality.climate === "synthetic" ? T(L, "de ejemplo", "example") : "NASA POWER"} · ${T(L, "Modelo", "Model")}: ${/SYNTHETIC/.test(d.dataQuality.model) ? T(L, "entrenado con datos sintéticos", "trained on synthetic data") : "ECOSTRESS"}</span></div>
+      <span class="si-dq">${T(L, "Clima", "Climate")}: ${d.dataQuality.climate === "synthetic" ? T(L, "de ejemplo", "example") : T(L, "NASA POWER (ET₀ FAO-56) + lluvia CHIRPS", "NASA POWER (FAO-56 ET₀) + CHIRPS rain")} · ECOSTRESS: ${d.dataQuality.ecostressPoint ? (d.dataQuality.ecostressPoint.representative === false ? T(L, `${d.dataQuality.ecostressPoint.totalValid} pasadas, punto fuera de la chacra (no calibra)`, `${d.dataQuality.ecostressPoint.totalValid} overpasses, point off the field (not used to calibrate)`) : T(L, `${d.dataQuality.ecostressPoint.totalValid} pasadas, calibra el modelo`, `${d.dataQuality.ecostressPoint.totalValid} overpasses, calibrates the model`)) : T(L, "sin datos", "no data")} · ${T(L, "Modelo SI de agua", "SI water model")}: ${/SYNTHETIC/.test(d.dataQuality.model) ? T(L, "entrenado con datos sintéticos", "trained on synthetic data") : "ECOSTRESS"}</span></div>
       ${S.err ? `<p class="si-err">${E(S.err)}</p>` : ""}</article>`;
   }
 
@@ -94,7 +94,7 @@
       const delta = (v, suf, good) => s.current ? "" : `<em class="${good ? "good" : "warn"}">${sign(v)}${suf}</em>`;
       return `<button type="button" class="card si-strat ${S.sel[ctx.farm] === s.id ? "picked" : ""}" data-si-pick="${s.id}">
         <div class="si-strat-top"><b>${E(s.name[L])}</b>${tags}</div>
-        <dl><div><dt>${T(L, "Agua", "Water")}</dt><dd>${num(s.water.p50, L)} <small>${unit}</small> ${delta(s.deltas.waterPct, "%", s.deltas.waterPct <= 0)}</dd></div>
+        <dl><div><dt>${T(L, "Agua", "Water")}</dt><dd>${num(s.water.expected ?? s.water.p50, L)} <small>${unit}</small> ${s.current ? "" : `<em class="${s.deltas.waterPct <= 0 ? "good" : "warn"}">${s.deltas.waterPct > 0 ? "+" : ""}${num(s.deltas.waterPct, L, 1)}%</em>`}</dd></div>
         <div><dt>${T(L, "Suelo", "Soil")}</dt><dd>${num(s.soil, L)}/100 ${delta(s.deltas.soilPts, "", s.deltas.soilPts >= 0)}</dd></div>
         <div><dt>${T(L, "Ingreso", "Income")}</dt><dd>S/ ${num(s.incomePenHa, L)} <small>/ha</small> ${delta(s.deltas.incomePct, "%", s.deltas.incomePct >= 0)}</dd></div>
         <div><dt>${T(L, "Déficit", "Deficit")}</dt><dd>${num(s.deficitPct, L, 1)}%</dd></div></dl>

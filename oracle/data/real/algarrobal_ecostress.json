@@ -1,0 +1,41 @@
+{
+ "source": "ECOSTRESS L3T JET v002 ETdaily, 70 m (NASA LP DAAC)",
+ "farmId": "algarrobal",
+ "product": "ECO_L3T_JET",
+ "etMonthly": [
+  1.649,
+  1.677,
+  1.396,
+  1.144,
+  0.964,
+  0.575,
+  0.736,
+  0.42,
+  1.139,
+  1.482,
+  1.39,
+  1.859
+ ],
+ "overpassesMonthly": [
+  18,
+  5,
+  15,
+  8,
+  14,
+  6,
+  20,
+  5,
+  10,
+  11,
+  19,
+  5
+ ],
+ "totalValid": 136,
+ "totalRead": 720,
+ "first": "2019-08-11T12:13:53",
+ "last": "2026-10-20T18:16:02",
+ "monthsWithData": 12,
+ "overpasses": [],
+ "representative": false,
+ "note": "Monthly mean of valid overpasses 2019-2026 at the map point (multi-year climatology)."
+}

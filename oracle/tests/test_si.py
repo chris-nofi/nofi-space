@@ -17,9 +17,12 @@ def runs():
     return {f: analyze(f, draws=80) for f in FARMS}
 
 
-def test_effective_rain_matches_scs():
-    assert effective_rain(np.array([100.0]))[0] == pytest.approx(84.0)
-    assert effective_rain(np.array([300.0]))[0] == pytest.approx(155.0)
+def test_effective_rain_matches_cropwat_dependable():
+    # FAO/AGLW: 0.8P - 25 above 75 mm/month, else max(0.6P - 10, 0) (same as data/pull_and_build.py)
+    assert effective_rain(np.array([100.0]))[0] == pytest.approx(55.0)
+    assert effective_rain(np.array([10.0]))[0] == pytest.approx(0.0)
+    assert effective_rain(np.array([50.0]))[0] == pytest.approx(20.0)
+
 
 
 def test_kc_curve_follows_fao_stages():

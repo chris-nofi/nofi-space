@@ -173,3 +173,10 @@
 .ceres-proofs { display: flex; flex-wrap: wrap; gap: 6px; margin: -2px 0 8px; }
 .ceres-proof { font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: #e3f4f5; color: #0d6b74; text-decoration: none; }
 a.ceres-proof:hover { background: #cdebed; }
+
+/* ---------- real-data citations ---------- */
+.cite { font-size: 11px; line-height: 1.5; color: var(--muted); margin: 8px 0 0; }
+.point-card { margin-top: 16px; }
+.warn-tag { background: var(--si-ochre-soft) !important; color: #9a5a1c !important; }
+.rv-issues { margin: 10px 0 0; padding-left: 18px; font-size: 12.5px; color: #9a5a1c; line-height: 1.5; }
+.rv-table th small { text-transform: none; letter-spacing: 0; }

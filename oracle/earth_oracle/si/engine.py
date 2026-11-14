@@ -52,9 +52,43 @@ def _q(a: np.ndarray) -> dict:
     return {"p10": round(float(p10), 1), "p50": round(float(p50), 1), "p90": round(float(p90), 1)}
 
 
+def _ecostress(farm_id: str) -> dict | None:
+    from ..real_data import read_input
+
+    return read_input(f"{farm_id}_ecostress.json")
+
+
+def _eco_point(farm_id: str) -> dict | None:
+    e = _ecostress(farm_id)
+    if not e:
+        return None
+    return {"product": e.get("product"), "etMonthly": e.get("etMonthly"), "overpassesMonthly": e.get("overpassesMonthly"),
+            "totalValid": e.get("totalValid"), "first": e.get("first"), "last": e.get("last"),
+            "representative": e.get("representative", True), "usedForCalibration": e.get("representative", True)}
+
+
+def _rain_range(farm_id: str) -> dict | None:
+    from ..real_data import read_input
+
+    return (read_input(f"{farm_id}_power.json") or {}).get("rainRangeMmYr")
+
+
+def _ndvi_info(farm_id: str, used: bool) -> dict | None:
+    from ..real_data import read_input
+
+    m = read_input(f"{farm_id}_ndvi.json")
+    if not m:
+        return {"source": "hls" if used else None, "used": used}
+    return {"source": m.get("source"), "representative": m.get("representative"), "used": used,
+            "monthly": m.get("monthly"), "latest": m.get("latest")}
+
+
 def _ecostress_monthly(farm_id: str) -> list[float | None] | None:
-    p = CACHE / f"{farm_id}_ecostress.json"
-    return json.loads(p.read_text(encoding="utf-8"))["etMonthly"] if p.exists() else None
+    """ECOSTRESS months that describe the field itself (not an off-field map pixel)."""
+    e = _ecostress(farm_id)
+    if not e or e.get("representative") is False:
+        return None
+    return e.get("etMonthly")
 
 
 def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None = None,
@@ -75,8 +109,14 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
     base = apply_scenario(baseline_climate(farm_id), sc["rainPct"], sc["tempDeltaC"])
     et0 = base.et0(farm.lat, farm.elevation_m)
     cals = {s["id"]: strategy_calendars(farm_id, s) for s in strategies}
-    kw = lambda s: {"supply_factor": supply_factor, "infiltration_bonus": s.get("infiltrationBonus", 0.0)}  # noqa: E731
     cur = next(s for s in strategies if s.get("current"))
+    eff = lambda s: {"efficiency": s.get("efficiency", rot.get("efficiency", 1.0)),  # noqa: E731
+                     "cover_efficiency": s.get("coverEfficiency", s.get("efficiency", rot.get("efficiency", 1.0)))}
+    supply = None
+    if rot.get("supply") == "current" and not rainfed:
+        # no canal delivery records: the farm gets at least what its current practice applies today
+        supply = simulate(cals[cur["id"]], base, et0, rot, **eff(cur)).need_m3
+    kw = lambda s: {"supply_factor": supply_factor, "infiltration_bonus": s.get("infiltrationBonus", 0.0), "supply": supply, **eff(s)}  # noqa: E731
 
     # ---- SI model: fill ECOSTRESS gaps and calibrate the physics ----
     _, card = load_model()
@@ -93,7 +133,8 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
     } for m in range(12)]
     physics_cur = r_cur.actual_mm / DAYS
     seen = np.array([x["etMmDay"] for x in measured])
-    calib = float(np.clip(seen.sum() / max(physics_cur.sum(), 1e-9), 0.8, 1.2))
+    # calibrate the physics only to real field observations (never to the model or an off-field pixel)
+    calib = float(np.clip(seen.sum() / max(physics_cur.sum(), 1e-9), 0.8, 1.2)) if eco else 1.0
 
     # ---- deterministic run (shapes, monthly series) ----
     det = {s["id"]: simulate(cals[s["id"]], base, et0, rot, calib=calib, **kw(s)) for s in strategies}
@@ -125,8 +166,9 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
     for i, s in enumerate(strategies):
         r = det[s["id"]]
         compare.append({
-            "id": s["id"], "name": s["name"], "current": bool(s.get("current")), "recommended": bool(s.get("recommended")),
-            "water": {"p50": round(float(med["water"][i]), 1), "unit": "m3/ha/yr" if not rainfed else "mm/yr"},
+            "id": s["id"], "name": s["name"], "current": bool(s.get("current")), "recommended": False,
+            "water": {"p50": round(float(med["water"][i]), 1), "unit": "m3/ha/yr" if not rainfed else "mm/yr",
+                      "expected": round(float(r.water_use), 1)},  # baseline (2001-2025 climatology) run: the headline number
             "waterMonthly": [round(float(v), 1) for v in (r.need_m3 if not rainfed else r.actual_mm)],
             "deficitPct": round(float(med["deficit"][i]) * 100, 1),
             "rechargeMm": round(float(r.recharge_mm.sum()), 1),
@@ -135,7 +177,8 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
             "nfixShare": round(r.nfix_share, 2),
             "bareMonths": round(r.bare_months, 1),
             "deltas": {
-                "waterPct": round(float((med["water"][i] - med["water"][ci]) / med["water"][ci] * 100), 1) if med["water"][ci] else 0.0,
+                # water change from the baseline-climate runs (same numbers as the headline); band stays in uncertainty
+                "waterPct": round(float((r.water_use - det[cur["id"]].water_use) / det[cur["id"]].water_use * 100), 1) if det[cur["id"]].water_use else 0.0,
                 "soilPts": round(float(med["soil"][i] - med["soil"][ci]), 1),
                 "incomePct": round(float((med["income"][i] - med["income"][ci]) / abs(med["income"][ci]) * 100), 1) if med["income"][ci] else 0.0,
                 "riskPts": round(float((med["risk"][i] - med["risk"][ci]) * 100), 1),
@@ -155,6 +198,9 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
         "ranking": [{"id": strategies[i]["id"], "score": round(float(scores[i]), 3), "paretoOptimal": pareto[i]} for i in order],
         "formula": "score = Σ priority_k × criterion_k; water = least use (irrigated) or least deficit (rainfed), soil = index/100, income = share of the best option, resilience = 1 − risk",
     }
+
+    for c in compare:  # one recommendation everywhere: the engine's top-ranked strategy
+        c["recommended"] = c["id"] == tradeoffs["ranking"][0]["id"]
 
     # ---- module 3: risk ----
     risk = {"hazards": HAZARDS, "strategies": {}}
@@ -206,6 +252,10 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
             "climate": base.source,
             "model": card["trainingData"],
             "ecostressMonths": sum(1 for x in measured if x["source"] == "ecostress"),
+            "ecostressPoint": _eco_point(farm_id),
+            "rainRangeMmYr": _rain_range(farm_id),
+            "rainSource": "CHIRPS v3 (substitute for GPM IMERG)" if _rain_range(farm_id) else None,
+            "ndvi": _ndvi_info(farm_id, obs_ndvi is not None),
             "hls": obs_ndvi is not None,
             "examplesFlag": "yields, prices and costs are example values pending Agencia Agraria data",
         },

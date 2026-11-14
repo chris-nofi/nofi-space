@@ -23,20 +23,31 @@ class Climate:
     u2: np.ndarray
     rs_mj: np.ndarray
     source: str              # "nasa-power" | "synthetic"
+    et0_ref: np.ndarray | None = None   # observed FAO-56 ET0 (mm/day) from the real data package
+    pm_base: np.ndarray | None = None   # engine PM on the baseline climate, to scale et0_ref for draws/scenarios
 
     def et0(self, lat: float, elev: float) -> np.ndarray:
-        return np.array(monthly_et0(list(self.tmax), list(self.tmin), list(self.rs_mj), list(self.u2), list(self.rh), lat, elev))
+        pm = np.array(monthly_et0(list(self.tmax), list(self.tmin), list(self.rs_mj), list(self.u2), list(self.rh), lat, elev))
+        if self.et0_ref is None or self.pm_base is None:
+            return pm
+        # real ET0, moved by the relative change the engine's own PM sees (warming, drawn years)
+        return self.et0_ref * pm / np.maximum(self.pm_base, 1e-6)
 
 
 def baseline_climate(farm_id: str) -> Climate:
-    power = CACHE / f"{farm_id}_power.json"
-    if power.exists():
-        p = json.loads(power.read_text(encoding="utf-8"))
-        return Climate(
-            np.array(p["tmaxMonthly"]), np.array(p["tminMonthly"]),
-            np.array(p["rainMmDayMonthly"]) * DAYS, np.array(p["rhMonthly"]),
-            np.array(p["u2Monthly"]), np.array(p["rsMjMonthly"]), "nasa-power",
+    from ..real_data import read_input
+
+    p = read_input(f"{farm_id}_power.json")
+    if p:
+        c = Climate(
+            np.array(p["tmaxMonthly"], float), np.array(p["tminMonthly"], float),
+            np.array(p["rainMmDayMonthly"], float) * DAYS, np.array(p["rhMonthly"], float),
+            np.array(p["u2Monthly"], float), np.array(p["rsMjMonthly"], float), "nasa-power",
         )
+        if p.get("et0MmDayMonthly"):
+            f = load_farms()[farm_id]
+            c = replace(c, et0_ref=np.array(p["et0MmDayMonthly"], float), pm_base=c.et0(f.lat, f.elevation_m))
+        return c
     f = json.loads((DATA / "climate_fallback.json").read_text(encoding="utf-8"))["farms"][farm_id]
     return Climate(
         np.array(f["tmax"], float), np.array(f["tmin"], float), np.array(f["rainMm"], float),
@@ -45,8 +56,19 @@ def baseline_climate(farm_id: str) -> Climate:
 
 
 def climate_sd(farm_id: str) -> dict:
+    """Interannual spread for the Monte Carlo. With the real package, rain also carries SOURCE
+    uncertainty: each drawn year picks CHIRPS, NASA POWER or ERA5 annual totals (scaled to the CHIRPS
+    monthly shape), because the three disagree by up to 6x in the highlands (Kepler Q6)."""
+    from ..real_data import read_input
+
     f = json.loads((DATA / "climate_fallback.json").read_text(encoding="utf-8"))["farms"][farm_id]
-    return f["sd"]
+    sd = dict(f["sd"])
+    p = read_input(f"{farm_id}_power.json")
+    rr = (p or {}).get("rainRangeMmYr") or {}
+    base = rr.get("chirps")
+    if base and base > 0:
+        sd["rainSourceFactors"] = [round(v / base, 3) for v in (rr.get("chirps"), rr.get("power"), rr.get("era5")) if v]
+    return sd
 
 
 def apply_scenario(c: Climate, rain_pct: float = 0.0, temp_delta: float = 0.0) -> Climate:
@@ -65,6 +87,8 @@ def draw(c: Climate, sd: dict, rng: np.random.Generator) -> Climate:
         return out
 
     year_rain = rng.lognormal(-sd["rainLog"] ** 2 / 2, sd["rainLog"])
+    if sd.get("rainSourceFactors"):
+        year_rain *= float(rng.choice(sd["rainSourceFactors"]))
     month_rain = rng.lognormal(-0.25 ** 2 / 2, 0.25, 12)
     return replace(
         c,

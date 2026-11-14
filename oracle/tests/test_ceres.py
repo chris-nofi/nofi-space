@@ -81,8 +81,9 @@ def test_verified_record_local_path_is_honest(monkeypatch):
     r = get_verified_record("samegua", "202610")
     assert r["dataHash"].startswith("0x") and len(r["dataHash"]) == 66
     assert r["paid_via_x402"] is False and r["recorded_on_chain"] is False
-    assert r["placeholder"] is True  # synthetic inputs until the real NASA pulls land
-    assert set(r["values"]) >= {"etMmDay", "et0MmDay", "rainMm", "ndvi", "strategy", "waterSavedM3"}
+    assert r["source"] == "evidence" and r["placeholder"] is False  # real monthly evidence (Kepler)
+    assert set(r["values"]) >= {"etMm", "et0Mm", "precipMm", "ndvi", "strategy", "waterSavedM3"}
+    assert r["attestable"] is False and r["issues"]  # Samegua point is off-field, NDVI < 0.20 in Oct
 
 
 def test_knowledge_and_tools_never_promise_farmer_rewards():
@@ -101,7 +102,7 @@ def test_risk_calendar_and_analysis_shapes():
 def test_run_tool_rejects_unknown_farm_and_never_raises():
     assert "error" in json.loads(run_tool("get_farm_analysis", {"farm_id": "lima"}))
     assert "error" in json.loads(run_tool("get_verified_record", {"farm_id": "samegua", "period": "2026-10"}))
-    assert {t["name"] for t in TOOLS} == {"get_farm_analysis", "get_verified_record", "get_risk_calendar"}
+    assert {t["name"] for t in TOOLS} == {"get_farm_analysis", "get_verified_record", "get_climate_context", "get_risk_calendar"}
 
 
 # ---------- agent loop ----------

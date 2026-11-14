@@ -1,0 +1,41 @@
+{
+ "source": "ECOSTRESS L3T JET v002 ETdaily, 70 m (NASA LP DAAC)",
+ "farmId": "carumas",
+ "product": "ECO_L3T_JET",
+ "etMonthly": [
+  2.146,
+  2.36,
+  1.645,
+  1.596,
+  1.357,
+  1.177,
+  1.136,
+  1.477,
+  1.034,
+  1.284,
+  1.662,
+  2.185
+ ],
+ "overpassesMonthly": [
+  15,
+  8,
+  6,
+  10,
+  17,
+  11,
+  25,
+  8,
+  15,
+  23,
+  25,
+  13
+ ],
+ "totalValid": 176,
+ "totalRead": 481,
+ "first": "2019-02-11T12:14:15",
+ "last": "2026-10-20T18:16:02",
+ "monthsWithData": 12,
+ "overpasses": [],
+ "representative": true,
+ "note": "Monthly mean of valid overpasses 2019-2026 at the map point (multi-year climatology)."
+}

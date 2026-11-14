@@ -40,6 +40,7 @@
 
   function status(r, lang) {
     if (r.placeholder) return `<span class="rv-chip warn">${T(lang, "Ejemplo · no anclado", "Example · not anchored")}</span>`;
+    if (r.attestable === false) return `<span class="rv-chip warn" title="${E((r.issues || []).map((i) => i[lang]).join(" "))}">${T(lang, "Datos reales · revisar antes de anclar", "Real data · review before anchoring")}</span>`;
     if (CFG.registryAddress) return `<a class="rv-chip ok" href="${E(EXPLORER)}/address/${E(CFG.registryAddress)}" target="_blank" rel="noopener noreferrer">${T(lang, "Anclado ✔ · ver", "Anchored ✔ · view")}</a>`;
     return `<span class="rv-chip ok">${T(lang, "Listo para anclar", "Ready to anchor")}</span>`;
   }
@@ -51,15 +52,18 @@
     const list = rows(farm);
     const last = list[list.length - 1];
     const real = last && !last.placeholder;
+    const ready = real && list.every((r) => r.attestable !== false);
+    const issues = [...new Set(list.flatMap((r) => (r.issues || []).map((i) => i[lang])))];
     const saved = list.reduce((a, r) => a + (r.waterSavedM3 || 0), 0);
     root.innerHTML = `
-      <article class="card rv-hero ${real ? "ok" : "warn"}">
-        <span class="rv-seal" aria-hidden="true">${real ? "✔" : "…"}</span>
+      <article class="card rv-hero ${ready ? "ok" : "warn"}">
+        <span class="rv-seal" aria-hidden="true">${ready ? "✔" : "…"}</span>
         <div>
           <span class="eyeline">${T(lang, "PARA EL AGRICULTOR · GRATIS", "FOR THE FARMER · FREE")}</span>
-          <h3>${real ? T(lang, "Tu registro verificable de agua está guardado", "Your verifiable water record is saved") : T(lang, "Tu registro se está preparando", "Your record is being prepared")}</h3>
-          <p>${real
-            ? T(lang, "Cualquiera puede comprobar que estos datos de la NASA no se cambiaron. No necesitas billetera ni pagar nada.", "Anyone can check these NASA data were not changed. You don't need a wallet or to pay anything.")
+          <h3>${ready ? T(lang, "Tu registro verificable de agua está listo", "Your verifiable water record is ready") : real ? T(lang, "Datos reales listos; falta un paso antes de guardarlos", "Real data ready; one step left before saving") : T(lang, "Tu registro se está preparando", "Your record is being prepared")}</h3>
+          <p>${ready
+            ? T(lang, "Datos reales de satélite, con su huella. Cualquiera podrá comprobar que no se cambiaron. No necesitas billetera ni pagar nada.", "Real satellite data with its fingerprint. Anyone will be able to check it wasn't changed. You don't need a wallet or to pay anything.")
+            : real ? T(lang, "Los meses ya tienen datos reales de la NASA y su huella. Antes de anclarlos hay que confirmar la ubicación de la chacra. Para ti es gratis.", "These months already have real NASA data and fingerprints. Before anchoring them, the field's location must be confirmed. Free for you.")
             : T(lang, "Estos meses usan datos de ejemplo. Cuando lleguen las mediciones reales de ECOSTRESS, HLS y POWER, cada mes quedará guardado con su huella.", "These months use example data. Once real ECOSTRESS, HLS and POWER measurements arrive, each month is saved with its fingerprint.")}</p>
         </div>
         <div class="rv-total"><small>${T(lang, "AGUA AHORRADA ESTIMADA", "ESTIMATED WATER SAVED")}</small><strong>${num(saved, lang)} m³</strong><small>${T(lang, `${list.length} meses`, `${list.length} months`)}</small></div>
@@ -68,15 +72,19 @@
       <article class="card">
         <div class="card-header"><div><span class="eyeline">01 / ${T(lang, "REGISTROS MENSUALES", "MONTHLY RECORDS")}</span><h3>${T(lang, "Mes a mes, con su huella digital", "Month by month, with its fingerprint")}</h3></div></div>
         <div class="rv-table-wrap"><table class="rv-table">
-          <thead><tr><th>${T(lang, "Mes", "Month")}</th><th>${T(lang, "Estrategia recomendada", "Recommended strategy")}</th><th class="n">${T(lang, "Agua ahorrada", "Water saved")}</th><th>${T(lang, "Huella (dataHash)", "Fingerprint (dataHash)")}</th><th>${T(lang, "Estado", "Status")}</th></tr></thead>
+          <thead><tr><th>${T(lang, "Mes", "Month")}</th><th class="n">ET₀ <small>mm</small></th><th class="n">ECOSTRESS <small>mm</small></th><th class="n">NDVI</th><th>${T(lang, "Estrategia recomendada", "Recommended strategy")}</th><th class="n">${T(lang, "Agua ahorrada", "Water saved")}</th><th>${T(lang, "Huella (dataHash)", "Fingerprint (dataHash)")}</th><th>${T(lang, "Estado", "Status")}</th></tr></thead>
           <tbody>${list.map((r) => `<tr>
             <td>${E(period(r.period, lang))}</td>
+            <td class="n">${r.et0Mm != null ? num(r.et0Mm, lang) : "—"}</td>
+            <td class="n">${r.etMm != null ? num(r.etMm, lang) : `<span title="${T(lang, "sin pasada válida", "no valid overpass")}">${T(lang, "sin dato", "no data")}</span>`}</td>
+            <td class="n">${r.ndvi != null ? Number(r.ndvi).toFixed(2) : "—"}</td>
             <td>${E(stratName(farm, r.strategy, lang))}</td>
             <td class="n">${num(r.waterSavedM3, lang)} m³</td>
             <td><button type="button" class="rv-hash" data-rv-copy="${E(r.dataHash)}" title="${E(r.dataHash)}">${E(short(r.dataHash))}<span>${S.copied === r.dataHash ? T(lang, "copiado", "copied") : T(lang, "copiar", "copy")}</span></button></td>
-            <td>${status(r, lang)}</td></tr>`).join("") || `<tr><td colspan="5">${T(lang, "Sin registros todavía.", "No records yet.")}</td></tr>`}
+            <td>${status(r, lang)}</td></tr>`).join("") || `<tr><td colspan="8">${T(lang, "Sin registros todavía.", "No records yet.")}</td></tr>`}
           </tbody></table></div>
-        <p class="si-note">${T(lang, "La huella es un sha256 del registro completo (valores, identificadores de los datos de la NASA y versión del motor). Si cambia un solo número, la huella cambia y el contrato dice «✘ no coincide».", "The fingerprint is a sha256 of the full record (values, NASA dataset IDs and engine version). Change one number and it no longer matches: the contract says “✘ mismatch”.")}
+        ${issues.length ? `<ul class="rv-issues">${issues.map((i) => `<li>${E(i)}</li>`).join("")}</ul>` : ""}
+        <p class="si-note">${T(lang, "Fuentes: ET₀ NASA POWER (FAO-56), ECOSTRESS L3T JET (70 m), NDVI MODIS MOD13Q1 o HLS, lluvia CHIRPS v3. ", "Sources: ET₀ NASA POWER (FAO-56), ECOSTRESS L3T JET (70 m), NDVI MODIS MOD13Q1 or HLS, rain CHIRPS v3. ")}${T(lang, "La huella es un sha256 del registro completo (valores, identificadores de los datos de la NASA y versión del motor). Si cambia un solo número, la huella cambia y el contrato dice «✘ no coincide».", "The fingerprint is a sha256 of the full record (values, NASA dataset IDs and engine version). Change one number and it no longer matches: the contract says “✘ mismatch”.")}
           ${S.err ? T(lang, " Oráculo no disponible: se muestran los registros incluidos en el sitio.", " Oracle unavailable: showing the records bundled with the site.") : ""}</p>
       </article>
 

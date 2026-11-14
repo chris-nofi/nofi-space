@@ -49,3 +49,12 @@ Add new results below as tasks complete.
 | `avalanche/` (Apollo's contracts + x402 server) | **Not in this repo yet**: merge and reconcile the record schema |
 | NØFI L1 | Not touched from here. Plan v2 §0 says validator balance 0, last block #200 |
 | Nothing deployed, signed with a real key, or sent | ✔ |
+
+## Real data (Sat 14 Nov 2026, ~02:15 Peru)
+
+| Check | Result |
+|---|---|
+| `oracle`: `pytest -q` | **51 passed**: new `test_real_data.py` covers real ET₀ in the engine; El Algarrobal 17,064 / 12,798 / 20,201 / 12,882 vs Kepler 17,070 / 12,800 / 20,210 / 12,890; drip first; off-field pixels not used; Carumas rain range lowers confidence; evidence issues; climate tool |
+| Kepler §9 checklist | `node --check app.js` OK; `CERES_NASA_DATA.farms` has 3 keys; El Algarrobal overview, strategy SUGERIDA, SI top rank and CERES text all say drip + strip cover, 12,882 m³/ha, −24.5 % vs 17,064; no "ECOSTRESS/HLS muestra/shows" strings; climate labeled; citations under charts; CHIRPS rain with POWER/ERA5 range; Samegua temperature from ERA5-Land; spot-check El Algarrobal Oct 2026 ET₀ = 142.9 mm |
+| Site headless | 5 pages × 3 farms, no runtime errors, no illustrative-data strings |
+| Not done | Retell prompt (CERES reads live tools, no static prompt to regenerate); evidence hash vs `build-attestation.mjs` unconfirmed; no signing or transactions |

@@ -89,7 +89,7 @@ Ask the Moquegua Local Lead and Team1 whether pre-hackathon scaffolding is OK (p
 
 1. **Revive the NØFI validator** (plan §0): P-Chain balance is 0 and the last block is #200 (29 Oct). `IncreaseL1ValidatorBalanceTx` with ~5 Fuji AVAX for validationID `LRQoNTfzo87JF8N97DcM73AwtQV4ZtNU8e1vQc6p68ZmWsmbR`. Go/no-go 12:00, otherwise Fuji.
 2. **Merge `avalanche/` into this repo** and reconcile the record schema (above).
-3. Real NASA pulls (POWER, then AppEEARS HLS/ECOSTRESS) → `export-evidence` → records with `placeholder: false`.
+3. ✅ Real NASA data imported (Kepler, `docs/10_REAL_DATA.md`); 12 real monthly evidence files are the records. Open: move Samegua/El Algarrobal points onto real fields, HLS 30 m, IMERG.
 4. Deploy and verify on NØFI, attest the first real record, and point `site/config.js` → `registryAddress`.
 5. Node x402 oracle + facilitator over HTTPS, then set `X402_EARTH_URL` and `CERES_AGENT_PRIVATE_KEY`. First real CERES payment tx on nofiscan before 19:00 Sat.
 6. `site/config.js` → `x402PayUrl` (pagar.html), so judges can pay from their own wallet.

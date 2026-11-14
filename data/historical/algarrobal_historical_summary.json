@@ -1,0 +1,219 @@
+{
+ "farm": "algarrobal",
+ "power_precip_qc_flagged_days": [
+  {
+   "date": "2022-09-12",
+   "power_mm": 261.5,
+   "chirps_month_mm": 1.6
+  },
+  {
+   "date": "2022-09-13",
+   "power_mm": 70.1,
+   "chirps_month_mm": 1.6
+  }
+ ],
+ "era5_et0_mm_yr_1991_2020": 1430.1,
+ "lat": -17.62,
+ "lon": -71.26,
+ "period": "1981-01-01..2026-11-11",
+ "climatology_1991_2020": {
+  "t2m_ann": 18.28,
+  "precip_mm_yr": 51.8,
+  "chirps_mm_yr": 26.5,
+  "frost_days_yr": 0.0
+ },
+ "trends": {
+  "t2m": {
+   "ols_per_decade": 0.069,
+   "ols_p": 0.1931,
+   "sen_per_decade": 0.078,
+   "mann_kendall_tau": 0.133,
+   "mann_kendall_p": 0.1966,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "tmax": {
+   "ols_per_decade": 0.094,
+   "ols_p": 0.0999,
+   "sen_per_decade": 0.108,
+   "mann_kendall_tau": 0.168,
+   "mann_kendall_p": 0.1044,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "tmin": {
+   "ols_per_decade": 0.049,
+   "ols_p": 0.3557,
+   "sen_per_decade": 0.038,
+   "mann_kendall_tau": 0.063,
+   "mann_kendall_p": 0.5442,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "precip_mm": {
+   "ols_per_decade": 0.197,
+   "ols_p": 0.9474,
+   "sen_per_decade": -0.014,
+   "mann_kendall_tau": 0.0,
+   "mann_kendall_p": 1.0,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "chirps_mm": {
+   "ols_per_decade": 0.204,
+   "ols_p": 0.8597,
+   "sen_per_decade": 0.546,
+   "mann_kendall_tau": 0.038,
+   "mann_kendall_p": 0.7101,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "frost_days_lt0": {
+   "ols_per_decade": 0.0,
+   "ols_p": null,
+   "sen_per_decade": -0.0,
+   "mann_kendall_tau": null,
+   "mann_kendall_p": null,
+   "years": "1981-2025",
+   "n": 45
+  },
+  "era5land_t2m": {
+   "ols_per_decade": -0.051,
+   "ols_p": 0.3706,
+   "sen_per_decade": -0.028,
+   "mann_kendall_tau": -0.044,
+   "mann_kendall_p": 0.6669,
+   "years": "1981-2025",
+   "n": 45
+  }
+ },
+ "extremes": {
+  "hottest_year": {
+   "year": 2023,
+   "t2m": 19.45
+  },
+  "coldest_year": {
+   "year": 2022,
+   "t2m": 17.5
+  },
+  "wettest_year_power": {
+   "year": 2012,
+   "mm": 116.0
+  },
+  "driest_year_power": {
+   "year": 1983,
+   "mm": 7.1
+  },
+  "wettest_year_chirps": {
+   "year": 1990,
+   "mm": 44.5
+  },
+  "driest_year_chirps": {
+   "year": 2023,
+   "mm": 5.4
+  },
+  "record_tmax": {
+   "date": "1983-03-21",
+   "c": 30.02
+  },
+  "record_tmin": {
+   "date": "2000-07-11",
+   "c": 8.99
+  },
+  "record_daily_precip": {
+   "date": "2022-09-15",
+   "mm": 25.24
+  },
+  "most_frost_days": {
+   "year": 1981,
+   "days": 0
+  },
+  "mean_frost_days_per_year_1991_2020": 0.0
+ },
+ "enso_dec_apr": {
+  "1982-83 El Nino": {
+   "dec_apr_t2m_anom": 1.55,
+   "dec_apr_precip_mm": 4.0,
+   "base_precip_mm": 42.4,
+   "dec_apr_chirps_mm": 3.3,
+   "base_chirps_mm": 18.1,
+   "tmax_anom": 1.78
+  },
+  "1997-98 El Nino": {
+   "dec_apr_t2m_anom": 1.31,
+   "dec_apr_precip_mm": 31.8,
+   "base_precip_mm": 42.4,
+   "dec_apr_chirps_mm": 14.1,
+   "base_chirps_mm": 18.1,
+   "tmax_anom": 1.42
+  },
+  "2015-16 El Nino": {
+   "dec_apr_t2m_anom": 0.67,
+   "dec_apr_precip_mm": 18.7,
+   "base_precip_mm": 42.4,
+   "dec_apr_chirps_mm": 17.1,
+   "base_chirps_mm": 18.1,
+   "tmax_anom": 0.88
+  },
+  "2023-24 El Nino": {
+   "dec_apr_t2m_anom": 1.14,
+   "dec_apr_precip_mm": 21.5,
+   "base_precip_mm": 42.4,
+   "dec_apr_chirps_mm": 10.7,
+   "base_chirps_mm": 18.1,
+   "tmax_anom": 1.15
+  },
+  "1998-99 La Nina": {
+   "dec_apr_t2m_anom": -0.72,
+   "dec_apr_precip_mm": 66.3,
+   "base_precip_mm": 42.4,
+   "dec_apr_chirps_mm": 18.4,
+   "base_chirps_mm": 18.1,
+   "tmax_anom": -0.84
+  },
+  "2010-11 La Nina": {
+   "dec_apr_t2m_anom": -0.5,
+   "dec_apr_precip_mm": 50.2,
+   "base_precip_mm": 42.4,
+   "dec_apr_chirps_mm": 14.6,
+   "base_chirps_mm": 18.1,
+   "tmax_anom": -0.47
+  }
+ },
+ "cross_checks": {
+  "power_vs_chirps_precip_1991_2020_mm_yr": [
+   51.8,
+   26.5
+  ],
+  "power_vs_era5_precip_1991_2020_mm_yr": [
+   51.8,
+   25.0
+  ],
+  "power_vs_era5land_t2m_1991_2020": [
+   18.28,
+   18.94
+  ],
+  "grid_points": {
+   "power_cell_elev_m": 720.4,
+   "chirps_cell": [
+    -17.62,
+    -71.26
+   ],
+   "era5land_cell": [
+    -17.599998,
+    -71.299995,
+    117.0
+   ],
+   "era5_cell": [
+    -17.5,
+    -71.25,
+    117.0
+   ]
+  }
+ },
+ "sources": {
+  "power": "https://power.larc.nasa.gov/api/temporal/daily/point (community=AG; radiation only from 1984)",
+  "chirps": "CHIRPS v3.0 monthly COGs, UCSB CHC https://data.chc.ucsb.edu/products/CHIRPS/v3.0/monthly/global/cogs/",
+  "era5": "https://archive-api.open-meteo.com/v1/archive models=era5,era5_land (Copernicus C3S, via Open-Meteo)"
+ }
+}

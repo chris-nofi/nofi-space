@@ -1,0 +1,63 @@
+{
+  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+  "farmKey": "moquegua:samegua",
+  "period": 202608,
+  "revision": 0,
+  "indicators": {
+    "et_mm": {
+      "value": 17.1,
+      "dataset": "ECOSTRESS_L3T_JET_v002",
+      "granules": [
+        "ECOv002_L3T_JET_46160_020_19KBA_20260826T155509_0713_01",
+        "ECOv002_L3T_JET_46160_020_19KBB_20260826T155509_0713_01"
+      ],
+      "scale": "70 m",
+      "stat": "mean ETdaily of 2 valid overpasses x 31 days"
+    },
+    "et0_mm": {
+      "value": 120.9,
+      "dataset": "NASA POWER AG daily (FAO-56 Penman-Monteith)",
+      "point": [
+        -17.18,
+        -70.9
+      ],
+      "gridCellElevation_m": 3851.1,
+      "farmElevation_m": 1575.0,
+      "days": 31,
+      "gapFilledDays": 0
+    },
+    "precip_mm": {
+      "value": 0.8,
+      "dataset": "CHIRPS_v3.0_monthly",
+      "scale": "0.05 deg",
+      "substituteFor": "GPM_3IMERGDF_v07",
+      "reason": "GES DISC returned 403 'EULA Acceptance Failure' for this Earthdata token"
+    },
+    "ndvi": {
+      "value": 0.233,
+      "dataset": "MOD13Q1_v061",
+      "composites": [
+        "2026-08-13",
+        "2026-08-29"
+      ],
+      "stat": "median of 16-day composites (250 m)",
+      "substituteFor": "HLS_S30_v2.0",
+      "reason": "no clear HLS scene this month"
+    }
+  },
+  "engine": {
+    "version": "ceres pull_and_build.py (sha256 34f980fa36bb)",
+    "priorities": {
+      "water": 0.4,
+      "soil": 0.25,
+      "income": 0.25,
+      "resilience": 0.1
+    },
+    "recommendedStrategyId": 2,
+    "recommendedStrategy": "maiz-arveja rotation",
+    "waterSavedM3": 0,
+    "waterSavedBasis": "(alfalfa Kc 0.95 - rotation Kc 1.05) x ET0 125.5 mm / 0.60 x 1.2 ha; ET0 from POWER cell at 3851 m (see caveat)",
+    "recommendationBasis": "dashboard + SI fixture recommendation; water saving recomputed below with ET0 x FAO-56 Kc",
+    "confidence": "low"
+  }
+}

@@ -1,22 +1,493 @@
 {
-  "_note": "Kc from FAO-56 Table 12 (transferred evidence). Yields, prices and costs are EXAMPLE values in PEN to be replaced with Agencia Agraria / MIDAGRI data. frostC = monthly-mean Tmin below which frost damage becomes likely; heatC = monthly-mean Tmax above which heat stress becomes likely. cover = canopy cover at mid-season (0-1); residue = cover left after harvest and for how many months.",
-  "crops": {
-    "potato":        {"name": {"es": "Papa", "en": "Potato"}, "family": "solanaceae", "kc": [0.50, 1.15, 0.75], "months": 5, "nfix": false, "rootM": 0.5, "frostC": 1.0, "heatC": 30, "salinity": "low", "cover": 0.80, "residue": [0.10, 1], "yieldT": 15, "pricePenT": 900, "costPenHa": 6000},
-    "faba":          {"name": {"es": "Haba", "en": "Faba bean"}, "family": "fabaceae", "kc": [0.50, 1.15, 1.10], "months": 5, "nfix": true, "rootM": 0.6, "frostC": -1.0, "heatC": 28, "salinity": "low", "cover": 0.75, "residue": [0.30, 2], "yieldT": 6, "pricePenT": 1500, "costPenHa": 4000},
-    "oat_vetch":     {"name": {"es": "Avena-vicia", "en": "Oat-vetch"}, "family": "poaceae+fabaceae", "kc": [0.40, 1.05, 0.90], "months": 4, "nfix": true, "rootM": 0.8, "frostC": -2.0, "heatC": 28, "salinity": "medium", "cover": 0.85, "residue": [0.70, 4], "yieldT": 20, "pricePenT": 150, "costPenHa": 1500},
-    "tarwi":         {"name": {"es": "Tarwi", "en": "Tarwi (Andean lupin)"}, "family": "fabaceae", "kc": [0.40, 1.10, 0.40], "months": 6, "nfix": true, "rootM": 1.2, "frostC": 0.0, "heatC": 28, "salinity": "low", "cover": 0.70, "residue": [0.30, 2], "yieldT": 1.2, "pricePenT": 6000, "costPenHa": 3000},
-    "barley":        {"name": {"es": "Cebada", "en": "Barley"}, "family": "poaceae", "kc": [0.30, 1.15, 0.25], "months": 5, "nfix": false, "rootM": 1.0, "frostC": -1.0, "heatC": 30, "salinity": "high", "cover": 0.75, "residue": [0.40, 2], "yieldT": 2.5, "pricePenT": 1200, "costPenHa": 1800},
-    "pasture":       {"name": {"es": "Descanso con pastos", "en": "Grass fallow"}, "family": "poaceae", "kc": [0.50, 0.75, 0.75], "months": 12, "nfix": false, "rootM": 0.6, "frostC": -4.0, "heatC": 32, "salinity": "medium", "cover": 0.70, "residue": [0.60, 1], "yieldT": 4, "pricePenT": 150, "costPenHa": 300},
-    "alfalfa":       {"name": {"es": "Alfalfa", "en": "Alfalfa"}, "family": "fabaceae", "kc": [0.90, 1.00, 0.95], "months": 12, "nfix": true, "rootM": 2.0, "frostC": -3.0, "heatC": 35, "salinity": "medium", "cover": 0.90, "residue": [0.50, 1], "yieldT": 18, "pricePenT": 600, "costPenHa": 4000},
-    "maize_forage":  {"name": {"es": "Maíz chala", "en": "Forage maize"}, "family": "poaceae", "kc": [0.30, 1.20, 0.50], "months": 5, "nfix": false, "rootM": 1.0, "frostC": 4.0, "heatC": 38, "salinity": "medium", "cover": 0.85, "residue": [0.20, 1], "yieldT": 50, "pricePenT": 120, "costPenHa": 3500},
-    "pea":           {"name": {"es": "Arveja", "en": "Pea"}, "family": "fabaceae", "kc": [0.50, 1.15, 1.10], "months": 4, "nfix": true, "rootM": 0.6, "frostC": 2.0, "heatC": 28, "salinity": "low", "cover": 0.75, "residue": [0.30, 1], "yieldT": 8, "pricePenT": 1500, "costPenHa": 5500},
-    "barley_forage": {"name": {"es": "Cebada forrajera", "en": "Forage barley"}, "family": "poaceae", "kc": [0.30, 1.15, 0.40], "months": 4, "nfix": false, "rootM": 1.0, "frostC": -1.0, "heatC": 30, "salinity": "high", "cover": 0.80, "residue": [0.30, 1], "yieldT": 25, "pricePenT": 110, "costPenHa": 1500},
-    "bean":          {"name": {"es": "Frijol", "en": "Bean"}, "family": "fabaceae", "kc": [0.40, 1.15, 0.35], "months": 4, "nfix": true, "rootM": 0.8, "frostC": 4.0, "heatC": 32, "salinity": "low", "cover": 0.70, "residue": [0.20, 1], "yieldT": 1.8, "pricePenT": 4500, "costPenHa": 3500},
-    "quinoa":        {"name": {"es": "Quinua", "en": "Quinoa"}, "family": "amaranthaceae", "kc": [0.50, 1.00, 0.70], "months": 5, "nfix": false, "rootM": 1.0, "frostC": 0.0, "heatC": 35, "salinity": "high", "cover": 0.65, "residue": [0.20, 1], "yieldT": 2.5, "pricePenT": 4500, "costPenHa": 4500},
-    "olive":         {"name": {"es": "Olivo · gravedad", "en": "Olive · gravity"}, "family": "oleaceae", "kcMonthly": [0.72, 0.72, 0.70, 0.68, 0.65, 0.62, 0.62, 0.64, 0.66, 0.68, 0.70, 0.72], "months": 12, "nfix": false, "rootM": 1.5, "frostC": 0.0, "heatC": 38, "salinity": "medium", "cover": 0.45, "residue": [0.0, 0], "yieldT": 6, "pricePenT": 3500, "costPenHa": 9000, "perennial": true},
-    "olive_deficit": {"name": {"es": "Olivo · riego deficitario", "en": "Olive · deficit irrigation"}, "family": "oleaceae", "kcMonthly": [0.58, 0.58, 0.55, 0.52, 0.50, 0.48, 0.48, 0.50, 0.60, 0.65, 0.62, 0.58], "months": 12, "nfix": false, "rootM": 1.5, "frostC": 0.0, "heatC": 38, "salinity": "medium", "cover": 0.45, "residue": [0.0, 0], "yieldT": 5.6, "pricePenT": 3500, "costPenHa": 8500, "perennial": true},
-    "olive_cover":   {"name": {"es": "Olivo + cobertura invernal", "en": "Olive + winter cover"}, "family": "oleaceae+fabaceae", "kcMonthly": [0.72, 0.72, 0.70, 0.68, 0.80, 0.78, 0.78, 0.80, 0.80, 0.68, 0.70, 0.72], "months": 12, "nfix": true, "rootM": 1.5, "frostC": 0.0, "heatC": 38, "salinity": "medium", "cover": 0.75, "residue": [0.0, 0], "yieldT": 6, "pricePenT": 3500, "costPenHa": 9600, "perennial": true},
-    "olive_drip":    {"name": {"es": "Olivo · goteo + franjas", "en": "Olive · drip + strips"}, "family": "oleaceae+fabaceae", "kcMonthly": [0.62, 0.62, 0.60, 0.58, 0.60, 0.58, 0.58, 0.60, 0.62, 0.60, 0.60, 0.62], "months": 12, "nfix": true, "rootM": 1.5, "frostC": 0.0, "heatC": 38, "salinity": "medium", "cover": 0.60, "residue": [0.0, 0], "yieldT": 6.5, "pricePenT": 3500, "costPenHa": 10500, "perennial": true}
+ "_note": "Kc from FAO-56 Table 12 (transferred evidence). Yields, prices and costs are EXAMPLE values in PEN to be replaced with Agencia Agraria / MIDAGRI data. frostC = monthly-mean Tmin below which frost damage becomes likely; heatC = monthly-mean Tmax above which heat stress becomes likely. cover = canopy cover at mid-season (0-1); residue = cover left after harvest and for how many months. Olive Kc 0.65 Jun-Sep / 0.70 otherwise (FAO-56 Table 12, 40-60 % canopy, southern hemisphere); deficit = 75 % ETc (RDI); cover crops: coverKcMonthly = share of ground x 0.8 May-Sep (winter legume 50 %, drip strips 30%) [assumption, Kepler §4.3].",
+ "crops": {
+  "potato": {
+   "name": {
+    "es": "Papa",
+    "en": "Potato"
+   },
+   "family": "solanaceae",
+   "kc": [
+    0.5,
+    1.15,
+    0.75
+   ],
+   "months": 5,
+   "nfix": false,
+   "rootM": 0.5,
+   "frostC": 1.0,
+   "heatC": 30,
+   "salinity": "low",
+   "cover": 0.8,
+   "residue": [
+    0.1,
+    1
+   ],
+   "yieldT": 15,
+   "pricePenT": 900,
+   "costPenHa": 6000
   },
-  "bare": {"kcWet": 0.30, "kcDry": 0.12}
+  "faba": {
+   "name": {
+    "es": "Haba",
+    "en": "Faba bean"
+   },
+   "family": "fabaceae",
+   "kc": [
+    0.5,
+    1.15,
+    1.1
+   ],
+   "months": 5,
+   "nfix": true,
+   "rootM": 0.6,
+   "frostC": -1.0,
+   "heatC": 28,
+   "salinity": "low",
+   "cover": 0.75,
+   "residue": [
+    0.3,
+    2
+   ],
+   "yieldT": 6,
+   "pricePenT": 1500,
+   "costPenHa": 4000
+  },
+  "oat_vetch": {
+   "name": {
+    "es": "Avena-vicia",
+    "en": "Oat-vetch"
+   },
+   "family": "poaceae+fabaceae",
+   "kc": [
+    0.4,
+    1.05,
+    0.9
+   ],
+   "months": 4,
+   "nfix": true,
+   "rootM": 0.8,
+   "frostC": -2.0,
+   "heatC": 28,
+   "salinity": "medium",
+   "cover": 0.85,
+   "residue": [
+    0.7,
+    4
+   ],
+   "yieldT": 20,
+   "pricePenT": 150,
+   "costPenHa": 1500
+  },
+  "tarwi": {
+   "name": {
+    "es": "Tarwi",
+    "en": "Tarwi (Andean lupin)"
+   },
+   "family": "fabaceae",
+   "kc": [
+    0.4,
+    1.1,
+    0.4
+   ],
+   "months": 6,
+   "nfix": true,
+   "rootM": 1.2,
+   "frostC": 0.0,
+   "heatC": 28,
+   "salinity": "low",
+   "cover": 0.7,
+   "residue": [
+    0.3,
+    2
+   ],
+   "yieldT": 1.2,
+   "pricePenT": 6000,
+   "costPenHa": 3000
+  },
+  "barley": {
+   "name": {
+    "es": "Cebada",
+    "en": "Barley"
+   },
+   "family": "poaceae",
+   "kc": [
+    0.3,
+    1.15,
+    0.25
+   ],
+   "months": 5,
+   "nfix": false,
+   "rootM": 1.0,
+   "frostC": -1.0,
+   "heatC": 30,
+   "salinity": "high",
+   "cover": 0.75,
+   "residue": [
+    0.4,
+    2
+   ],
+   "yieldT": 2.5,
+   "pricePenT": 1200,
+   "costPenHa": 1800
+  },
+  "pasture": {
+   "name": {
+    "es": "Descanso con pastos",
+    "en": "Grass fallow"
+   },
+   "family": "poaceae",
+   "kc": [
+    0.5,
+    0.75,
+    0.75
+   ],
+   "months": 12,
+   "nfix": false,
+   "rootM": 0.6,
+   "frostC": -4.0,
+   "heatC": 32,
+   "salinity": "medium",
+   "cover": 0.7,
+   "residue": [
+    0.6,
+    1
+   ],
+   "yieldT": 4,
+   "pricePenT": 150,
+   "costPenHa": 300
+  },
+  "alfalfa": {
+   "name": {
+    "es": "Alfalfa",
+    "en": "Alfalfa"
+   },
+   "family": "fabaceae",
+   "kc": [
+    0.9,
+    1.0,
+    0.95
+   ],
+   "months": 12,
+   "nfix": true,
+   "rootM": 2.0,
+   "frostC": -3.0,
+   "heatC": 35,
+   "salinity": "medium",
+   "cover": 0.9,
+   "residue": [
+    0.5,
+    1
+   ],
+   "yieldT": 18,
+   "pricePenT": 600,
+   "costPenHa": 4000
+  },
+  "maize_forage": {
+   "name": {
+    "es": "Maíz chala",
+    "en": "Forage maize"
+   },
+   "family": "poaceae",
+   "kc": [
+    0.3,
+    1.2,
+    0.5
+   ],
+   "months": 5,
+   "nfix": false,
+   "rootM": 1.0,
+   "frostC": 4.0,
+   "heatC": 38,
+   "salinity": "medium",
+   "cover": 0.85,
+   "residue": [
+    0.2,
+    1
+   ],
+   "yieldT": 50,
+   "pricePenT": 120,
+   "costPenHa": 3500
+  },
+  "pea": {
+   "name": {
+    "es": "Arveja",
+    "en": "Pea"
+   },
+   "family": "fabaceae",
+   "kc": [
+    0.5,
+    1.15,
+    1.1
+   ],
+   "months": 4,
+   "nfix": true,
+   "rootM": 0.6,
+   "frostC": 2.0,
+   "heatC": 28,
+   "salinity": "low",
+   "cover": 0.75,
+   "residue": [
+    0.3,
+    1
+   ],
+   "yieldT": 8,
+   "pricePenT": 1500,
+   "costPenHa": 5500
+  },
+  "barley_forage": {
+   "name": {
+    "es": "Cebada forrajera",
+    "en": "Forage barley"
+   },
+   "family": "poaceae",
+   "kc": [
+    0.3,
+    1.15,
+    0.4
+   ],
+   "months": 4,
+   "nfix": false,
+   "rootM": 1.0,
+   "frostC": -1.0,
+   "heatC": 30,
+   "salinity": "high",
+   "cover": 0.8,
+   "residue": [
+    0.3,
+    1
+   ],
+   "yieldT": 25,
+   "pricePenT": 110,
+   "costPenHa": 1500
+  },
+  "bean": {
+   "name": {
+    "es": "Frijol",
+    "en": "Bean"
+   },
+   "family": "fabaceae",
+   "kc": [
+    0.4,
+    1.15,
+    0.35
+   ],
+   "months": 4,
+   "nfix": true,
+   "rootM": 0.8,
+   "frostC": 4.0,
+   "heatC": 32,
+   "salinity": "low",
+   "cover": 0.7,
+   "residue": [
+    0.2,
+    1
+   ],
+   "yieldT": 1.8,
+   "pricePenT": 4500,
+   "costPenHa": 3500
+  },
+  "quinoa": {
+   "name": {
+    "es": "Quinua",
+    "en": "Quinoa"
+   },
+   "family": "amaranthaceae",
+   "kc": [
+    0.5,
+    1.0,
+    0.7
+   ],
+   "months": 5,
+   "nfix": false,
+   "rootM": 1.0,
+   "frostC": 0.0,
+   "heatC": 35,
+   "salinity": "high",
+   "cover": 0.65,
+   "residue": [
+    0.2,
+    1
+   ],
+   "yieldT": 2.5,
+   "pricePenT": 4500,
+   "costPenHa": 4500
+  },
+  "olive": {
+   "name": {
+    "es": "Olivo · gravedad",
+    "en": "Olive · gravity"
+   },
+   "family": "oleaceae",
+   "kcMonthly": [
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.65,
+    0.65,
+    0.65,
+    0.65,
+    0.7,
+    0.7,
+    0.7
+   ],
+   "months": 12,
+   "nfix": false,
+   "rootM": 1.5,
+   "frostC": 0.0,
+   "heatC": 38,
+   "salinity": "medium",
+   "cover": 0.45,
+   "residue": [
+    0.0,
+    0
+   ],
+   "yieldT": 6,
+   "pricePenT": 3500,
+   "costPenHa": 9000,
+   "perennial": true
+  },
+  "olive_deficit": {
+   "name": {
+    "es": "Olivo · riego deficitario",
+    "en": "Olive · deficit irrigation"
+   },
+   "family": "oleaceae",
+   "kcMonthly": [
+    0.525,
+    0.525,
+    0.525,
+    0.525,
+    0.525,
+    0.4875,
+    0.4875,
+    0.4875,
+    0.4875,
+    0.525,
+    0.525,
+    0.525
+   ],
+   "months": 12,
+   "nfix": false,
+   "rootM": 1.5,
+   "frostC": 0.0,
+   "heatC": 38,
+   "salinity": "medium",
+   "cover": 0.45,
+   "residue": [
+    0.0,
+    0
+   ],
+   "yieldT": 5.6,
+   "pricePenT": 3500,
+   "costPenHa": 8500,
+   "perennial": true
+  },
+  "olive_cover": {
+   "name": {
+    "es": "Olivo + cobertura invernal",
+    "en": "Olive + winter cover"
+   },
+   "family": "oleaceae+fabaceae",
+   "kcMonthly": [
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.65,
+    0.65,
+    0.65,
+    0.65,
+    0.7,
+    0.7,
+    0.7
+   ],
+   "months": 12,
+   "nfix": true,
+   "rootM": 1.5,
+   "frostC": 0.0,
+   "heatC": 38,
+   "salinity": "medium",
+   "cover": 0.75,
+   "residue": [
+    0.0,
+    0
+   ],
+   "yieldT": 6,
+   "pricePenT": 3500,
+   "costPenHa": 9600,
+   "perennial": true,
+   "coverKcMonthly": [
+    0,
+    0,
+    0,
+    0,
+    0.4,
+    0.4,
+    0.4,
+    0.4,
+    0.4,
+    0,
+    0,
+    0
+   ]
+  },
+  "olive_drip": {
+   "name": {
+    "es": "Olivo · goteo + franjas",
+    "en": "Olive · drip + strips"
+   },
+   "family": "oleaceae+fabaceae",
+   "kcMonthly": [
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.7,
+    0.65,
+    0.65,
+    0.65,
+    0.65,
+    0.7,
+    0.7,
+    0.7
+   ],
+   "months": 12,
+   "nfix": true,
+   "rootM": 1.5,
+   "frostC": 0.0,
+   "heatC": 38,
+   "salinity": "medium",
+   "cover": 0.6,
+   "residue": [
+    0.0,
+    0
+   ],
+   "yieldT": 6.5,
+   "pricePenT": 3500,
+   "costPenHa": 10500,
+   "perennial": true,
+   "coverKcMonthly": [
+    0,
+    0,
+    0,
+    0,
+    0.24,
+    0.24,
+    0.24,
+    0.24,
+    0.24,
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "bare": {
+  "kcWet": 0.3,
+  "kcDry": 0.12
+ }
 }

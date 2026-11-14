@@ -6,7 +6,8 @@ from datetime import date
 from functools import lru_cache
 
 from ..config import env
-from ..proof import package
+from ..proof import package, record_values, summary
+from ..real_data import context as real_context
 from ..si.engine import analyze
 from ..x402_client import X402Error, fetch_paid
 
@@ -43,6 +44,11 @@ TOOLS = [
             },
             "required": ["farm_id"],
         },
+    },
+    {
+        "name": "get_climate_context",
+        "description": "Clima real de la parcela desde NASA POWER, CHIRPS y ERA5 (1981-2026): ET0 anual, rango de lluvia entre fuentes, tendencia de temperatura por década, años extremos, El Niño/La Niña, anomalías de los últimos meses, y advertencias de calidad (celda de POWER, punto fuera de la chacra). Úsala cuando pregunten por el clima, la sequía, El Niño, el calentamiento o qué tan confiables son los datos.",
+        "input_schema": {"type": "object", "properties": {"farm_id": {"type": "string", "enum": FARM_IDS}}, "required": ["farm_id"]},
     },
     {
         "name": "get_risk_calendar",
@@ -124,12 +130,42 @@ def get_verified_record(farm_id: str, period: str | None = None) -> dict:
             "note_for_farmer": "Di solo: 'tu registro verificable de agua está guardado'. No hables de pagos, tokens ni billeteras con el agricultor.",
         }
     pkg = package(farm_id, period)
+    summ = summary(pkg)
     return {
-        "farm_id": farm_id, "period": period, "values": pkg["record"]["values"], "dataHash": pkg["dataHash"],
-        "datasets_used": [s["dataset"] for s in pkg["record"]["sources"] if s["used"]],
-        "placeholder": pkg["placeholder"], "recorded_on_chain": False, "paid_via_x402": False, "payment": None,
-        "note": "Oráculo x402 no configurado: registro calculado localmente, sin pago ni anclaje en la cadena.",
-        "note_for_farmer": "Si placeholder es true, di que son datos de ejemplo hasta tener las mediciones reales de la NASA.",
+        "farm_id": farm_id, "period": period, "values": record_values(pkg), "dataHash": pkg["dataHash"],
+        "datasets_used": summ["datasets"], "source": pkg.get("source"),
+        "placeholder": pkg["placeholder"], "attestable": pkg.get("attestable", False), "issues": summ["issues"],
+        "recorded_on_chain": False, "paid_via_x402": False, "payment": None,
+        "note": "Oráculo x402 no configurado: registro leído localmente, sin pago ni anclaje en la cadena.",
+        "note_for_farmer": "Datos reales de satélite y reanálisis. Si hay 'issues', dilo con sencillez (por ejemplo, que el punto del mapa debe moverse a la chacra antes de guardar el registro).",
+    }
+
+
+def get_climate_context(farm_id: str) -> dict:
+    ctx = real_context(farm_id)
+    if not ctx:
+        return {"error": "datos climáticos reales no cargados (python -m earth_oracle.cli import-real)"}
+    t = ctx.get("trends") or {}
+    pick = lambda d, *ks: {k: d.get(k) for k in ks if isinstance(d, dict) and k in d}  # noqa: E731
+    return {
+        "farm_id": farm_id,
+        "et0_mm_yr_power_fao56": ctx.get("et0MmYr"), "et0_mm_yr_era5_1991_2020": ctx.get("era5Et0MmYr"),
+        "rain_mm_yr_by_source": ctx.get("rainRangeMmYr"),
+        "climatology_1991_2020": ctx.get("climatology1991_2020"),
+        "temperature_trend": pick(t.get("t2m") or {}, "sen_per_decade", "mann_kendall_p", "period"),
+        "extremes": ctx.get("extremes"),
+        "enso_dec_apr": ctx.get("ensoDecApr"),
+        "last_months_anomaly": (ctx.get("last12") or [])[-4:],
+        "temperature_rule": ctx.get("temperatureRule"),
+        "point": pick(ctx.get("point") or {}, "lat", "lon", "srtm30m_m", "power_grid_cell_m", "slope_deg_30m"),
+        "representative": ctx.get("representative"),
+        "warnings": [w for w in [
+            ctx.get("offFieldNote", {}) and (ctx.get("offFieldNote") or {}).get("es"),
+            "Carumas y Samegua comparten una celda de NASA POWER a 3.851 m: la temperatura de POWER no sirve para el valle de Samegua (se usa ERA5-Land)." if farm_id in ("carumas", "samegua") else None,
+            "GPM IMERG pendiente (falta aprobar el EULA de GES DISC): la lluvia viene de CHIRPS v3.",
+            "Las anomalías de los últimos meses son reanálisis preliminar.",
+        ] if w],
+        "sources": ctx.get("sources"),
     }
 
 
@@ -149,7 +185,7 @@ def get_risk_calendar(farm_id: str, strategy_id: str | None = None) -> dict:
             "bare_soil_windows": seasons.get("bareWindows", [])}
 
 
-HANDLERS = {"get_farm_analysis": get_farm_analysis, "get_verified_record": get_verified_record, "get_risk_calendar": get_risk_calendar}
+HANDLERS = {"get_farm_analysis": get_farm_analysis, "get_verified_record": get_verified_record, "get_climate_context": get_climate_context, "get_risk_calendar": get_risk_calendar}
 
 
 def run_tool(name: str, args: dict) -> str:

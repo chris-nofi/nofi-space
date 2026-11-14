@@ -1,0 +1,40 @@
+{
+ "source": "MOD13Q1 v061 NDVI, 250 m, 16-day (ORNL DAAC)",
+ "farmId": "carumas",
+ "monthly": [
+  0.519,
+  0.634,
+  0.704,
+  0.641,
+  0.523,
+  0.432,
+  0.406,
+  0.376,
+  0.38,
+  0.379,
+  0.398,
+  0.418
+ ],
+ "std": [
+  0.087,
+  0.1,
+  0.068,
+  0.071,
+  0.061,
+  0.049,
+  0.029,
+  0.029,
+  0.03,
+  0.043,
+  0.044,
+  0.045
+ ],
+ "first": "2001-01-01",
+ "last": "2026-10-16",
+ "latest": {
+  "date": "2026-10-16",
+  "ndvi": 0.482
+ },
+ "representative": true,
+ "note": "MODIS pixel (~6 ha) is larger than the 1-2 ha field; HLS 30 m not yet in the package."
+}

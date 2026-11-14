@@ -1,0 +1,27 @@
+{
+  "task_type": "point",
+  "task_name": "ceres-ventures-moquegua-hls-ecostress-smap",
+  "params": {
+    "dates": [{ "startDate": "01-01-2019", "endDate": "11-13-2026" }],
+    "layers": [
+      { "product": "HLSL30.020", "layer": "B04" },
+      { "product": "HLSL30.020", "layer": "B05" },
+      { "product": "HLSL30.020", "layer": "Fmask" },
+      { "product": "HLSS30.020", "layer": "B04" },
+      { "product": "HLSS30.020", "layer": "B8A" },
+      { "product": "HLSS30.020", "layer": "Fmask" },
+      { "product": "ECO_L3T_JET.002", "layer": "ETdaily" },
+      { "product": "ECO_L3T_JET.002", "layer": "ETinstUncertainty" },
+      { "product": "ECO_L4T_ESI.002", "layer": "ESI" },
+      { "product": "ECO_L2T_LSTE.002", "layer": "LST" },
+      { "product": "ECO_L2T_LSTE.002", "layer": "QC" },
+      { "product": "SPL3SMP_E.006", "layer": "Soil_Moisture_Retrieval_Data_AM_soil_moisture" },
+      { "product": "SPL4SMGP.008", "layer": "Geophysical_Data_sm_rootzone" }
+    ],
+    "coordinates": [
+      { "id": "carumas",    "category": "moquegua", "latitude": -16.81, "longitude": -70.69 },
+      { "id": "samegua",    "category": "moquegua", "latitude": -17.18, "longitude": -70.90 },
+      { "id": "algarrobal", "category": "moquegua", "latitude": -17.62, "longitude": -71.26 }
+    ]
+  }
+}

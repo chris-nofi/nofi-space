@@ -1,0 +1,150 @@
+{
+ "carumas": {
+  "latest": [
+   {
+    "month": "2026-05",
+    "chirps_mm": 0.5,
+    "spi3": 0.38,
+    "spi6": 0.62
+   },
+   {
+    "month": "2026-06",
+    "chirps_mm": 2.8,
+    "spi3": 0.66,
+    "spi6": 0.75
+   },
+   {
+    "month": "2026-07",
+    "chirps_mm": 0.0,
+    "spi3": -0.22,
+    "spi6": 0.63
+   },
+   {
+    "month": "2026-08",
+    "chirps_mm": 3.6,
+    "spi3": null,
+    "spi6": 0.42
+   },
+   {
+    "month": "2026-09",
+    "chirps_mm": 2.1,
+    "spi3": -0.06,
+    "spi6": 0.45
+   },
+   {
+    "month": "2026-10",
+    "chirps_mm": 12.1,
+    "spi3": 0.65,
+    "spi6": 0.36
+   }
+  ],
+  "flags_spi3": {
+   "8": "not computed: <10 non-zero baseline values or mean < 5 mm"
+  },
+  "flags_spi6": {},
+  "min_spi6": {
+   "month": "1983-04",
+   "value": -3.01
+  }
+ },
+ "samegua": {
+  "latest": [
+   {
+    "month": "2026-05",
+    "chirps_mm": 0.1,
+    "spi3": 0.17,
+    "spi6": 0.87
+   },
+   {
+    "month": "2026-06",
+    "chirps_mm": 3.3,
+    "spi3": -0.39,
+    "spi6": 1.17
+   },
+   {
+    "month": "2026-07",
+    "chirps_mm": 0.0,
+    "spi3": -0.1,
+    "spi6": 0.63
+   },
+   {
+    "month": "2026-08",
+    "chirps_mm": 0.8,
+    "spi3": null,
+    "spi6": 0.18
+   },
+   {
+    "month": "2026-09",
+    "chirps_mm": 3.7,
+    "spi3": -0.61,
+    "spi6": -0.9
+   },
+   {
+    "month": "2026-10",
+    "chirps_mm": 7.4,
+    "spi3": 0.42,
+    "spi6": 0.15
+   }
+  ],
+  "flags_spi3": {
+   "8": "not computed: <10 non-zero baseline values or mean < 5 mm"
+  },
+  "flags_spi6": {},
+  "min_spi6": {
+   "month": "1983-05",
+   "value": -3.01
+  }
+ },
+ "algarrobal": {
+  "latest": [
+   {
+    "month": "2026-05",
+    "chirps_mm": 1.9,
+    "spi3": -1.04,
+    "spi6": -0.22
+   },
+   {
+    "month": "2026-06",
+    "chirps_mm": 1.5,
+    "spi3": null,
+    "spi6": 0.35
+   },
+   {
+    "month": "2026-07",
+    "chirps_mm": 0.0,
+    "spi3": null,
+    "spi6": -1.5
+   },
+   {
+    "month": "2026-08",
+    "chirps_mm": 2.2,
+    "spi3": null,
+    "spi6": -0.08
+   },
+   {
+    "month": "2026-09",
+    "chirps_mm": 1.9,
+    "spi3": null,
+    "spi6": 0.22
+   },
+   {
+    "month": "2026-10",
+    "chirps_mm": 0.0,
+    "spi3": null,
+    "spi6": 0.27
+   }
+  ],
+  "flags_spi3": {
+   "6": "not computed: <10 non-zero baseline values or mean < 5 mm",
+   "7": "not computed: <10 non-zero baseline values or mean < 5 mm",
+   "8": "not computed: <10 non-zero baseline values or mean < 5 mm",
+   "9": "not computed: <10 non-zero baseline values or mean < 5 mm",
+   "10": "not computed: <10 non-zero baseline values or mean < 5 mm"
+  },
+  "flags_spi6": {},
+  "min_spi6": {
+   "month": "1983-04",
+   "value": -3.01
+  }
+ }
+}

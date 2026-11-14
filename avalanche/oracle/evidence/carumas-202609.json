@@ -1,0 +1,62 @@
+{
+  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+  "farmKey": "moquegua:carumas",
+  "period": 202609,
+  "revision": 0,
+  "indicators": {
+    "et_mm": {
+      "value": 0.0,
+      "dataset": "ECOSTRESS_L3T_JET_v002",
+      "granules": [
+        "ECOv002_L3T_JET_46344_024_19KCB_20260907T111610_0713_01"
+      ],
+      "scale": "70 m",
+      "stat": "mean ETdaily of 1 valid overpasses x 30 days"
+    },
+    "et0_mm": {
+      "value": 132.5,
+      "dataset": "NASA POWER AG daily (FAO-56 Penman-Monteith)",
+      "point": [
+        -16.81,
+        -70.69
+      ],
+      "gridCellElevation_m": 3851.1,
+      "farmElevation_m": 3151.0,
+      "days": 29,
+      "gapFilledDays": 1
+    },
+    "precip_mm": {
+      "value": 2.1,
+      "dataset": "CHIRPS_v3.0_monthly",
+      "scale": "0.05 deg",
+      "substituteFor": "GPM_3IMERGDF_v07",
+      "reason": "GES DISC returned 403 'EULA Acceptance Failure' for this Earthdata token"
+    },
+    "ndvi": {
+      "value": 0.436,
+      "dataset": "MOD13Q1_v061",
+      "composites": [
+        "2026-09-14",
+        "2026-09-30"
+      ],
+      "stat": "median of 16-day composites (250 m)",
+      "substituteFor": "HLS_S30_v2.0",
+      "reason": "no clear HLS scene this month"
+    }
+  },
+  "engine": {
+    "version": "ceres pull_and_build.py (sha256 34f980fa36bb)",
+    "priorities": {
+      "water": 0.4,
+      "soil": 0.25,
+      "income": 0.25,
+      "resilience": 0.1
+    },
+    "recommendedStrategyId": 2,
+    "recommendedStrategy": "haba-avena rotation",
+    "waterSavedM3": 0,
+    "waterSavedBasis": "rainfed farm: no irrigation water saved; recommendation is about soil cover/erosion",
+    "recommendationBasis": "dashboard + SI fixture recommendation (not recomputed: rainfed, no irrigation water to save)",
+    "confidence": "low"
+  }
+}

@@ -4,7 +4,7 @@ NASA Space Apps 2026 · Field Shift · Moquegua, Perú · Team1 LatAm Avalanche 
 
 NASA satellite data turned into spoken water advice for Moquegua farmers. CERES compares the current rotation with three water-saving alternatives and explains it by voice or chat in Spanish. Every NASA data query is paid per request with **x402** on our own **Avalanche L1 (NØFI Chain, 880024)**, and every monthly record is anchored as a verifiable on-chain record. Farmers never pay and never see a wallet or token.
 
-**Plan v2 is the source of truth for chain and money:** see `docs/09_PLAN_V2.md`.
+**Plan v2 is the source of truth for chain and money:** see `docs/09_PLAN_V2.md`. **All numbers now come from real NASA data** (Kepler's package in `data/`): see `docs/10_REAL_DATA.md`.
 
 > Support tool only. It does not replace the farmer's judgment or the Agencia Agraria / INIA.
 
@@ -46,11 +46,11 @@ The dashboard runs on example data with no network. To use live NASA data, run t
 | Piece | State |
 |---|---|
 | Dashboard | Working on example data |
-| NASA POWER + FAO-56 ET0 | Working code; ET0 matches FAO-56 Example 17 (5.72 mm/day); live POWER pull not yet run |
+| Real data | Kepler's package imported (`data/`): POWER 1981–2026, CHIRPS v3, ERA5, ECOSTRESS 2019–2026, MODIS 2001–2026, SRTM, 12 monthly evidence files. HLS, IMERG, SMAP, DSWx pending |
 | ECOSTRESS / HLS / DSWx extraction | Search code written; extraction needs Earthdata Login and a test run |
 | NØFI L1 | RPC answers but **no blocks since 29 Oct**: validator P-Chain balance is 0. Top up first (plan v2 §0) |
 | Earth records | `export-evidence` writes one hashed JSON per farm-month; `placeholder: true` until real NASA pulls |
 | x402 | CERES agent buyer (EIP-3009, eip155:880024) built and tested against a fake facilitator; the paid server lives in `avalanche/x402/` |
 | Legacy contracts (`contracts/`) | WaterEscrow etc., compile with solc 0.8.24; not deployed in v2 |
-| SI engine | Working API, 16 tests; synthetic climate/training data until NASA caches exist; UI is Phase 5 |
+| SI engine | Runs on **real** NASA POWER ET₀, CHIRPS rain (POWER/ERA5 range), ECOSTRESS and MODIS; reproduces Kepler's El Algarrobal numbers. SI water-use model still trained on synthetic data (labeled) |
 | CERES chat + voice | Claude tool loop + Retell WebSocket built, tests with fakes; needs ANTHROPIC_API_KEY / Retell keys for live use. Tools: analysis, risk calendar, verified record (x402) |

@@ -1,0 +1,40 @@
+{
+ "source": "MOD13Q1 v061 NDVI, 250 m, 16-day (ORNL DAAC)",
+ "farmId": "samegua",
+ "monthly": [
+  0.235,
+  0.225,
+  0.209,
+  0.227,
+  0.229,
+  0.231,
+  0.237,
+  0.245,
+  0.223,
+  0.229,
+  0.23,
+  0.233
+ ],
+ "std": [
+  0.085,
+  0.08,
+  0.058,
+  0.068,
+  0.065,
+  0.076,
+  0.061,
+  0.063,
+  0.072,
+  0.05,
+  0.072,
+  0.083
+ ],
+ "first": "2001-01-01",
+ "last": "2026-10-16",
+ "latest": {
+  "date": "2026-10-16",
+  "ndvi": 0.18
+ },
+ "representative": false,
+ "note": "MODIS pixel (~6 ha) is larger than the 1-2 ha field; HLS 30 m not yet in the package."
+}
