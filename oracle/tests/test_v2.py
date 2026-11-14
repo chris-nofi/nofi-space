@@ -36,6 +36,11 @@ def test_canonical_bytes_match_js_convention():
     assert canonical({"b": 1, "a": {"d": 2, "c": "ñ"}}) == '{"a":{"c":"ñ","d":2},"b":1}'.encode()
 
 
+def test_canonical_numbers_match_javascript():
+    # JSON.stringify writes 0.0 as 0 and 1e-7 as 1e-7; the attester and /verify hash those bytes
+    assert canonical({"b": 0.0, "a": 1.5, "c": 1e-7, "d": [True, None, 142.9]}) == b'{"a":1.5,"b":0,"c":1e-7,"d":[true,null,142.9]}'
+
+
 def test_bad_period_rejected():
     with pytest.raises(ValueError):
         build_record("samegua", "2026-10")

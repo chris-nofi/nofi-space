@@ -28,9 +28,40 @@ SCHEMA = "ceres-ventures/earth-record@1"
 ENGINE_DIR = Path(__file__).parent
 
 
+def _js_number(x) -> str:
+    """Number text exactly as JavaScript's JSON.stringify writes it (the attester and x402 oracle are JS)."""
+    if isinstance(x, bool):
+        return "true" if x else "false"
+    if isinstance(x, int):
+        return str(x)
+    if x != x or x in (float("inf"), float("-inf")):
+        return "null"
+    if x == int(x) and abs(x) < 1e21:
+        return str(int(x))
+    r = repr(x)
+    if "e" in r:  # Python 1e-07 -> JS 1e-7, 1e+22 -> 1e+22
+        m, e = r.split("e")
+        sign = "-" if e.startswith("-") else "+"
+        r = f"{m}e{sign}{int(e.lstrip('+-'))}"
+    return r
+
+
+def _canon(v) -> str:
+    if isinstance(v, dict):
+        return "{" + ",".join(json.dumps(k, ensure_ascii=False) + ":" + _canon(v[k]) for k in sorted(v)) + "}"
+    if isinstance(v, (list, tuple)):
+        return "[" + ",".join(_canon(x) for x in v) + "]"
+    if isinstance(v, (int, float)) and not isinstance(v, bool) or isinstance(v, bool):
+        return _js_number(v)
+    if v is None:
+        return "null"
+    return json.dumps(v, ensure_ascii=False)
+
+
 def canonical(obj) -> bytes:
-    """Sorted keys, no whitespace, UTF-8. Same bytes in Python and JS (JSON.stringify of a key-sorted object)."""
-    return json.dumps(obj, separators=(",", ":"), sort_keys=True, ensure_ascii=False).encode("utf-8")
+    """Recursively sorted keys, no whitespace, UTF-8, numbers as JavaScript prints them: the same bytes as
+    canon() in avalanche/oracle/build-attestation.mjs and site/verify.html, so every side gets the same dataHash."""
+    return _canon(obj).encode("utf-8")
 
 
 def sha256_hex(obj) -> str:

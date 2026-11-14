@@ -232,3 +232,4 @@ a.ceres-proof:hover { background: #cdebed; }
 .glossary dt { font-weight: 700; color: var(--navy); } .glossary dd { margin: 0; color: var(--txt); }
 @media (max-width: 600px) { .glossary dl { grid-template-columns: minmax(0, 1fr); } }
 .ai-note { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 6px 0 0; max-width: 110ch; }
+.rv-verify { font-size: 11px; font-weight: 700; color: var(--teal); margin-left: 6px; }

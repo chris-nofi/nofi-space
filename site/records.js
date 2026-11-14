@@ -80,7 +80,7 @@
             <td class="n">${r.ndvi != null ? Number(r.ndvi).toFixed(2) : "—"}</td>
             <td>${E(stratName(farm, r.strategy, lang))}</td>
             <td class="n">${num(r.waterSavedM3, lang)} m³</td>
-            <td><button type="button" class="rv-hash" data-rv-copy="${E(r.dataHash)}" title="${E(r.dataHash)}">${E(short(r.dataHash))}<span>${S.copied === r.dataHash ? T(lang, "copiado", "copied") : T(lang, "copiar", "copy")}</span></button></td>
+            <td><button type="button" class="rv-hash" data-rv-copy="${E(r.dataHash)}" title="${E(r.dataHash)}">${E(short(r.dataHash))}<span>${S.copied === r.dataHash ? T(lang, "copiado", "copied") : T(lang, "copiar", "copy")}</span></button> <a class="rv-verify" href="/verify/${E(r.dataHash)}?farm=${E(farm)}&period=${E(r.period)}">${T(lang, "comprobar", "verify")}</a></td>
             <td>${status(r, lang)}</td></tr>`).join("") || `<tr><td colspan="8">${T(lang, "Sin registros todavía.", "No records yet.")}</td></tr>`}
           </tbody></table></div>
         ${issues.length ? `<ul class="rv-issues">${issues.map((i) => `<li>${E(i)}</li>`).join("")}</ul>` : ""}

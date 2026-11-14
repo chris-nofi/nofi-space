@@ -1,3 +1,29 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0d303e"><title>CERES — Verify evidence</title><link rel="stylesheet" href="/landing.css"><link rel="icon" href="/favicon.svg"><script src="/config.js" defer></script></head><body><header class="site-header"><nav class="nav wrap"><a href="/" class="brand"><span class="brand-name">ceres<span>ventures.</span></span></a><a class="button button-small" href="/app">Dashboard ↗</a></nav></header><main class="section section-light"><div class="wrap" style="max-width:840px"><p class="kicker">VERIFIABLE EVIDENCE</p><h1 style="font:800 clamp(36px,6vw,62px) Manrope,sans-serif;letter-spacing:-.05em">Inspect a record.<br>Trust the evidence, not a badge.</h1><p class="muted">A local JSON fingerprint is not proof of an on-chain anchor. A transaction is verified only if a configured network/explorer can independently confirm it.</p><article class="feature-card" style="margin-top:35px;min-height:0"><span class="small-label">RECORD IDENTIFIER</span><p><code id="digest" style="overflow-wrap:anywhere">—</code></p><p id="state" class="muted">Checking locally available evidence…</p><div id="details"></div><a id="explorer" hidden target="_blank" rel="noopener noreferrer" class="button button-dark">Open explorer ↗</a></article><p class="tiny">Testnet chain ID: 880024. No wallet or private key is required to inspect evidence. Never treat a placeholder digest as a verified transaction.</p><a href="/#verification">← Back to how verification works</a></div></main><script>
-(async()=>{const path=decodeURIComponent(location.pathname.split("/").filter(Boolean).slice(1).join("/"))||"pending";const q=new URLSearchParams(location.search);const farm=["algarrobal","carumas","samegua"].includes(q.get("farm"))?q.get("farm"):"algarrobal";document.getElementById("digest").textContent=path;try{const r=await fetch("/evidence/"+farm+"-202610.json");if(!r.ok)throw Error("Missing evidence");const e=await r.json();const d=e.digest||e.dataHash||e.anchor?.digest;const tx=e.anchor?.tx||e.anchor?.txHash||e.anchor?.transactionHash;const s=document.getElementById("state");const details=document.getElementById("details");details.textContent="Farm: "+e.farmKey+" · Period: "+e.period+" · Local file: /evidence/"+farm+"-202610.json";if(!d){s.textContent="NOT ANCHORED — This evidence file does not provide a verifiable digest and transaction. No on-chain claim is made.";return}if(path!=="pending"&&path!==d){s.textContent="MISMATCH — The supplied identifier does not match this evidence file.";return}if(!tx){s.textContent="DIGEST ONLY — The evidence contains an identifier but no confirmed transaction.";return}s.textContent="TRANSACTION REFERENCE PRESENT — Verify its receipt, chain ID and registry event independently in the explorer.";const cfg=window.AGUA_CLARA_CONFIG||{};if(cfg.explorerUrl){const a=document.getElementById("explorer");a.href=cfg.explorerUrl.replace(/\\/$/,"")+"/tx/"+encodeURIComponent(tx);a.hidden=false}}catch(err){document.getElementById("state").textContent="Could not load the selected evidence JSON. Verification is unavailable."}})();
+/* Verify a record locally. The digest is recomputed in the browser exactly like the oracle does
+   (sha256 over canonical JSON: recursively sorted keys, no whitespace). A digest alone is NOT an anchor:
+   "anchored" is only shown when a transaction reference exists, and even then it must be checked in the explorer. */
+(async()=>{
+  const canon=(v)=>Array.isArray(v)?"["+v.map(canon).join(",")+"]":v&&typeof v==="object"?"{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canon(v[k])).join(",")+"}":JSON.stringify(v);
+  const sha=async(t)=>"0x"+[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+  const id=decodeURIComponent(location.pathname.split("/").filter(Boolean).slice(1).join("/"))||"";
+  const q=new URLSearchParams(location.search);
+  const farm=["algarrobal","carumas","samegua"].includes(q.get("farm"))?q.get("farm"):"algarrobal";
+  const period=/^\d{6}$/.test(q.get("period")||"")?q.get("period"):"202610";
+  const file="/evidence/"+farm+"-"+period+".json";
+  const s=document.getElementById("state"),details=document.getElementById("details");
+  document.getElementById("digest").textContent=id||"—";
+  try{
+    const r=await fetch(file);if(!r.ok)throw Error("missing");
+    const e=await r.json();
+    const d=(window.crypto&&crypto.subtle)?await sha(canon(e)):null;
+    const tx=e.anchor?.tx||e.anchor?.txHash||e.anchor?.transactionHash;
+    details.textContent="Farm: "+e.farmKey+" · Period: "+e.period+" · File: "+file+(d?" · sha256: "+d:"");
+    if(!id)document.getElementById("digest").textContent=d||"—";
+    if(id&&d&&id.toLowerCase()!==d){s.textContent="MISMATCH — The supplied identifier does not match the fingerprint of this evidence file.";return}
+    if(!tx){s.textContent=(d?"FINGERPRINT COMPUTED — ":"")+"Not anchored yet: there is no confirmed transaction for this record. No on-chain claim is made.";return}
+    s.textContent="TRANSACTION REFERENCE PRESENT — Verify its receipt, chain ID and registry event independently in the explorer.";
+    const cfg=window.AGUA_CLARA_CONFIG||{};
+    if(cfg.explorerUrl){const a=document.getElementById("explorer");a.href=cfg.explorerUrl.replace(/\/$/,"")+"/tx/"+encodeURIComponent(tx);a.hidden=false}
+  }catch(err){s.textContent="Could not load the selected evidence JSON. Verification is unavailable."}
+})();
 </script></body></html>
