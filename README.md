@@ -30,7 +30,8 @@ The dashboard runs on example data with no network. To use live NASA data, run t
 | `docs/04_X402.md` | How the x402 evidence API works |
 | `docs/05_DEMO_SCRIPT.md` | 2-minute video script and slide outline |
 | `docs/06_SUBMISSION.md` | English project description and references for the Space Apps page |
-| `docs/07_SI_MODEL.md` | SI engine, water-use model and CERES |
+| `docs/07_SI_MODEL.md` | SI engine and water-use model |
+| `docs/08_CERES.md` | CERES text chat (Claude API) and voice calls (Retell): setup, knowledge pack, models |
 | `web/` | Dashboard (Vite + React + TypeScript) |
 | `oracle/` | Earth oracle (Python + FastAPI) |
 | `contracts/` | Foundry contracts |
@@ -44,4 +45,5 @@ The dashboard runs on example data with no network. To use live NASA data, run t
 | ECOSTRESS / HLS / DSWx extraction | Search code written; extraction needs Earthdata Login and a test run |
 | Contracts | Compile cleanly (solc 0.8.24) with 10 Foundry tests; `forge test` not yet run; deploy to NØCHAIN testnet pending RPC and chain ID |
 | x402 | Demo-mode gate working; production facilitator verify/settle is a task |
-| SI engine + CERES | Working API, 16 tests; synthetic climate/training data until NASA caches exist; UI is Phase 5 |
+| SI engine | Working API, 16 tests; synthetic climate/training data until NASA caches exist; UI is Phase 5 |
+| CERES chat + voice | Claude tool loop + Retell WebSocket built, 11 tests with fakes; needs ANTHROPIC_API_KEY / Retell keys for live use |

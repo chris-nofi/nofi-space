@@ -208,6 +208,23 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--nasa); outline-
 .ceres-body { display: grid; gap: 4px; }
 .ceres-head { display: flex; justify-content: space-between; align-items: center; }
 .ceres p { font-size: 14px; }
+.ceres-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
+.btn.danger { background: var(--ochre); color: var(--surface); }
+.chat { display: grid; gap: 8px; margin-top: 6px; }
+.chat-log { max-height: 260px; overflow-y: auto; display: grid; gap: 6px; padding: 8px; background: var(--sunk); border: 1px solid var(--line); border-radius: 12px; }
+.chat-log p, .live-transcript p { margin: 0; padding: 7px 10px; border-radius: 10px; font-size: 13.5px; max-width: 92%; white-space: pre-wrap; }
+.from-user { justify-self: end; background: var(--water); color: var(--surface); }
+.from-ceres { justify-self: start; background: var(--surface); border: 1px solid var(--line); }
+.chat-error { color: var(--ochre); font-size: 13px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; cursor: pointer; }
+.chip:hover:not(:disabled) { border-color: var(--water); color: var(--water); }
+.chip:disabled { opacity: .5; cursor: not-allowed; }
+.chat-input { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+.chat-input input { font: inherit; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); min-width: 0; }
+.chat-input input:focus-visible { outline: 2px solid var(--nasa); outline-offset: 1px; }
+.live-transcript { display: grid; gap: 6px; padding: 8px; border-radius: 12px; background: var(--water-soft); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* basin */
 .signals { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }

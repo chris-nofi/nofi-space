@@ -22,3 +22,11 @@ Add new results below as tasks complete.
 | SI model comparison (synthetic data, GroupKFold 5) | physics MAE 0.72 · ridge 0.62 · GBM 0.47 mm/day; GBM 80 % band coverage 0.74 |
 | `web`: `npm run build` | Passes after Sofía → CERES rename |
 | Real-data training | Not yet: needs ECOSTRESS + POWER + HLS caches (T5.5) |
+
+## CERES chat + voice
+
+| Check | Result |
+|---|---|
+| `oracle`: `pytest -q` | 37 passed (11 new CERES tests, Claude and Retell faked) |
+| `web`: `npm run build` | Passes with CERES chat + Retell web call (retell-client-js-sdk 3.0.3) |
+| Live Claude API / Retell call | Not run: needs keys (Tasks T6.1, T6.2) |

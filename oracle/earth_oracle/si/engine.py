@@ -188,7 +188,7 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
     }
 
     # ---- seasons ----
-    seasons = {"current": {**detect(ndvi), "source": "hls" if obs_ndvi is not None else "modeled from crop calendar"}}
+    seasons = {"observed": {**detect(ndvi), "source": "hls" if obs_ndvi is not None else "modeled from crop calendar"}}
     for s in strategies:
         seasons[s["id"]] = detect(ndvi_from_cover(det[s["id"]].cover))
 

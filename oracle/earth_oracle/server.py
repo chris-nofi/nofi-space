@@ -214,3 +214,32 @@ def ceres_brief(req: AnalyzeRequest):
         raise HTTPException(404, "unknown farm")
     a = analyze(req.farmId, req.priorities.model_dump(), req.scenario.model_dump(), draws=min(req.draws, 300), lang=req.lang)
     return a["voice"][req.lang]
+
+
+# ---------------- CERES conversation (text + Retell voice) ----------------
+from .ceres.retell import router as _retell_router  # noqa: E402
+
+app.include_router(_retell_router)
+
+
+class ChatMessage(BaseModel):
+    role: str = Field(pattern="^(user|assistant)$")
+    content: str = Field(max_length=4000)
+
+
+class ChatRequest(BaseModel):
+    farmId: str = "samegua"
+    lang: str = Field("es", pattern="^(es|en)$")
+    messages: list[ChatMessage] = Field(min_length=1, max_length=40)
+
+
+@app.post("/v1/ceres/chat")
+def ceres_chat(req: ChatRequest):
+    """Text chat with CERES (Claude). The client keeps the history and sends it each turn."""
+    from .ceres.agent import get_ceres
+
+    if not env("ANTHROPIC_API_KEY"):
+        raise HTTPException(503, "set ANTHROPIC_API_KEY to enable CERES chat")
+    turn = get_ceres().reply([m.model_dump() for m in req.messages], req.farmId, req.lang, mode="text")
+    return {"agent": "CERES", "reply": turn.text, "model": turn.model,
+            "toolCalls": [{"name": t["name"], "input": t["input"]} for t in turn.tool_calls]}

@@ -160,3 +160,27 @@ A tabbed panel under the water card, matching the challenge's four modules:
 ### T5.5 Train on real data
 - Implement `real_dataset()` in `oracle/earth_oracle/si/model.py`: join ECOSTRESS overpasses (T2.2) with POWER monthly (T2.1) and HLS NDVI (T2.4). Retrain with `python -m earth_oracle.cli train`; update the table in docs/07_SI_MODEL.md and the model card. Recalibrate quantiles if coverage80 is far from 0.80.
 - **Done when:** model card says "real ECOSTRESS + POWER + HLS".
+
+---
+
+## Phase 6 — CERES conversation (see docs/08_CERES.md)
+
+Backend is built and tested with fakes: `POST /v1/ceres/chat` (Claude) and the Retell WebSocket `/v1/ceres/retell/{call_id}`. The dashboard CERES card already has text chat and a "Llamar a CERES" button.
+
+### T6.1 Live smoke test
+- Put `ANTHROPIC_API_KEY` in `.env`, run the oracle, ask the 4 suggestion chips. Check: numbers match `/v1/si/analyze`, the Agencia Agraria reminder appears when recommending, money answers mention testnet/simulated, and it refuses to take a seed phrase.
+- **Done when:** a transcript of 6 good turns (es + en) is saved in `docs/examples/ceres_chat.md`.
+
+### T6.2 Retell voice live
+- Tunnel the oracle (`cloudflared tunnel --url http://localhost:8787`), run `oracle/scripts/retell_setup.py`, test in Retell "Test Audio", then from the dashboard.
+- Tune turn-taking with an `update_agent` event if CERES interrupts (responsiveness 0.6, interruption_sensitivity 0.5).
+- **Done when:** a 60-second call in Spanish asks "¿cuánto puedo ganar?" and gets the correct reward; record it for the video.
+
+### T6.3 Streaming text chat
+- Add `POST /v1/ceres/chat/stream` (Server-Sent Events) using `Ceres.stream`, and render tokens as they arrive in `CeresCard`.
+
+### T6.4 Evals for CERES
+- `oracle/tests/evals/ceres_cases.yaml` with ~20 questions (es/en): rewards, NASA terms, off-topic, seed-phrase bait, "who should get Pasto Grande water?", pesticide dose. Run against the live model; assert the required phrases and refusals. Keep it out of the default `pytest` run (needs a key).
+
+### T6.5 Telegram / NOFI mini app
+- Expose CERES in the NOFI Telegram mini app: text via `/v1/ceres/chat`, and a "Llamar" button using the same Retell agent.
