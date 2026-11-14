@@ -1,1 +1,6 @@
-/* /index.html 200
+/app /dashboard.html 200
+/app/ /dashboard.html 200
+/verify /verify.html 200
+/verify/* /verify.html 200
+/api-docs /api-docs.html 200
+/ /index.html 200
