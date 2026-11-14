@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14T01:22:24",
+ "generated": "2026-11-14T02:32:28",
  "farms": {
   "carumas": {
    "point": {
@@ -829,7 +829,171 @@
      }
     ]
    },
-   "et_ecostress": {
+   "ndvi_hls_app_point": {
+    "pixel": [
+     -16.81,
+     -70.69
+    ],
+    "monthly_mean": [
+     0.357,
+     0.536,
+     0.628,
+     0.589,
+     0.48,
+     0.398,
+     0.363,
+     0.331,
+     0.317,
+     0.315,
+     0.351,
+     0.317
+    ],
+    "n_clear": [
+     13,
+     14,
+     22,
+     39,
+     38,
+     37,
+     45,
+     40,
+     37,
+     41,
+     19,
+     23
+    ],
+    "total_clear": 368,
+    "total_scenes": 426,
+    "first": "2024-01-06",
+    "last": "2026-11-04",
+    "monthly_median_series": {
+     "2024-01": 0.439,
+     "2024-02": 0.508,
+     "2024-03": 0.622,
+     "2024-04": 0.624,
+     "2024-05": 0.516,
+     "2024-06": 0.408,
+     "2024-07": 0.356,
+     "2024-08": 0.328,
+     "2024-09": 0.3,
+     "2024-10": 0.334,
+     "2024-11": 0.441,
+     "2024-12": 0.32,
+     "2025-01": 0.321,
+     "2025-02": 0.532,
+     "2025-03": 0.627,
+     "2025-04": 0.594,
+     "2025-05": 0.478,
+     "2025-06": 0.381,
+     "2025-07": 0.363,
+     "2025-08": 0.336,
+     "2025-09": 0.304,
+     "2025-10": 0.288,
+     "2025-11": 0.325,
+     "2025-12": 0.31,
+     "2026-01": 0.298,
+     "2026-02": 0.536,
+     "2026-03": 0.61,
+     "2026-04": 0.574,
+     "2026-05": 0.462,
+     "2026-06": 0.396,
+     "2026-07": 0.366,
+     "2026-08": 0.353,
+     "2026-09": 0.349,
+     "2026-10": 0.325,
+     "2026-11": 0.301
+    },
+    "bare_months_lt_0_25": 0,
+    "latest": {
+     "date": "2026-11-04",
+     "ndvi": 0.3294
+    }
+   },
+   "ndvi_hls": {
+    "pixel": [
+     -16.81,
+     -70.69
+    ],
+    "monthly_mean": [
+     0.357,
+     0.536,
+     0.628,
+     0.589,
+     0.48,
+     0.398,
+     0.363,
+     0.331,
+     0.317,
+     0.315,
+     0.351,
+     0.317
+    ],
+    "n_clear": [
+     13,
+     14,
+     22,
+     39,
+     38,
+     37,
+     45,
+     40,
+     37,
+     41,
+     19,
+     23
+    ],
+    "total_clear": 368,
+    "total_scenes": 426,
+    "first": "2024-01-06",
+    "last": "2026-11-04",
+    "monthly_median_series": {
+     "2024-01": 0.439,
+     "2024-02": 0.508,
+     "2024-03": 0.622,
+     "2024-04": 0.624,
+     "2024-05": 0.516,
+     "2024-06": 0.408,
+     "2024-07": 0.356,
+     "2024-08": 0.328,
+     "2024-09": 0.3,
+     "2024-10": 0.334,
+     "2024-11": 0.441,
+     "2024-12": 0.32,
+     "2025-01": 0.321,
+     "2025-02": 0.532,
+     "2025-03": 0.627,
+     "2025-04": 0.594,
+     "2025-05": 0.478,
+     "2025-06": 0.381,
+     "2025-07": 0.363,
+     "2025-08": 0.336,
+     "2025-09": 0.304,
+     "2025-10": 0.288,
+     "2025-11": 0.325,
+     "2025-12": 0.31,
+     "2026-01": 0.298,
+     "2026-02": 0.536,
+     "2026-03": 0.61,
+     "2026-04": 0.574,
+     "2026-05": 0.462,
+     "2026-06": 0.396,
+     "2026-07": 0.366,
+     "2026-08": 0.353,
+     "2026-09": 0.349,
+     "2026-10": 0.325,
+     "2026-11": 0.301
+    },
+    "bare_months_lt_0_25": 0,
+    "latest": {
+     "date": "2026-11-04",
+     "ndvi": 0.3294
+    }
+   },
+   "et_ecostress_app_point": {
+    "pixel": [
+     -16.81,
+     -70.69
+    ],
     "et_daily_mm_monthly_mean": [
      2.146,
      2.36,
@@ -863,12 +1027,632 @@
     "first": "2019-02-11T12:14:15",
     "last": "2026-10-20T18:16:02"
    },
+   "et_ecostress": {
+    "pixel": [
+     -16.81,
+     -70.69
+    ],
+    "et_daily_mm_monthly_mean": [
+     2.146,
+     2.36,
+     1.645,
+     1.596,
+     1.357,
+     1.177,
+     1.136,
+     1.477,
+     1.034,
+     1.284,
+     1.662,
+     2.185
+    ],
+    "n_overpasses": [
+     15,
+     8,
+     6,
+     10,
+     17,
+     11,
+     25,
+     8,
+     15,
+     23,
+     25,
+     13
+    ],
+    "total_valid": 176,
+    "total_read": 481,
+    "first": "2019-02-11T12:14:15",
+    "last": "2026-10-20T18:16:02"
+   },
+   "smap": {
+    "monthly_series_m3m3": {
+     "2015-04": 0.15,
+     "2015-05": 0.091,
+     "2015-06": 0.082,
+     "2015-07": 0.083,
+     "2015-08": 0.08,
+     "2015-09": 0.08,
+     "2015-10": 0.082,
+     "2015-11": 0.077,
+     "2015-12": 0.072,
+     "2016-01": 0.089,
+     "2016-02": 0.261,
+     "2016-03": 0.115,
+     "2016-04": 0.144,
+     "2016-05": 0.077,
+     "2016-06": 0.078,
+     "2016-07": 0.091,
+     "2016-08": 0.08,
+     "2016-09": 0.081,
+     "2016-10": 0.077,
+     "2016-11": 0.074,
+     "2016-12": 0.104,
+     "2017-01": 0.322,
+     "2017-02": 0.21,
+     "2017-03": 0.245,
+     "2017-04": 0.121,
+     "2017-05": 0.08,
+     "2017-06": 0.079,
+     "2017-07": 0.081,
+     "2017-08": 0.073,
+     "2017-09": 0.079,
+     "2017-10": 0.072,
+     "2017-11": 0.078,
+     "2017-12": 0.106,
+     "2018-01": 0.186,
+     "2018-02": 0.178,
+     "2018-03": 0.167,
+     "2018-04": 0.1,
+     "2018-05": 0.085,
+     "2018-06": 0.093,
+     "2018-07": 0.09,
+     "2018-08": 0.081,
+     "2018-09": 0.078,
+     "2018-10": 0.08,
+     "2018-11": 0.076,
+     "2018-12": 0.088,
+     "2019-01": 0.204,
+     "2019-02": 0.326,
+     "2019-03": 0.162,
+     "2019-04": 0.097,
+     "2019-05": 0.084,
+     "2019-06": 0.088,
+     "2019-07": 0.085,
+     "2019-08": 0.084,
+     "2019-09": 0.083,
+     "2019-10": 0.092,
+     "2019-11": 0.098,
+     "2019-12": 0.09,
+     "2020-01": 0.252,
+     "2020-02": 0.298,
+     "2020-03": 0.264,
+     "2020-04": 0.131,
+     "2020-05": 0.088,
+     "2020-06": 0.088,
+     "2020-07": 0.085,
+     "2020-08": 0.088,
+     "2020-09": 0.09,
+     "2020-10": 0.112,
+     "2020-11": 0.08,
+     "2020-12": 0.159,
+     "2021-01": 0.219,
+     "2021-02": 0.167,
+     "2021-03": 0.162,
+     "2021-04": 0.113,
+     "2021-05": 0.091,
+     "2021-06": 0.085,
+     "2021-07": 0.087,
+     "2021-08": 0.085,
+     "2021-09": 0.086,
+     "2021-10": 0.084,
+     "2021-11": 0.099,
+     "2021-12": 0.13,
+     "2022-01": 0.201,
+     "2022-02": 0.174,
+     "2022-03": 0.21,
+     "2022-04": 0.09,
+     "2022-05": 0.084,
+     "2022-06": 0.084,
+     "2022-07": 0.087,
+     "2022-08": 0.09,
+     "2022-09": 0.083,
+     "2022-10": 0.079,
+     "2022-11": 0.081,
+     "2022-12": 0.153,
+     "2023-01": 0.194,
+     "2023-02": 0.241,
+     "2023-03": 0.192,
+     "2023-04": 0.118,
+     "2023-05": 0.088,
+     "2023-06": 0.083,
+     "2023-07": 0.086,
+     "2023-08": 0.083,
+     "2023-09": 0.082,
+     "2023-10": 0.104,
+     "2023-11": 0.1,
+     "2023-12": 0.133,
+     "2024-01": 0.204,
+     "2024-02": 0.237,
+     "2024-03": 0.299,
+     "2024-04": 0.12,
+     "2024-05": 0.089,
+     "2024-06": 0.089,
+     "2024-07": 0.087,
+     "2024-08": 0.082,
+     "2024-09": 0.083,
+     "2024-10": 0.084,
+     "2024-11": 0.101,
+     "2024-12": 0.103,
+     "2025-01": 0.212,
+     "2025-02": 0.322,
+     "2025-03": 0.225,
+     "2025-04": 0.132,
+     "2025-05": 0.093,
+     "2025-06": 0.087,
+     "2025-07": 0.087,
+     "2025-08": 0.085,
+     "2025-09": 0.086,
+     "2025-10": 0.084,
+     "2025-11": 0.083,
+     "2025-12": 0.106,
+     "2026-01": 0.246,
+     "2026-02": 0.282,
+     "2026-03": 0.15,
+     "2026-04": 0.14,
+     "2026-05": 0.088,
+     "2026-06": 0.083,
+     "2026-07": 0.084,
+     "2026-08": 0.089,
+     "2026-09": 0.083,
+     "2026-10": 0.083,
+     "2026-11": 0.12
+    },
+    "sm_am_monthly_mean_m3m3": [
+     0.215,
+     0.247,
+     0.201,
+     0.122,
+     0.087,
+     0.085,
+     0.086,
+     0.083,
+     0.083,
+     0.086,
+     0.086,
+     0.113
+    ],
+    "n": [
+     146,
+     126,
+     154,
+     157,
+     157,
+     133,
+     145,
+     137,
+     152,
+     158,
+     138,
+     130
+    ],
+    "total_valid": 1733,
+    "first": "2015-04-01",
+    "last": "2026-11-10",
+    "latest": {
+     "date": "2026-11-10",
+     "sm": 0.1239
+    }
+   },
    "evidence_files": [
     "avalanche/oracle/evidence/carumas-202607.json",
     "avalanche/oracle/evidence/carumas-202608.json",
     "avalanche/oracle/evidence/carumas-202609.json",
     "avalanche/oracle/evidence/carumas-202610.json"
-   ]
+   ],
+   "extensions": {
+    "soil": {
+     "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+     "point": [
+      -16.81,
+      -70.69
+     ],
+     "offset_m": 0,
+     "depth": "0-30 cm weighted",
+     "clay_pct": 15.93,
+     "sand_pct": 58.28,
+     "silt_pct": 25.77,
+     "soc_g_kg": 17.8,
+     "ph_h2o": 7.18,
+     "bulk_density_g_cm3": 1.16
+    },
+    "cover": {
+     "point": {
+      "lat": -16.81,
+      "lon": -70.69,
+      "kind": "app_point"
+     },
+     "bare_threshold_ndvi": 0.2,
+     "s2_median_ndvi_by_month_2024_2026": [
+      0.189,
+      0.392,
+      0.549,
+      0.484,
+      0.348,
+      0.271,
+      0.232,
+      0.209,
+      0.18,
+      0.168,
+      0.165,
+      0.171
+     ],
+     "s2_obs_by_month": [
+      21,
+      14,
+      29,
+      41,
+      45,
+      41,
+      47,
+      43,
+      41,
+      41,
+      28,
+      32
+     ],
+     "hls_median_ndvi_by_month": [
+      0.33,
+      0.513,
+      0.627,
+      0.588,
+      0.482,
+      0.398,
+      0.361,
+      0.339,
+      0.312,
+      0.315,
+      0.327,
+      0.31
+     ],
+     "modis_median_ndvi_by_month_2015_present": [
+      0.494,
+      0.665,
+      0.736,
+      0.662,
+      0.537,
+      0.451,
+      0.408,
+      0.381,
+      0.371,
+      0.4,
+      0.385,
+      0.415
+     ],
+     "bare_months": [
+      "Jan",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+     ],
+     "vulnerable_months": [
+      {
+       "month": "Jan",
+       "reasons": [
+        "bare/sparse cover (S2 NDVI<0.20)",
+        "rainy month (>=10% of annual ERA5 rain)"
+       ]
+      },
+      {
+       "month": "Dec",
+       "reasons": [
+        "bare/sparse cover (S2 NDVI<0.20)",
+        "rainy month (>=10% of annual ERA5 rain)"
+       ]
+      }
+     ],
+     "s2_last_12_months": {
+      "2025-11": 0.165,
+      "2025-12": 0.167,
+      "2026-01": 0.156,
+      "2026-02": 0.522,
+      "2026-03": 0.501,
+      "2026-04": 0.478,
+      "2026-05": 0.369,
+      "2026-06": 0.286,
+      "2026-07": 0.24,
+      "2026-08": 0.215,
+      "2026-09": 0.19,
+      "2026-10": 0.166,
+      "2026-11": 0.161
+     },
+     "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+    },
+    "frost": {
+     "power": {
+      "source": "NASA POWER T2M_MIN raw (MERRA-2 0.5x0.625 deg cell), gaps filled from ERA5-Land",
+      "clim_1991_2020_days_lt0_by_month": [
+       1.8,
+       2.4,
+       3.1,
+       7.2,
+       21.5,
+       24.4,
+       27.0,
+       24.0,
+       17.3,
+       12.2,
+       9.6,
+       3.7
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       6.9,
+       5.8,
+       8.6,
+       16.5,
+       28.0,
+       29.5,
+       30.8,
+       29.8,
+       25.7,
+       21.4,
+       16.8,
+       10.1
+      ],
+      "clim_1991_2020_days_lt0_yr": 154.2,
+      "clim_1991_2020_days_lt2_yr": 229.9,
+      "recent_years": {
+       "2021": {
+        "lt0": 133,
+        "lt2": 212,
+        "n_days": 365,
+        "min_c": -3.2
+       },
+       "2022": {
+        "lt0": 190,
+        "lt2": 244,
+        "n_days": 365,
+        "min_c": -3.8
+       },
+       "2023": {
+        "lt0": 95,
+        "lt2": 182,
+        "n_days": 365,
+        "min_c": -3.0
+       },
+       "2024": {
+        "lt0": 72,
+        "lt2": 153,
+        "n_days": 366,
+        "min_c": -3.6
+       },
+       "2025": {
+        "lt0": 114,
+        "lt2": 192,
+        "n_days": 365,
+        "min_c": -3.0
+       },
+       "2026": {
+        "lt0": 87,
+        "lt2": 147,
+        "n_days": 315,
+        "min_c": -3.0
+       }
+      },
+      "last_date": "2026-11-11",
+      "era5_gap_filled_days": 0
+     },
+     "power_site_lapse": {
+      "source": "NASA POWER T2M_MIN + 4.55 C lapse shift to SRTM farm elevation (6.5 C/km)",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.1,
+       0.2,
+       0.3,
+       0.7,
+       2.5,
+       3.7,
+       5.4,
+       4.1,
+       3.4,
+       1.9,
+       1.8,
+       0.2
+      ],
+      "clim_1991_2020_days_lt0_yr": 0.0,
+      "clim_1991_2020_days_lt2_yr": 24.3,
+      "recent_years": {
+       "2021": {
+        "lt0": 0,
+        "lt2": 13,
+        "n_days": 365,
+        "min_c": 1.4
+       },
+       "2022": {
+        "lt0": 0,
+        "lt2": 35,
+        "n_days": 365,
+        "min_c": 0.8
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 3,
+        "n_days": 365,
+        "min_c": 1.6
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 10,
+        "n_days": 366,
+        "min_c": 0.9
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 4,
+        "n_days": 365,
+        "min_c": 1.5
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 4,
+        "n_days": 315,
+        "min_c": 1.6
+       }
+      },
+      "last_date": "2026-11-11"
+     },
+     "era5_land": {
+      "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.6,
+       0.0,
+       0.4,
+       0.5,
+       0.2,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.0,
+       0.1,
+       0.1,
+       1.1,
+       3.2,
+       1.6,
+       2.5,
+       2.1,
+       0.9,
+       0.4,
+       0.2,
+       0.0
+      ],
+      "clim_1991_2020_days_lt0_yr": 1.7,
+      "clim_1991_2020_days_lt2_yr": 12.2,
+      "recent_years": {
+       "2021": {
+        "lt0": 1,
+        "lt2": 11,
+        "n_days": 365,
+        "min_c": -0.2
+       },
+       "2022": {
+        "lt0": 2,
+        "lt2": 8,
+        "n_days": 365,
+        "min_c": -0.7
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 9,
+        "n_days": 365,
+        "min_c": 0.5
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 366,
+        "min_c": 2.9
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 3,
+        "n_days": 365,
+        "min_c": 0.5
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 5,
+        "n_days": 311,
+        "min_c": 0.4
+       }
+      },
+      "last_date": "2026-11-07"
+     },
+     "preferred": "power_site_lapse",
+     "preferred_reason": "POWER cell is ~700 m above the farm; lapse-adjusted POWER (+6.5 C/km) matches ERA5-Land Tmax/Tmin within ~1 C (see kepler-answers Q1)",
+     "note": "Point Tmin from gridded reanalysis; local cold-air pooling on valley floors can add frost days not seen at grid scale."
+    },
+    "slope": {
+     "center_deg": 16.2,
+     "window_mean_deg": 15.9,
+     "window_max_deg": 18.1,
+     "center_pct": 29.1,
+     "elev_center_m": 3151.0,
+     "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+    },
+    "erosion": {
+     "power": {
+      "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+      "period": "2001-2025",
+      "wet_day_p95_mm": 6.7,
+      "days_gt10mm_per_yr": 0.6,
+      "days_gt_p95_per_yr": 1.76,
+      "mean_intensity_gt_p95_mm": 11.3,
+      "days_gt10mm_by_month": [
+       0.08,
+       0.16,
+       0.04,
+       0.0,
+       0.0,
+       0.08,
+       0.04,
+       0.0,
+       0.04,
+       0.04,
+       0.0,
+       0.12
+      ],
+      "proxy_tan_slope_x_days_gt10mm": 0.171,
+      "proxy_tan_slope_x_p95_intensity": 3.206
+     },
+     "era5": {
+      "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+      "period": "2001-2025",
+      "wet_day_p95_mm": 15.4,
+      "days_gt10mm_per_yr": 23.72,
+      "days_gt_p95_per_yr": 6.04,
+      "mean_intensity_gt_p95_mm": 19.0,
+      "days_gt10mm_by_month": [
+       7.48,
+       8.84,
+       5.16,
+       0.6,
+       0.04,
+       0.0,
+       0.04,
+       0.0,
+       0.04,
+       0.04,
+       0.2,
+       1.28
+      ],
+      "proxy_tan_slope_x_days_gt10mm": 6.757,
+      "proxy_tan_slope_x_p95_intensity": 5.415
+     },
+     "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+     "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+    }
+   },
+   "field_pixel_status": "pending: data/earthdata/field_pixels_pull.py still running; HLS/ECOSTRESS for samegua/algarrobal are app-point (bare ground) values"
   },
   "samegua": {
    "point": {
@@ -1697,7 +2481,218 @@
      }
     ]
    },
+   "field_pixel": {
+    "lat": -17.17996,
+    "lon": -70.90147,
+    "dist_from_app_point_m": 150,
+    "ndvi_on_scene": 0.558,
+    "scene": "HLS.S30.T19KBB.2026308T145721.v2.0",
+    "ndvi_at_app_point_on_scene": 0.049,
+    "basis": "nearest HLS pixel with NDVI>=0.5 (find_green_pixels.py); candidate - confirm with farmer"
+   },
+   "ndvi_hls_app_point": {
+    "pixel": [
+     -17.18,
+     -70.9
+    ],
+    "monthly_mean": [
+     0.058,
+     0.06,
+     0.055,
+     0.047,
+     0.047,
+     0.044,
+     0.051,
+     0.052,
+     0.053,
+     0.055,
+     0.059,
+     0.062
+    ],
+    "n_clear": [
+     37,
+     33,
+     57,
+     75,
+     56,
+     51,
+     62,
+     49,
+     60,
+     57,
+     38,
+     35
+    ],
+    "total_clear": 610,
+    "total_scenes": 790,
+    "first": "2024-01-02",
+    "last": "2026-11-04",
+    "monthly_median_series": {
+     "2024-01": 0.057,
+     "2024-02": 0.061,
+     "2024-03": 0.055,
+     "2024-04": 0.049,
+     "2024-05": 0.046,
+     "2024-06": 0.051,
+     "2024-07": 0.058,
+     "2024-08": 0.061,
+     "2024-09": 0.063,
+     "2024-10": 0.062,
+     "2024-11": 0.059,
+     "2024-12": 0.071,
+     "2025-01": 0.059,
+     "2025-02": 0.06,
+     "2025-03": 0.047,
+     "2025-04": 0.044,
+     "2025-05": 0.052,
+     "2025-06": 0.046,
+     "2025-07": 0.053,
+     "2025-08": 0.052,
+     "2025-09": 0.054,
+     "2025-10": 0.059,
+     "2025-11": 0.058,
+     "2025-12": 0.057,
+     "2026-01": 0.061,
+     "2026-02": 0.054,
+     "2026-03": 0.053,
+     "2026-04": 0.046,
+     "2026-05": 0.04,
+     "2026-06": 0.024,
+     "2026-07": 0.041,
+     "2026-08": 0.037,
+     "2026-09": 0.04,
+     "2026-10": 0.04,
+     "2026-11": 0.044
+    },
+    "bare_months_lt_0_25": 12,
+    "latest": {
+     "date": "2026-11-04",
+     "ndvi": 0.0492
+    }
+   },
+   "ndvi_hls": {
+    "pixel": [
+     -17.18,
+     -70.9
+    ],
+    "monthly_mean": [
+     0.058,
+     0.06,
+     0.055,
+     0.047,
+     0.047,
+     0.044,
+     0.051,
+     0.052,
+     0.053,
+     0.055,
+     0.059,
+     0.062
+    ],
+    "n_clear": [
+     37,
+     33,
+     57,
+     75,
+     56,
+     51,
+     62,
+     49,
+     60,
+     57,
+     38,
+     35
+    ],
+    "total_clear": 610,
+    "total_scenes": 790,
+    "first": "2024-01-02",
+    "last": "2026-11-04",
+    "monthly_median_series": {
+     "2024-01": 0.057,
+     "2024-02": 0.061,
+     "2024-03": 0.055,
+     "2024-04": 0.049,
+     "2024-05": 0.046,
+     "2024-06": 0.051,
+     "2024-07": 0.058,
+     "2024-08": 0.061,
+     "2024-09": 0.063,
+     "2024-10": 0.062,
+     "2024-11": 0.059,
+     "2024-12": 0.071,
+     "2025-01": 0.059,
+     "2025-02": 0.06,
+     "2025-03": 0.047,
+     "2025-04": 0.044,
+     "2025-05": 0.052,
+     "2025-06": 0.046,
+     "2025-07": 0.053,
+     "2025-08": 0.052,
+     "2025-09": 0.054,
+     "2025-10": 0.059,
+     "2025-11": 0.058,
+     "2025-12": 0.057,
+     "2026-01": 0.061,
+     "2026-02": 0.054,
+     "2026-03": 0.053,
+     "2026-04": 0.046,
+     "2026-05": 0.04,
+     "2026-06": 0.024,
+     "2026-07": 0.041,
+     "2026-08": 0.037,
+     "2026-09": 0.04,
+     "2026-10": 0.04,
+     "2026-11": 0.044
+    },
+    "bare_months_lt_0_25": 12,
+    "latest": {
+     "date": "2026-11-04",
+     "ndvi": 0.0492
+    }
+   },
+   "et_ecostress_app_point": {
+    "pixel": [
+     -17.18,
+     -70.9
+    ],
+    "et_daily_mm_monthly_mean": [
+     1.765,
+     1.537,
+     1.215,
+     0.842,
+     0.451,
+     0.321,
+     0.251,
+     0.362,
+     0.322,
+     0.386,
+     0.502,
+     0.909
+    ],
+    "n_overpasses": [
+     15,
+     6,
+     13,
+     13,
+     14,
+     12,
+     29,
+     9,
+     18,
+     21,
+     26,
+     9
+    ],
+    "total_valid": 185,
+    "total_read": 808,
+    "first": "2019-06-10T12:41:25",
+    "last": "2026-10-20T18:16:02"
+   },
    "et_ecostress": {
+    "pixel": [
+     -17.18,
+     -70.9
+    ],
     "et_daily_mm_monthly_mean": [
      1.765,
      1.537,
@@ -1736,7 +2731,389 @@
     "avalanche/oracle/evidence/samegua-202608.json",
     "avalanche/oracle/evidence/samegua-202609.json",
     "avalanche/oracle/evidence/samegua-202610.json"
-   ]
+   ],
+   "extensions": {
+    "soil": {
+     "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+     "point": [
+      -17.17996,
+      -70.90147
+     ],
+     "offset_m": 0,
+     "depth": "0-30 cm weighted",
+     "clay_pct": 13.85,
+     "sand_pct": 62.33,
+     "silt_pct": 23.8,
+     "soc_g_kg": 12.57,
+     "ph_h2o": 7.93,
+     "bulk_density_g_cm3": 1.27
+    },
+    "cover": {
+     "point": {
+      "lat": -17.17996,
+      "lon": -70.90147,
+      "kind": "field_pixel"
+     },
+     "bare_threshold_ndvi": 0.2,
+     "s2_median_ndvi_by_month_2024_2026": [
+      0.572,
+      0.615,
+      0.596,
+      0.592,
+      0.67,
+      0.681,
+      0.65,
+      0.628,
+      0.635,
+      0.616,
+      0.603,
+      0.635
+     ],
+     "s2_obs_by_month": [
+      49,
+      33,
+      72,
+      82,
+      69,
+      67,
+      71,
+      60,
+      65,
+      68,
+      53,
+      54
+     ],
+     "hls_median_ndvi_by_month": [
+      0.058,
+      0.06,
+      0.052,
+      0.045,
+      0.048,
+      0.044,
+      0.051,
+      0.052,
+      0.054,
+      0.055,
+      0.058,
+      0.06
+     ],
+     "modis_median_ndvi_by_month_2015_present": [
+      0.195,
+      0.211,
+      0.182,
+      0.246,
+      0.227,
+      0.241,
+      0.248,
+      0.233,
+      0.211,
+      0.233,
+      0.216,
+      0.187
+     ],
+     "bare_months": [],
+     "vulnerable_months": [],
+     "s2_last_12_months": {
+      "2025-11": 0.62,
+      "2025-12": 0.578,
+      "2026-01": 0.57,
+      "2026-02": 0.551,
+      "2026-03": 0.589,
+      "2026-04": 0.585,
+      "2026-05": 0.663,
+      "2026-06": 0.688,
+      "2026-07": 0.663,
+      "2026-08": 0.614,
+      "2026-09": 0.639,
+      "2026-10": 0.626,
+      "2026-11": 0.59
+     },
+     "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+    },
+    "frost": {
+     "power": {
+      "source": "NASA POWER T2M_MIN raw (MERRA-2 0.5x0.625 deg cell), gaps filled from ERA5-Land",
+      "clim_1991_2020_days_lt0_by_month": [
+       1.8,
+       2.4,
+       3.1,
+       7.2,
+       21.5,
+       24.4,
+       27.0,
+       24.0,
+       17.3,
+       12.2,
+       9.6,
+       3.7
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       6.9,
+       5.8,
+       8.6,
+       16.5,
+       28.0,
+       29.5,
+       30.8,
+       29.8,
+       25.7,
+       21.4,
+       16.8,
+       10.1
+      ],
+      "clim_1991_2020_days_lt0_yr": 154.2,
+      "clim_1991_2020_days_lt2_yr": 229.9,
+      "recent_years": {
+       "2021": {
+        "lt0": 133,
+        "lt2": 212,
+        "n_days": 365,
+        "min_c": -3.2
+       },
+       "2022": {
+        "lt0": 190,
+        "lt2": 244,
+        "n_days": 365,
+        "min_c": -3.8
+       },
+       "2023": {
+        "lt0": 95,
+        "lt2": 182,
+        "n_days": 365,
+        "min_c": -3.0
+       },
+       "2024": {
+        "lt0": 72,
+        "lt2": 153,
+        "n_days": 366,
+        "min_c": -3.6
+       },
+       "2025": {
+        "lt0": 114,
+        "lt2": 192,
+        "n_days": 365,
+        "min_c": -3.0
+       },
+       "2026": {
+        "lt0": 87,
+        "lt2": 147,
+        "n_days": 315,
+        "min_c": -3.0
+       }
+      },
+      "last_date": "2026-11-11",
+      "era5_gap_filled_days": 0
+     },
+     "power_site_lapse": {
+      "source": "NASA POWER T2M_MIN + 14.79 C lapse shift to SRTM farm elevation (6.5 C/km)",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt0_yr": 0.0,
+      "clim_1991_2020_days_lt2_yr": 0.0,
+      "recent_years": {
+       "2021": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.6
+       },
+       "2022": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.0
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.8
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 366,
+        "min_c": 11.2
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.7
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 315,
+        "min_c": 11.8
+       }
+      },
+      "last_date": "2026-11-11"
+     },
+     "era5_land": {
+      "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt0_yr": 0.0,
+      "clim_1991_2020_days_lt2_yr": 0.0,
+      "recent_years": {
+       "2021": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 12.1
+       },
+       "2022": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.0
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.6
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 366,
+        "min_c": 12.7
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 12.2
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 311,
+        "min_c": 10.6
+       }
+      },
+      "last_date": "2026-11-07"
+     },
+     "preferred": "era5_land",
+     "preferred_reason": "shares the Carumas POWER cell (~2,275 m above the farm); a 14.8 C lapse shift is too large to trust, so ERA5-Land (0.1 deg) is used",
+     "note": "Point Tmin from gridded reanalysis; local cold-air pooling on valley floors can add frost days not seen at grid scale."
+    },
+    "slope": {
+     "center_deg": 6.3,
+     "window_mean_deg": 5.5,
+     "window_max_deg": 6.7,
+     "center_pct": 11.0,
+     "elev_center_m": 1558.0,
+     "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+    },
+    "erosion": {
+     "power": {
+      "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+      "period": "2001-2025",
+      "wet_day_p95_mm": 6.7,
+      "days_gt10mm_per_yr": 0.6,
+      "days_gt_p95_per_yr": 1.76,
+      "mean_intensity_gt_p95_mm": 11.3,
+      "days_gt10mm_by_month": [
+       0.08,
+       0.16,
+       0.04,
+       0.0,
+       0.0,
+       0.08,
+       0.04,
+       0.0,
+       0.04,
+       0.04,
+       0.0,
+       0.12
+      ],
+      "proxy_tan_slope_x_days_gt10mm": 0.058,
+      "proxy_tan_slope_x_p95_intensity": 1.084
+     },
+     "era5": {
+      "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+      "period": "2001-2025",
+      "wet_day_p95_mm": 11.5,
+      "days_gt10mm_per_yr": 3.44,
+      "days_gt_p95_per_yr": 2.08,
+      "mean_intensity_gt_p95_mm": 15.0,
+      "days_gt10mm_by_month": [
+       0.84,
+       1.6,
+       0.68,
+       0.16,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.16
+      ],
+      "proxy_tan_slope_x_days_gt10mm": 0.331,
+      "proxy_tan_slope_x_p95_intensity": 1.448
+     },
+     "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+     "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+    }
+   },
+   "field_pixel_status": "pending: data/earthdata/field_pixels_pull.py still running; HLS/ECOSTRESS for samegua/algarrobal are app-point (bare ground) values"
   },
   "algarrobal": {
    "point": {
@@ -2684,7 +4061,208 @@
      "et0": "FAO-56 PM from NASA POWER daily 2001-2025 at POWER grid cell (power_raw)"
     }
    },
+   "field_pixel": {
+    "lat": -17.6155,
+    "lon": -71.2588,
+    "dist_from_app_point_m": 532,
+    "ndvi_on_scene": 0.59,
+    "scene": "HLS.S30.T18KZF.2026293T145729.v2.0",
+    "ndvi_at_app_point_on_scene": null,
+    "basis": "nearest HLS pixel with NDVI>=0.5 (find_green_pixels.py); candidate - confirm with farmer"
+   },
+   "ndvi_hls_app_point": {
+    "pixel": [
+     -17.62,
+     -71.26
+    ],
+    "monthly_mean": [
+     0.063,
+     0.067,
+     0.065,
+     0.067,
+     0.071,
+     0.071,
+     0.058,
+     0.06,
+     0.064,
+     0.064,
+     0.064,
+     0.061
+    ],
+    "n_clear": [
+     21,
+     27,
+     37,
+     37,
+     11,
+     6,
+     2,
+     7,
+     3,
+     14,
+     11,
+     18
+    ],
+    "total_clear": 194,
+    "total_scenes": 244,
+    "first": "2024-01-14",
+    "last": "2026-10-15",
+    "monthly_median_series": {
+     "2024-01": 0.065,
+     "2024-02": 0.076,
+     "2024-03": 0.067,
+     "2024-04": 0.064,
+     "2024-05": 0.073,
+     "2024-06": 0.066,
+     "2024-07": 0.058,
+     "2024-09": 0.059,
+     "2024-10": 0.061,
+     "2024-11": 0.065,
+     "2024-12": 0.06,
+     "2025-01": 0.057,
+     "2025-02": 0.064,
+     "2025-03": 0.067,
+     "2025-04": 0.068,
+     "2025-05": 0.074,
+     "2025-06": 0.074,
+     "2025-08": 0.051,
+     "2025-09": 0.067,
+     "2025-10": 0.066,
+     "2025-11": 0.063,
+     "2025-12": 0.061,
+     "2026-01": 0.065,
+     "2026-02": 0.073,
+     "2026-03": 0.062,
+     "2026-04": 0.072,
+     "2026-05": 0.076,
+     "2026-07": 0.059,
+     "2026-08": 0.07,
+     "2026-10": 0.069
+    },
+    "bare_months_lt_0_25": 12,
+    "latest": {
+     "date": "2026-10-15",
+     "ndvi": 0.0687
+    }
+   },
+   "ndvi_hls": {
+    "pixel": [
+     -17.62,
+     -71.26
+    ],
+    "monthly_mean": [
+     0.063,
+     0.067,
+     0.065,
+     0.067,
+     0.071,
+     0.071,
+     0.058,
+     0.06,
+     0.064,
+     0.064,
+     0.064,
+     0.061
+    ],
+    "n_clear": [
+     21,
+     27,
+     37,
+     37,
+     11,
+     6,
+     2,
+     7,
+     3,
+     14,
+     11,
+     18
+    ],
+    "total_clear": 194,
+    "total_scenes": 244,
+    "first": "2024-01-14",
+    "last": "2026-10-15",
+    "monthly_median_series": {
+     "2024-01": 0.065,
+     "2024-02": 0.076,
+     "2024-03": 0.067,
+     "2024-04": 0.064,
+     "2024-05": 0.073,
+     "2024-06": 0.066,
+     "2024-07": 0.058,
+     "2024-09": 0.059,
+     "2024-10": 0.061,
+     "2024-11": 0.065,
+     "2024-12": 0.06,
+     "2025-01": 0.057,
+     "2025-02": 0.064,
+     "2025-03": 0.067,
+     "2025-04": 0.068,
+     "2025-05": 0.074,
+     "2025-06": 0.074,
+     "2025-08": 0.051,
+     "2025-09": 0.067,
+     "2025-10": 0.066,
+     "2025-11": 0.063,
+     "2025-12": 0.061,
+     "2026-01": 0.065,
+     "2026-02": 0.073,
+     "2026-03": 0.062,
+     "2026-04": 0.072,
+     "2026-05": 0.076,
+     "2026-07": 0.059,
+     "2026-08": 0.07,
+     "2026-10": 0.069
+    },
+    "bare_months_lt_0_25": 12,
+    "latest": {
+     "date": "2026-10-15",
+     "ndvi": 0.0687
+    }
+   },
+   "et_ecostress_app_point": {
+    "pixel": [
+     -17.62,
+     -71.26
+    ],
+    "et_daily_mm_monthly_mean": [
+     1.649,
+     1.677,
+     1.396,
+     1.144,
+     0.964,
+     0.575,
+     0.736,
+     0.42,
+     1.139,
+     1.482,
+     1.39,
+     1.859
+    ],
+    "n_overpasses": [
+     18,
+     5,
+     15,
+     8,
+     14,
+     6,
+     20,
+     5,
+     10,
+     11,
+     19,
+     5
+    ],
+    "total_valid": 136,
+    "total_read": 720,
+    "first": "2019-08-11T12:13:53",
+    "last": "2026-10-20T18:16:02"
+   },
    "et_ecostress": {
+    "pixel": [
+     -17.62,
+     -71.26
+    ],
     "et_daily_mm_monthly_mean": [
      1.649,
      1.677,
@@ -2723,7 +4301,388 @@
     "avalanche/oracle/evidence/algarrobal-202608.json",
     "avalanche/oracle/evidence/algarrobal-202609.json",
     "avalanche/oracle/evidence/algarrobal-202610.json"
-   ]
+   ],
+   "extensions": {
+    "soil": {
+     "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+     "point": [
+      -17.6155,
+      -71.2588
+     ],
+     "offset_m": 0,
+     "depth": "0-30 cm weighted",
+     "clay_pct": 14.15,
+     "sand_pct": 66.52,
+     "silt_pct": 19.35,
+     "soc_g_kg": 25.73,
+     "ph_h2o": 7.8,
+     "bulk_density_g_cm3": 1.31
+    },
+    "cover": {
+     "point": {
+      "lat": -17.6155,
+      "lon": -71.2588,
+      "kind": "field_pixel"
+     },
+     "bare_threshold_ndvi": 0.2,
+     "s2_median_ndvi_by_month_2024_2026": [
+      0.249,
+      0.313,
+      0.272,
+      0.259,
+      0.306,
+      0.26,
+      0.358,
+      0.317,
+      0.296,
+      0.268,
+      0.257,
+      0.282
+     ],
+     "s2_obs_by_month": [
+      20,
+      20,
+      25,
+      28,
+      16,
+      10,
+      6,
+      3,
+      6,
+      21,
+      18,
+      18
+     ],
+     "hls_median_ndvi_by_month": [
+      0.064,
+      0.069,
+      0.067,
+      0.07,
+      0.074,
+      0.071,
+      0.058,
+      0.053,
+      0.067,
+      0.066,
+      0.065,
+      0.061
+     ],
+     "modis_median_ndvi_by_month_2015_present": [
+      0.194,
+      0.176,
+      0.159,
+      0.148,
+      0.17,
+      0.12,
+      0.178,
+      0.153,
+      0.162,
+      0.16,
+      0.158,
+      0.172
+     ],
+     "bare_months": [],
+     "vulnerable_months": [],
+     "s2_last_12_months": {
+      "2025-11": 0.253,
+      "2025-12": 0.282,
+      "2026-01": 0.271,
+      "2026-02": 0.253,
+      "2026-03": 0.305,
+      "2026-04": 0.336,
+      "2026-05": 0.347,
+      "2026-07": 0.358,
+      "2026-08": 0.317,
+      "2026-09": 0.292,
+      "2026-10": 0.273,
+      "2026-11": 0.255
+     },
+     "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+    },
+    "frost": {
+     "power": {
+      "source": "NASA POWER T2M_MIN raw (MERRA-2 0.5x0.625 deg cell), gaps filled from ERA5-Land",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt0_yr": 0.0,
+      "clim_1991_2020_days_lt2_yr": 0.0,
+      "recent_years": {
+       "2021": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 10.4
+       },
+       "2022": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 9.9
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 12.6
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 366,
+        "min_c": 10.9
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.3
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 315,
+        "min_c": 12.5
+       }
+      },
+      "last_date": "2026-11-11",
+      "era5_gap_filled_days": 0
+     },
+     "power_site_lapse": {
+      "source": "NASA POWER T2M_MIN + 3.63 C lapse shift to SRTM farm elevation (6.5 C/km)",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt0_yr": 0.0,
+      "clim_1991_2020_days_lt2_yr": 0.0,
+      "recent_years": {
+       "2021": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 14.0
+       },
+       "2022": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 13.5
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 16.2
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 366,
+        "min_c": 14.6
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 14.9
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 315,
+        "min_c": 16.1
+       }
+      },
+      "last_date": "2026-11-11"
+     },
+     "era5_land": {
+      "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+      "clim_1991_2020_days_lt0_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt2_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "clim_1991_2020_days_lt0_yr": 0.0,
+      "clim_1991_2020_days_lt2_yr": 0.0,
+      "recent_years": {
+       "2021": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.6
+       },
+       "2022": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.2
+       },
+       "2023": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 13.4
+       },
+       "2024": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 366,
+        "min_c": 11.6
+       },
+       "2025": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 365,
+        "min_c": 11.4
+       },
+       "2026": {
+        "lt0": 0,
+        "lt2": 0,
+        "n_days": 311,
+        "min_c": 13.3
+       }
+      },
+      "last_date": "2026-11-07"
+     },
+     "preferred": "power",
+     "preferred_reason": "coastal inversion: raw POWER preferred; frost is absent in every series",
+     "note": "Point Tmin from gridded reanalysis; local cold-air pooling on valley floors can add frost days not seen at grid scale."
+    },
+    "slope": {
+     "center_deg": 7.9,
+     "window_mean_deg": 8.4,
+     "window_max_deg": 19.4,
+     "center_pct": 13.9,
+     "elev_center_m": 112.0,
+     "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+    },
+    "erosion": {
+     "power": {
+      "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+      "period": "2001-2025",
+      "wet_day_p95_mm": 6.7,
+      "days_gt10mm_per_yr": 0.2,
+      "days_gt_p95_per_yr": 0.6,
+      "mean_intensity_gt_p95_mm": 10.5,
+      "days_gt10mm_by_month": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.04,
+       0.0,
+       0.12,
+       0.0,
+       0.0,
+       0.04
+      ],
+      "proxy_tan_slope_x_days_gt10mm": 0.03,
+      "proxy_tan_slope_x_p95_intensity": 1.544
+     },
+     "era5": {
+      "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+      "period": "2001-2025",
+      "wet_day_p95_mm": 6.5,
+      "days_gt10mm_per_yr": 0.08,
+      "days_gt_p95_per_yr": 0.36,
+      "mean_intensity_gt_p95_mm": 8.6,
+      "days_gt10mm_by_month": [
+       0.04,
+       0.04,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "proxy_tan_slope_x_days_gt10mm": 0.012,
+      "proxy_tan_slope_x_p95_intensity": 1.273
+     },
+     "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+     "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+    }
+   },
+   "field_pixel_status": "pending: data/earthdata/field_pixels_pull.py still running; HLS/ECOSTRESS for samegua/algarrobal are app-point (bare ground) values"
   }
  },
  "sources": {
@@ -2731,9 +4690,11 @@
   "modis": "MOD13Q1 v061 NDVI 250 m 16-day, ORNL DAAC MODIS Web Service https://modis.ornl.gov/rst/api/v1/",
   "hls": "HLS L30/S30 v2.0 30 m (NASA LP DAAC) https://doi.org/10.5067/HLS/HLSS30.002",
   "ecostress": "ECOSTRESS L3T JET v002 ETdaily 70 m (NASA LP DAAC) https://doi.org/10.5067/ECOSTRESS/ECO_L3T_JET.002",
+  "sentinel2": "Contains modified Copernicus Sentinel-2 L2A data 2024-2026 (ESA), via Element84 Earth Search STAC (partner)",
+  "soilgrids": "Poggio et al. 2021, SoilGrids 2.0, ISRIC, CC-BY 4.0 (NON-NASA)",
+  "era5": "Copernicus ERA5 / ERA5-Land via Open-Meteo Historical API https://open-meteo.com/en/docs/historical-weather-api",
   "smap": "SMAP L3 Enhanced 9 km SPL3SMP_E v006 (NSIDC DAAC) https://doi.org/10.5067/M20OXIZHY3RJ",
   "srtm": "NASA SRTM GL1 30 m via OpenTopoData https://www.opentopodata.org/datasets/srtm/",
-  "chirps": "CHIRPS v3.0 monthly, UCSB Climate Hazards Center https://data.chc.ucsb.edu/products/CHIRPS/v3.0/",
-  "era5": "Copernicus ERA5 / ERA5-Land via Open-Meteo Historical API https://open-meteo.com/en/docs/historical-weather-api"
+  "chirps": "CHIRPS v3.0 monthly, UCSB Climate Hazards Center https://data.chc.ucsb.edu/products/CHIRPS/v3.0/"
  }
 }

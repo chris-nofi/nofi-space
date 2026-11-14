@@ -15,6 +15,21 @@ from .config import load_farms
 from .evidence import plot_hash
 
 
+def _latest_evidence(farm_id: str, periods: list[str]) -> dict | None:
+    """Indicators of the latest real evidence month, for the evidence chips on each strategy card."""
+    from .proof import package
+
+    for p in reversed(periods):
+        pkg = package(farm_id, p)
+        if pkg.get("source") != "evidence":
+            continue
+        ind = pkg["record"].get("indicators", {})
+        keep = ("value", "dataset", "scale", "stat", "reason", "substituteFor", "pixel", "point", "days")
+        return {"period": p, "dataHash": pkg["dataHash"], "file": f"evidence/{farm_id}-{p}.json", "attestable": pkg.get("attestable"),
+                "indicators": {k: {kk: v.get(kk) for kk in keep if v.get(kk) is not None} for k, v in ind.items()}}
+    return None
+
+
 def _periods(arg: str | None) -> list[str]:
     from .ceres.tools import default_period
 
@@ -85,7 +100,12 @@ def main() -> None:
                 "rainRangeMmYr": pw.get("rainRangeMmYr"), "et0MmDay": pw.get("et0MmDayMonthly"),
                 "tmaxMonthly": pw["tmaxMonthly"], "tminMonthly": pw["tminMonthly"], "provenance": pw.get("provenance"),
                 "ecostress": {k: (eco or {}).get(k) for k in ("etMonthly", "overpassesMonthly", "totalValid", "first", "last", "representative")},
-                "ndvi": {k: (nd or {}).get(k) for k in ("monthly", "source", "representative", "latest", "first", "last")},
+                "ndvi": {k: (nd or {}).get(k) for k in ("monthly", "source", "dataset", "pointKind", "fieldPixel", "nClear", "note", "representative", "first", "last", "context")},
+                "extensions": (ctx or {}).get("extensions"),
+                "fieldPixel": (ctx or {}).get("fieldPixel"),
+                "smap": (ctx or {}).get("smap"),
+                "latestEvidence": _latest_evidence(fid, periods),
+                "frostDaysPowerCell": ((ctx or {}).get("climatology1991_2020") or {}).get("frost_days_yr"),
                 "trendT2m": ((ctx or {}).get("trends") or {}).get("t2m"),
                 "point": (ctx or {}).get("point"),
             }
@@ -97,6 +117,15 @@ def main() -> None:
               "window.AGUA_SI_FIXTURES = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n"
               "window.AGUA_SI_RECORDS = " + json.dumps(recs, ensure_ascii=False, separators=(",", ":")) + ";\n"
               "window.AGUA_SI_CLIMATE = " + json.dumps(clim, ensure_ascii=False, separators=(",", ":")) + ";\n")
+        # the exact evidence bytes that get hashed, downloadable from the site (Apollo W7)
+        import shutil
+
+        from .proof import EVIDENCE_DIR
+
+        ev_dest = Path(__file__).resolve().parents[2] / "site" / "evidence"
+        ev_dest.mkdir(exist_ok=True)
+        for f in sorted(EVIDENCE_DIR.glob("*.json")):
+            shutil.copyfile(f, ev_dest / f.name)
         dest = Path(__file__).resolve().parents[2] / "site" / "si-data.js"
         dest.write_text(js, encoding="utf-8")
         print(f"wrote {dest} ({len(js)} bytes)")

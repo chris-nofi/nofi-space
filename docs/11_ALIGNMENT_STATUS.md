@@ -1,0 +1,22 @@
+# Challenge-alignment status (Apollo's plan, `docs/plans/challenge-alignment-implementation.md`)
+
+Built Sat 14 Nov 2026, ~03:00 Peru time, in this repo (`site/` is the deploy target). Nothing was deployed, attested, submitted or sent, and the Retell agent wasn't touched.
+
+| ID | Status | Where |
+|---|---|---|
+| W1 | ✅ Done. Rotation + soil-health hero ("Rota mejor, cuida tu suelo"), "Apoyo a la rotación" crumbs, Ceres Ventures branding. No "Agua Clara" in the UI. Farmer ES never shows wallet / USDC / gas | `app.js`, `index.html` |
+| W2 | ✅ Done. 4 strategies per farm including current. Each card has why, benefits, evidence (+ chips with dataset · value · date · scale), gaps, local-review risks, soil levers and needs. El Algarrobal is labeled "management, not annual rotation". Counts are derived from the data | `rotations.json`, `real-data.js`, `app.js` `compare()` |
+| W3 | ✅ Done. Sliders work offline (`rerank()` on the engine's criteria and formula). Constraints: water scarce/typical/secure, no drip kit (not eligible as the top pick, shown with a reason), no quinoa/tarwi buyer, needs forage, soil goal. The Strategies "SUGERIDA" tag and the CERES summary follow the re-rank. Reset works. Rain/warming scenarios still need the oracle (labeled) | `si.js` |
+| W4 | ✅ Done. 12-month NDVI timeline: Carumas uses HLS 30 m; valley farms use Sentinel-2 at the provisional crop pixel, labeled. It marks bare months (< 0.20), vulnerable months (bare + rain/frost), simulated risk peaks and a cover-crop opportunity sentence. Shown in the SI view and on the Evidence page | `si.js` `seasonBlock()` |
+| W5 | ✅ Done. Soil card with real SoilGrids values, labeled "no es un producto NASA", with model caveats. Soil explainers for each lever. Salinity is labeled inferred, not measured | `app.js` `soilCard()`, `real-data.js` `LEVERS` |
+| W6 | ✅ Cards done. Frost from the preferred series per farm (lapse-corrected POWER at Carumas, ERA5-Land at Samegua, raw POWER at the coast), with the raw-cell caveat. SRTM slope and a relative erosion rank. The GIS map is P2, not done | `app.js` `frostCard()` / `slopeCard()` |
+| W7 | ✅ Done. Citations under every chart. Evidence chips. Downloadable evidence JSONs (the same bytes that get hashed, `site/evidence/`). Glossary with 7 terms. Partner credits for ESA Sentinel-2 and ECMWF ERA5. Nulls show "sin dato" plus the reason. AI disclosure in the footer | `app.js`, `real-data.js`, CLI `export-site` |
+| W8 | ✅ Done. One source: the engine on real data, which reproduces Kepler's El Algarrobal 17,070 / 12,890. `node site/tests/consistency.mjs` checks recommended === ranking[0], card water === engine and voice === winner for all 3 farms | `site/tests/consistency.mjs` |
+| W9 | ✅ Repo side done. The CERES prompt (`prompt.py`) has the strategy-explanation section, farmer vs judge registro wording, glossary terms and an honest real-data rule. Tools return why/benefits/gaps/risks. Chips and safety text updated. Our CERES is the Claude custom-LLM brain behind Retell, so there's no `ceres_prompt.md` to dry-run. **Live agent unchanged** | `oracle/earth_oracle/ceres/` |
+| W10 | ✅ Done. Rewards module gone. The recommended card shows a "registro verificable" badge (anchored, or "aún no anclado" with the reason); judge/EN mode shows chain 880024 and the dataHash. Farmer ES sidebar says "Registro verificable"; EN shows NØFI L1 · 880024 · nofiscan | `app.js` |
+| W11 | ✅ Drafts done. In-app AI disclosure. `docs/project-page-en-draft.md`; `docs/video-shot-list.md` (NASA 30-s + Team1 cut). Recording and submission are gated on Chris | `docs/` |
+| A | ⛔ Gated / outside this repo. Validator top-up, deploy, attest and live x402 need Chris. `avalanche/` (Apollo's contracts, `build-attestation.mjs`, `earth-data.mjs`, `registro.html`, `pagar.html`) isn't in this repo, so these plan items are still open: the null-ET fix in the attester, the `DEFAULT_DIRS` change to `oracle/evidence`, default `--chain 880024`, and moving `registro.html` off Fuji. `site/config.js` has `registryAddress` / `x402PayUrl` slots ready | — |
+
+## Data caveats surfaced in the UI
+- **El Algarrobal provisional crop pixel.** October 2026 HLS NDVI is 0.069 while Sentinel-2 reads 0.27 at the same pixel. Kepler should check this before any attestation.
+- **Samegua.** The v2 sources doc lists the crop as avocado; the app scenario is alfalfa (illustrative). Align before the video.

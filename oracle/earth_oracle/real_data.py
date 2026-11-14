@@ -8,7 +8,11 @@ Per-farm choices follow data/CONNECT-REAL-DATA.md §5 and data/kepler-answers.md
   ERA5-Land monthly means (the POWER cell sits at 3,851 m); El Algarrobal = raw POWER (coastal inversion).
 - Rain: CHIRPS v3 1991-2020 (POWER and ERA5 kept as the range); IMERG pending GES DISC EULA.
 - ECOSTRESS: monthly mean ETdaily at the map point (70 m) with overpass counts.
-- NDVI: MODIS MOD13Q1 250 m monthly mean (HLS not in the package).
+- NDVI (package v2): Carumas = HLS 30 m at the app point (cropland); Samegua / El Algarrobal = Sentinel-2 10 m
+  at the provisional field pixel (nearest HLS pixel with NDVI >= 0.5, 150 m / 532 m from the app point, to be
+  confirmed with the farmer), because HLS at the app point reads bare ground (~0.05). MODIS 250 m is kept as context.
+- Extensions (v2): SoilGrids (NON-NASA), Sentinel-2 cover / bare / vulnerable months, frost (preferred series per
+  farm), SRTM slope and an erosion proxy (relative rank only, IMERG blocked).
 - `representative` is false where Kepler found the point on desert or mixed pixels (Samegua, El Algarrobal):
   the engine then reports the value but does not treat it as the field's own measurement.
 """
@@ -114,14 +118,28 @@ def build_inputs(farm_id: str, b: dict | None = None) -> dict:
         "note": "Monthly mean of valid overpasses 2019-2026 at the map point (multi-year climatology).",
     }
     modis = n["ndvi_modis"]
-    ndvi = {
-        "source": "MOD13Q1 v061 NDVI, 250 m, 16-day (ORNL DAAC)",
-        "farmId": farm_id,
-        "monthly": modis["ndvi_monthly_mean"],
-        "std": modis.get("ndvi_monthly_std"),
-        "first": modis.get("first"), "last": modis.get("last"), "latest": modis.get("latest"),
-        "representative": REPRESENTATIVE[farm_id]["ndvi"],
-        "note": "MODIS pixel (~6 ha) is larger than the 1-2 ha field; HLS 30 m not yet in the package.",
+    ext = (_extensions().get(farm_id) or {})
+    cover = ext.get("cover") or {}
+    hls = n.get("ndvi_hls_app_point") or n.get("ndvi_hls")
+    fp = n.get("field_pixel")
+    if farm_id == "carumas" and hls and all(v is not None for v in hls.get("monthly_mean", [None])):
+        ndvi = {"source": "HLS v2.0 30 m (L30/S30), monthly mean 2024-2026, Fmask", "dataset": "HLS_L30_S30_v2.0",
+                "pointKind": "app_point", "monthly": hls["monthly_mean"], "nClear": hls.get("n_clear"),
+                "first": hls.get("first"), "last": hls.get("last"), "representative": True,
+                "note": "App point is on cropland (HLS NDVI 0.31-0.63)."}
+    elif fp and cover.get("s2_median_ndvi_by_month_2024_2026"):
+        ndvi = {"source": "Sentinel-2 L2A 10 m (ESA, partner), monthly median 2024-2026, SCL mask", "dataset": "Sentinel-2_L2A",
+                "pointKind": "field_pixel_provisional", "monthly": cover["s2_median_ndvi_by_month_2024_2026"], "nClear": cover.get("s2_obs_by_month"),
+                "fieldPixel": fp, "representative": True,
+                "note": f"Provisional field pixel {fp.get('dist_from_app_point_m')} m from the app point (nearest HLS pixel with NDVI >= 0.5); confirm with the farmer. HLS at the app point reads bare ground."}
+    else:
+        ndvi = {"source": "MOD13Q1 v061 NDVI, 250 m, 16-day (ORNL DAAC)", "dataset": "MOD13Q1_v061", "pointKind": "app_point",
+                "monthly": modis["ndvi_monthly_mean"], "representative": REPRESENTATIVE[farm_id]["ndvi"],
+                "note": "MODIS pixel (~6 ha) is larger than the 1-2 ha field."}
+    ndvi["context"] = {
+        "hlsAppPoint": {k: (hls or {}).get(k) for k in ("monthly_mean", "n_clear", "total_clear", "first", "last")} if hls else None,
+        "modis250m": {"monthly": modis["ndvi_monthly_mean"], "first": modis.get("first"), "last": modis.get("last"), "latest": modis.get("latest")},
+        "s2FieldPixel": cover.get("s2_median_ndvi_by_month_2024_2026"),
     }
     context = {
         "farmId": farm_id,
@@ -141,10 +159,57 @@ def build_inputs(farm_id: str, b: dict | None = None) -> dict:
         "representative": REPRESENTATIVE[farm_id],
         "offFieldNote": None if REPRESENTATIVE[farm_id]["ecostress"] else OFF_FIELD_NOTE,
         "qc": n.get("qc"),
+        "fieldPixel": fp,
+        "extensions": _public_extensions(farm_id, ext),
+        "smap": _smap_summary(n.get("smap")),
         "generated": b.get("generated"),
         "sources": b.get("sources"),
     }
     return {"power": power, "ecostress": ecostress, "ndvi": ndvi, "context": context}
+
+
+def _extensions() -> dict:
+    p = PACKAGE / "out" / "risk_extensions.json"
+    return json.loads(p.read_text(encoding="utf-8"))["farms"] if p.exists() else {}
+
+
+def erosion_ranks() -> dict:
+    """Relative erosion rank (Kepler §10: a rank, never a number). Proxy = tan(slope) x mean intensity of the
+    wettest 5 % of days (NASA POWER), raised one step when the field has bare months in the rainy season."""
+    ext = _extensions()
+    score = {}
+    for fid, e in ext.items():
+        proxy = ((e.get("erosion") or {}).get("power") or {}).get("proxy_tan_slope_x_p95_intensity") or 0.0
+        wet_bare = any("rainy" in " ".join(v.get("reasons", [])) for v in (e.get("cover") or {}).get("vulnerable_months", []))
+        score[fid] = proxy * (2.0 if wet_bare else 1.0)
+    order = sorted(score, key=score.get, reverse=True)
+    labels = ["high", "medium", "low"]
+    return {fid: labels[min(i, 2)] for i, fid in enumerate(order)}
+
+
+def _public_extensions(farm_id: str, ext: dict) -> dict | None:
+    if not ext:
+        return None
+    frost = ext.get("frost") or {}
+    pref = frost.get("preferred")
+    cover = ext.get("cover") or {}
+    return {
+        "soil": ext.get("soil"),
+        "cover": {k: cover.get(k) for k in ("point", "bare_threshold_ndvi", "s2_median_ndvi_by_month_2024_2026", "s2_obs_by_month",
+                                            "hls_median_ndvi_by_month", "bare_months", "vulnerable_months", "method")},
+        "frost": {"preferred": pref, "preferredReason": frost.get("preferred_reason"), "series": frost.get(pref) if pref else None,
+                  "powerRawCell": {k: (frost.get("power") or {}).get(k) for k in ("clim_1991_2020_days_lt0_yr", "clim_1991_2020_days_lt2_yr")}},
+        "slope": ext.get("slope"),
+        "erosion": {"rank": erosion_ranks().get(farm_id), "power": (ext.get("erosion") or {}).get("power"),
+                    "era5": (ext.get("erosion") or {}).get("era5"), "method": (ext.get("erosion") or {}).get("method"),
+                    "imergStatus": (ext.get("erosion") or {}).get("imerg_status")},
+    }
+
+
+def _smap_summary(sm: dict | None) -> dict | None:
+    if not sm:
+        return None
+    return {k: v for k, v in sm.items() if k != "monthly_series_m3m3"}
 
 
 def import_all() -> list[Path]:

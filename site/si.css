@@ -180,3 +180,55 @@ a.ceres-proof:hover { background: #cdebed; }
 .warn-tag { background: var(--si-ochre-soft) !important; color: #9a5a1c !important; }
 .rv-issues { margin: 10px 0 0; padding-left: 18px; font-size: 12.5px; color: #9a5a1c; line-height: 1.5; }
 .rv-table th small { text-transform: none; letter-spacing: 0; }
+
+/* ---------- strategy card: evidence chips, soil levers, registro badge ---------- */
+.four-insights.five { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.ev-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0 0; }
+.ev-title { font-size: 10px; font-weight: 800; letter-spacing: .8px; color: var(--muted); margin-right: 4px; }
+.ev-chip { font-size: 11.5px; background: #eef5f6; border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px; color: var(--navy); }
+.ev-chip small { color: var(--muted); margin-left: 4px; }
+.ev-chip.partner { background: #f3f0fb; }
+.ev-chip.gap { background: var(--si-ochre-soft); color: #9a5a1c; }
+.ev-dl { font-size: 11.5px; color: var(--teal); font-weight: 700; margin-left: auto; }
+.lever-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; align-items: flex-start; }
+.lever { background: #eaf7ef; border-radius: 10px; padding: 5px 10px; font-size: 12px; max-width: 320px; }
+.lever summary { cursor: pointer; font-weight: 700; color: var(--si-good); }
+.lever p { margin: 6px 0 2px; color: var(--txt); line-height: 1.45; }
+.need-chip { font-size: 11.5px; background: var(--si-ochre-soft); color: #9a5a1c; border-radius: 999px; padding: 5px 10px; display: inline-flex; gap: 4px; align-items: center; }
+.registro-badge { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: #f6fafa; font-size: 12.5px; }
+.registro-badge.ok { background: var(--si-teal-soft); border-color: #bfe3e6; }
+.registro-badge span { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.registro-badge small { color: var(--muted); overflow-wrap: anywhere; }
+.registro-badge button { background: #fff; border: 1px solid var(--border); border-radius: 9px; padding: 6px 10px; font-weight: 700; font-size: 12px; color: var(--navy); }
+.si-flag { font-size: 11px; color: #9a5a1c; background: var(--si-ochre-soft); border-radius: 8px; padding: 4px 8px; }
+.si-ficha summary { cursor: pointer; font-size: 12px; font-weight: 700; color: var(--teal); }
+.si-ficha dl { display: grid; gap: 6px; margin: 8px 0 0; }
+.si-ficha dt { font-size: 10.5px; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); }
+.si-ficha dd { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--txt); text-align: left; font-weight: 400; }
+.si-select { font: inherit; font-size: 12.5px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: #fff; color: var(--txt); width: 100%; }
+.si-check { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--txt); }
+
+/* ---------- season timeline ---------- */
+.si-season { display: grid; gap: 10px; }
+.ss-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; overflow-x: auto; }
+@media (max-width: 700px) { .ss-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.ss-cell { position: relative; display: grid; gap: 3px; justify-items: center; padding: 8px 4px; border-radius: 10px; background: #f3f8f8; border: 1px solid var(--border); min-height: 96px; align-content: end; }
+.ss-cell.bare { background: var(--si-ochre-soft); }
+.ss-cell.vul { box-shadow: inset 0 0 0 2px var(--si-ochre); }
+.ss-bar { width: 60%; height: calc(6px + var(--v) * 46px); border-radius: 4px; background: linear-gradient(180deg, #5ad08b, #1f8a5b); }
+.ss-cell.bare .ss-bar { background: linear-gradient(180deg, #e8b07a, #d98a3d); }
+.ss-cell b { font-size: 11px; color: var(--navy); }
+.ss-cell small { font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ss-cell .tag { font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: .3px; border-radius: 6px; padding: 1px 5px; }
+.tag.bare { background: #fff; color: #9a5a1c; } .tag.vul { background: var(--si-ochre); color: #fff; } .tag.risk { background: #e3ecff; color: #2f5bb5; }
+
+/* ---------- evidence page: soil / frost / slope / glossary ---------- */
+.risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 16px 0; }
+.risk-grid > * { min-width: 0; }
+.kv { display: grid; grid-template-columns: auto auto; gap: 6px 14px; font-size: 13px; margin: 6px 0; }
+.kv span { color: var(--muted); } .kv b { color: var(--navy); font-variant-numeric: tabular-nums; }
+#season-root { margin-top: 16px; }
+.glossary dl { display: grid; grid-template-columns: minmax(140px, max-content) 1fr; gap: 8px 16px; margin: 0; font-size: 13px; line-height: 1.5; }
+.glossary dt { font-weight: 700; color: var(--navy); } .glossary dd { margin: 0; color: var(--txt); }
+@media (max-width: 600px) { .glossary dl { grid-template-columns: minmax(0, 1fr); } }
+.ai-note { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 6px 0 0; max-width: 110ch; }

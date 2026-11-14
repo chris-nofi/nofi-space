@@ -79,8 +79,8 @@ def _ndvi_info(farm_id: str, used: bool) -> dict | None:
     m = read_input(f"{farm_id}_ndvi.json")
     if not m:
         return {"source": "hls" if used else None, "used": used}
-    return {"source": m.get("source"), "representative": m.get("representative"), "used": used,
-            "monthly": m.get("monthly"), "latest": m.get("latest")}
+    return {"source": m.get("source"), "dataset": m.get("dataset"), "pointKind": m.get("pointKind"), "fieldPixel": m.get("fieldPixel"),
+            "representative": m.get("representative"), "used": used, "monthly": m.get("monthly"), "nClear": m.get("nClear"), "note": m.get("note")}
 
 
 def _ecostress_monthly(farm_id: str) -> list[float | None] | None:
@@ -167,6 +167,8 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
         r = det[s["id"]]
         compare.append({
             "id": s["id"], "name": s["name"], "current": bool(s.get("current")), "recommended": False,
+            "soilLevers": s.get("soilLevers", []), "needs": s.get("needs", []), "benefits": s.get("benefits"),
+            "why": s.get("why"), "gaps": s.get("gaps"), "risks": s.get("risks"), "mainRisk": s.get("mainRisk"),
             "water": {"p50": round(float(med["water"][i]), 1), "unit": "m3/ha/yr" if not rainfed else "mm/yr",
                       "expected": round(float(r.water_use), 1)},  # baseline (2001-2025 climatology) run: the headline number
             "waterMonthly": [round(float(v), 1) for v in (r.need_m3 if not rainfed else r.actual_mm)],
@@ -234,7 +236,9 @@ def analyze(farm_id: str, priorities: dict | None = None, scenario: dict | None 
     }
 
     # ---- seasons ----
-    seasons = {"observed": {**detect(ndvi), "source": "hls" if obs_ndvi is not None else "modeled from crop calendar"}}
+    _ni = _ndvi_info(farm_id, obs_ndvi is not None) or {}
+    seasons = {"observed": {**detect(ndvi), "source": (_ni.get("source") or "observed") if obs_ndvi is not None else "modeled from crop calendar",
+                            "pointKind": _ni.get("pointKind")}}
     for s in strategies:
         seasons[s["id"]] = detect(ndvi_from_cover(det[s["id"]].cover))
 

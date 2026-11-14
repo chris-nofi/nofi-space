@@ -1,0 +1,1168 @@
+{
+ "generated": "2026-11-14T02:10:31-0500",
+ "farms": {
+  "carumas": {
+   "soil": {
+    "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+    "point": [
+     -16.81,
+     -70.69
+    ],
+    "offset_m": 0,
+    "depth": "0-30 cm weighted",
+    "clay_pct": 15.93,
+    "sand_pct": 58.28,
+    "silt_pct": 25.77,
+    "soc_g_kg": 17.8,
+    "ph_h2o": 7.18,
+    "bulk_density_g_cm3": 1.16
+   },
+   "cover": {
+    "point": {
+     "lat": -16.81,
+     "lon": -70.69,
+     "kind": "app_point"
+    },
+    "bare_threshold_ndvi": 0.2,
+    "s2_median_ndvi_by_month_2024_2026": [
+     0.189,
+     0.392,
+     0.549,
+     0.484,
+     0.348,
+     0.271,
+     0.232,
+     0.209,
+     0.18,
+     0.168,
+     0.165,
+     0.171
+    ],
+    "s2_obs_by_month": [
+     21,
+     14,
+     29,
+     41,
+     45,
+     41,
+     47,
+     43,
+     41,
+     41,
+     28,
+     32
+    ],
+    "hls_median_ndvi_by_month": [
+     0.33,
+     0.513,
+     0.627,
+     0.588,
+     0.482,
+     0.398,
+     0.361,
+     0.339,
+     0.312,
+     0.315,
+     0.327,
+     0.31
+    ],
+    "modis_median_ndvi_by_month_2015_present": [
+     0.494,
+     0.665,
+     0.736,
+     0.662,
+     0.537,
+     0.451,
+     0.408,
+     0.381,
+     0.371,
+     0.4,
+     0.385,
+     0.415
+    ],
+    "bare_months": [
+     "Jan",
+     "Sep",
+     "Oct",
+     "Nov",
+     "Dec"
+    ],
+    "vulnerable_months": [
+     {
+      "month": "Jan",
+      "reasons": [
+       "bare/sparse cover (S2 NDVI<0.20)",
+       "rainy month (>=10% of annual ERA5 rain)"
+      ]
+     },
+     {
+      "month": "Dec",
+      "reasons": [
+       "bare/sparse cover (S2 NDVI<0.20)",
+       "rainy month (>=10% of annual ERA5 rain)"
+      ]
+     }
+    ],
+    "s2_last_12_months": {
+     "2025-11": 0.165,
+     "2025-12": 0.167,
+     "2026-01": 0.156,
+     "2026-02": 0.522,
+     "2026-03": 0.501,
+     "2026-04": 0.478,
+     "2026-05": 0.369,
+     "2026-06": 0.286,
+     "2026-07": 0.24,
+     "2026-08": 0.215,
+     "2026-09": 0.19,
+     "2026-10": 0.166,
+     "2026-11": 0.161
+    },
+    "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+   },
+   "frost": {
+    "power": {
+     "source": "NASA POWER T2M_MIN raw (MERRA-2 0.5x0.625 deg cell), gaps filled from ERA5-Land",
+     "clim_1991_2020_days_lt0_by_month": [
+      1.8,
+      2.4,
+      3.1,
+      7.2,
+      21.5,
+      24.4,
+      27.0,
+      24.0,
+      17.3,
+      12.2,
+      9.6,
+      3.7
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      6.9,
+      5.8,
+      8.6,
+      16.5,
+      28.0,
+      29.5,
+      30.8,
+      29.8,
+      25.7,
+      21.4,
+      16.8,
+      10.1
+     ],
+     "clim_1991_2020_days_lt0_yr": 154.2,
+     "clim_1991_2020_days_lt2_yr": 229.9,
+     "recent_years": {
+      "2021": {
+       "lt0": 133,
+       "lt2": 212,
+       "n_days": 365,
+       "min_c": -3.2
+      },
+      "2022": {
+       "lt0": 190,
+       "lt2": 244,
+       "n_days": 365,
+       "min_c": -3.8
+      },
+      "2023": {
+       "lt0": 95,
+       "lt2": 182,
+       "n_days": 365,
+       "min_c": -3.0
+      },
+      "2024": {
+       "lt0": 72,
+       "lt2": 153,
+       "n_days": 366,
+       "min_c": -3.6
+      },
+      "2025": {
+       "lt0": 114,
+       "lt2": 192,
+       "n_days": 365,
+       "min_c": -3.0
+      },
+      "2026": {
+       "lt0": 87,
+       "lt2": 147,
+       "n_days": 315,
+       "min_c": -3.0
+      }
+     },
+     "last_date": "2026-11-11",
+     "era5_gap_filled_days": 0
+    },
+    "power_site_lapse": {
+     "source": "NASA POWER T2M_MIN + 4.55 C lapse shift to SRTM farm elevation (6.5 C/km)",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.1,
+      0.2,
+      0.3,
+      0.7,
+      2.5,
+      3.7,
+      5.4,
+      4.1,
+      3.4,
+      1.9,
+      1.8,
+      0.2
+     ],
+     "clim_1991_2020_days_lt0_yr": 0.0,
+     "clim_1991_2020_days_lt2_yr": 24.3,
+     "recent_years": {
+      "2021": {
+       "lt0": 0,
+       "lt2": 13,
+       "n_days": 365,
+       "min_c": 1.4
+      },
+      "2022": {
+       "lt0": 0,
+       "lt2": 35,
+       "n_days": 365,
+       "min_c": 0.8
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 3,
+       "n_days": 365,
+       "min_c": 1.6
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 10,
+       "n_days": 366,
+       "min_c": 0.9
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 4,
+       "n_days": 365,
+       "min_c": 1.5
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 4,
+       "n_days": 315,
+       "min_c": 1.6
+      }
+     },
+     "last_date": "2026-11-11"
+    },
+    "era5_land": {
+     "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.6,
+      0.0,
+      0.4,
+      0.5,
+      0.2,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.0,
+      0.1,
+      0.1,
+      1.1,
+      3.2,
+      1.6,
+      2.5,
+      2.1,
+      0.9,
+      0.4,
+      0.2,
+      0.0
+     ],
+     "clim_1991_2020_days_lt0_yr": 1.7,
+     "clim_1991_2020_days_lt2_yr": 12.2,
+     "recent_years": {
+      "2021": {
+       "lt0": 1,
+       "lt2": 11,
+       "n_days": 365,
+       "min_c": -0.2
+      },
+      "2022": {
+       "lt0": 2,
+       "lt2": 8,
+       "n_days": 365,
+       "min_c": -0.7
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 9,
+       "n_days": 365,
+       "min_c": 0.5
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 366,
+       "min_c": 2.9
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 3,
+       "n_days": 365,
+       "min_c": 0.5
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 5,
+       "n_days": 311,
+       "min_c": 0.4
+      }
+     },
+     "last_date": "2026-11-07"
+    },
+    "preferred": "power_site_lapse",
+    "preferred_reason": "POWER cell is ~700 m above the farm; lapse-adjusted POWER (+6.5 C/km) matches ERA5-Land Tmax/Tmin within ~1 C (see kepler-answers Q1)",
+    "note": "Point Tmin from gridded reanalysis; local cold-air pooling on valley floors can add frost days not seen at grid scale."
+   },
+   "slope": {
+    "center_deg": 16.2,
+    "window_mean_deg": 15.9,
+    "window_max_deg": 18.1,
+    "center_pct": 29.1,
+    "elev_center_m": 3151.0,
+    "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+   },
+   "erosion": {
+    "power": {
+     "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+     "period": "2001-2025",
+     "wet_day_p95_mm": 6.7,
+     "days_gt10mm_per_yr": 0.6,
+     "days_gt_p95_per_yr": 1.76,
+     "mean_intensity_gt_p95_mm": 11.3,
+     "days_gt10mm_by_month": [
+      0.08,
+      0.16,
+      0.04,
+      0.0,
+      0.0,
+      0.08,
+      0.04,
+      0.0,
+      0.04,
+      0.04,
+      0.0,
+      0.12
+     ],
+     "proxy_tan_slope_x_days_gt10mm": 0.171,
+     "proxy_tan_slope_x_p95_intensity": 3.206
+    },
+    "era5": {
+     "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+     "period": "2001-2025",
+     "wet_day_p95_mm": 15.4,
+     "days_gt10mm_per_yr": 23.72,
+     "days_gt_p95_per_yr": 6.04,
+     "mean_intensity_gt_p95_mm": 19.0,
+     "days_gt10mm_by_month": [
+      7.48,
+      8.84,
+      5.16,
+      0.6,
+      0.04,
+      0.0,
+      0.04,
+      0.0,
+      0.04,
+      0.04,
+      0.2,
+      1.28
+     ],
+     "proxy_tan_slope_x_days_gt10mm": 6.757,
+     "proxy_tan_slope_x_p95_intensity": 5.415
+    },
+    "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+    "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+   }
+  },
+  "samegua": {
+   "soil": {
+    "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+    "point": [
+     -17.17996,
+     -70.90147
+    ],
+    "offset_m": 0,
+    "depth": "0-30 cm weighted",
+    "clay_pct": 13.85,
+    "sand_pct": 62.33,
+    "silt_pct": 23.8,
+    "soc_g_kg": 12.57,
+    "ph_h2o": 7.93,
+    "bulk_density_g_cm3": 1.27
+   },
+   "cover": {
+    "point": {
+     "lat": -17.17996,
+     "lon": -70.90147,
+     "kind": "field_pixel"
+    },
+    "bare_threshold_ndvi": 0.2,
+    "s2_median_ndvi_by_month_2024_2026": [
+     0.572,
+     0.615,
+     0.596,
+     0.592,
+     0.67,
+     0.681,
+     0.65,
+     0.628,
+     0.635,
+     0.616,
+     0.603,
+     0.635
+    ],
+    "s2_obs_by_month": [
+     49,
+     33,
+     72,
+     82,
+     69,
+     67,
+     71,
+     60,
+     65,
+     68,
+     53,
+     54
+    ],
+    "hls_median_ndvi_by_month": [
+     0.058,
+     0.06,
+     0.052,
+     0.045,
+     0.048,
+     0.044,
+     0.051,
+     0.052,
+     0.054,
+     0.055,
+     0.058,
+     0.06
+    ],
+    "modis_median_ndvi_by_month_2015_present": [
+     0.195,
+     0.211,
+     0.182,
+     0.246,
+     0.227,
+     0.241,
+     0.248,
+     0.233,
+     0.211,
+     0.233,
+     0.216,
+     0.187
+    ],
+    "bare_months": [],
+    "vulnerable_months": [],
+    "s2_last_12_months": {
+     "2025-11": 0.62,
+     "2025-12": 0.578,
+     "2026-01": 0.57,
+     "2026-02": 0.551,
+     "2026-03": 0.589,
+     "2026-04": 0.585,
+     "2026-05": 0.663,
+     "2026-06": 0.688,
+     "2026-07": 0.663,
+     "2026-08": 0.614,
+     "2026-09": 0.639,
+     "2026-10": 0.626,
+     "2026-11": 0.59
+    },
+    "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+   },
+   "frost": {
+    "power": {
+     "source": "NASA POWER T2M_MIN raw (MERRA-2 0.5x0.625 deg cell), gaps filled from ERA5-Land",
+     "clim_1991_2020_days_lt0_by_month": [
+      1.8,
+      2.4,
+      3.1,
+      7.2,
+      21.5,
+      24.4,
+      27.0,
+      24.0,
+      17.3,
+      12.2,
+      9.6,
+      3.7
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      6.9,
+      5.8,
+      8.6,
+      16.5,
+      28.0,
+      29.5,
+      30.8,
+      29.8,
+      25.7,
+      21.4,
+      16.8,
+      10.1
+     ],
+     "clim_1991_2020_days_lt0_yr": 154.2,
+     "clim_1991_2020_days_lt2_yr": 229.9,
+     "recent_years": {
+      "2021": {
+       "lt0": 133,
+       "lt2": 212,
+       "n_days": 365,
+       "min_c": -3.2
+      },
+      "2022": {
+       "lt0": 190,
+       "lt2": 244,
+       "n_days": 365,
+       "min_c": -3.8
+      },
+      "2023": {
+       "lt0": 95,
+       "lt2": 182,
+       "n_days": 365,
+       "min_c": -3.0
+      },
+      "2024": {
+       "lt0": 72,
+       "lt2": 153,
+       "n_days": 366,
+       "min_c": -3.6
+      },
+      "2025": {
+       "lt0": 114,
+       "lt2": 192,
+       "n_days": 365,
+       "min_c": -3.0
+      },
+      "2026": {
+       "lt0": 87,
+       "lt2": 147,
+       "n_days": 315,
+       "min_c": -3.0
+      }
+     },
+     "last_date": "2026-11-11",
+     "era5_gap_filled_days": 0
+    },
+    "power_site_lapse": {
+     "source": "NASA POWER T2M_MIN + 14.79 C lapse shift to SRTM farm elevation (6.5 C/km)",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt0_yr": 0.0,
+     "clim_1991_2020_days_lt2_yr": 0.0,
+     "recent_years": {
+      "2021": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.6
+      },
+      "2022": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.0
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.8
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 366,
+       "min_c": 11.2
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.7
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 315,
+       "min_c": 11.8
+      }
+     },
+     "last_date": "2026-11-11"
+    },
+    "era5_land": {
+     "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt0_yr": 0.0,
+     "clim_1991_2020_days_lt2_yr": 0.0,
+     "recent_years": {
+      "2021": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 12.1
+      },
+      "2022": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.0
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.6
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 366,
+       "min_c": 12.7
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 12.2
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 311,
+       "min_c": 10.6
+      }
+     },
+     "last_date": "2026-11-07"
+    },
+    "preferred": "era5_land",
+    "preferred_reason": "shares the Carumas POWER cell (~2,275 m above the farm); a 14.8 C lapse shift is too large to trust, so ERA5-Land (0.1 deg) is used",
+    "note": "Point Tmin from gridded reanalysis; local cold-air pooling on valley floors can add frost days not seen at grid scale."
+   },
+   "slope": {
+    "center_deg": 6.3,
+    "window_mean_deg": 5.5,
+    "window_max_deg": 6.7,
+    "center_pct": 11.0,
+    "elev_center_m": 1558.0,
+    "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+   },
+   "erosion": {
+    "power": {
+     "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+     "period": "2001-2025",
+     "wet_day_p95_mm": 6.7,
+     "days_gt10mm_per_yr": 0.6,
+     "days_gt_p95_per_yr": 1.76,
+     "mean_intensity_gt_p95_mm": 11.3,
+     "days_gt10mm_by_month": [
+      0.08,
+      0.16,
+      0.04,
+      0.0,
+      0.0,
+      0.08,
+      0.04,
+      0.0,
+      0.04,
+      0.04,
+      0.0,
+      0.12
+     ],
+     "proxy_tan_slope_x_days_gt10mm": 0.058,
+     "proxy_tan_slope_x_p95_intensity": 1.084
+    },
+    "era5": {
+     "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+     "period": "2001-2025",
+     "wet_day_p95_mm": 11.5,
+     "days_gt10mm_per_yr": 3.44,
+     "days_gt_p95_per_yr": 2.08,
+     "mean_intensity_gt_p95_mm": 15.0,
+     "days_gt10mm_by_month": [
+      0.84,
+      1.6,
+      0.68,
+      0.16,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.16
+     ],
+     "proxy_tan_slope_x_days_gt10mm": 0.331,
+     "proxy_tan_slope_x_p95_intensity": 1.448
+    },
+    "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+    "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+   }
+  },
+  "algarrobal": {
+   "soil": {
+    "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+    "point": [
+     -17.6155,
+     -71.2588
+    ],
+    "offset_m": 0,
+    "depth": "0-30 cm weighted",
+    "clay_pct": 14.15,
+    "sand_pct": 66.52,
+    "silt_pct": 19.35,
+    "soc_g_kg": 25.73,
+    "ph_h2o": 7.8,
+    "bulk_density_g_cm3": 1.31
+   },
+   "cover": {
+    "point": {
+     "lat": -17.6155,
+     "lon": -71.2588,
+     "kind": "field_pixel"
+    },
+    "bare_threshold_ndvi": 0.2,
+    "s2_median_ndvi_by_month_2024_2026": [
+     0.249,
+     0.313,
+     0.272,
+     0.259,
+     0.306,
+     0.26,
+     0.358,
+     0.317,
+     0.296,
+     0.268,
+     0.257,
+     0.282
+    ],
+    "s2_obs_by_month": [
+     20,
+     20,
+     25,
+     28,
+     16,
+     10,
+     6,
+     3,
+     6,
+     21,
+     18,
+     18
+    ],
+    "hls_median_ndvi_by_month": [
+     0.064,
+     0.069,
+     0.067,
+     0.07,
+     0.074,
+     0.071,
+     0.058,
+     0.053,
+     0.067,
+     0.066,
+     0.065,
+     0.061
+    ],
+    "modis_median_ndvi_by_month_2015_present": [
+     0.194,
+     0.176,
+     0.159,
+     0.148,
+     0.17,
+     0.12,
+     0.178,
+     0.153,
+     0.162,
+     0.16,
+     0.158,
+     0.172
+    ],
+    "bare_months": [],
+    "vulnerable_months": [],
+    "s2_last_12_months": {
+     "2025-11": 0.253,
+     "2025-12": 0.282,
+     "2026-01": 0.271,
+     "2026-02": 0.253,
+     "2026-03": 0.305,
+     "2026-04": 0.336,
+     "2026-05": 0.347,
+     "2026-07": 0.358,
+     "2026-08": 0.317,
+     "2026-09": 0.292,
+     "2026-10": 0.273,
+     "2026-11": 0.255
+    },
+    "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+   },
+   "frost": {
+    "power": {
+     "source": "NASA POWER T2M_MIN raw (MERRA-2 0.5x0.625 deg cell), gaps filled from ERA5-Land",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt0_yr": 0.0,
+     "clim_1991_2020_days_lt2_yr": 0.0,
+     "recent_years": {
+      "2021": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 10.4
+      },
+      "2022": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 9.9
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 12.6
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 366,
+       "min_c": 10.9
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.3
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 315,
+       "min_c": 12.5
+      }
+     },
+     "last_date": "2026-11-11",
+     "era5_gap_filled_days": 0
+    },
+    "power_site_lapse": {
+     "source": "NASA POWER T2M_MIN + 3.63 C lapse shift to SRTM farm elevation (6.5 C/km)",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt0_yr": 0.0,
+     "clim_1991_2020_days_lt2_yr": 0.0,
+     "recent_years": {
+      "2021": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 14.0
+      },
+      "2022": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 13.5
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 16.2
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 366,
+       "min_c": 14.6
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 14.9
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 315,
+       "min_c": 16.1
+      }
+     },
+     "last_date": "2026-11-11"
+    },
+    "era5_land": {
+     "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+     "clim_1991_2020_days_lt0_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt2_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "clim_1991_2020_days_lt0_yr": 0.0,
+     "clim_1991_2020_days_lt2_yr": 0.0,
+     "recent_years": {
+      "2021": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.6
+      },
+      "2022": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.2
+      },
+      "2023": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 13.4
+      },
+      "2024": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 366,
+       "min_c": 11.6
+      },
+      "2025": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 365,
+       "min_c": 11.4
+      },
+      "2026": {
+       "lt0": 0,
+       "lt2": 0,
+       "n_days": 311,
+       "min_c": 13.3
+      }
+     },
+     "last_date": "2026-11-07"
+    },
+    "preferred": "power",
+    "preferred_reason": "coastal inversion: raw POWER preferred; frost is absent in every series",
+    "note": "Point Tmin from gridded reanalysis; local cold-air pooling on valley floors can add frost days not seen at grid scale."
+   },
+   "slope": {
+    "center_deg": 7.9,
+    "window_mean_deg": 8.4,
+    "window_max_deg": 19.4,
+    "center_pct": 13.9,
+    "elev_center_m": 112.0,
+    "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+   },
+   "erosion": {
+    "power": {
+     "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+     "period": "2001-2025",
+     "wet_day_p95_mm": 6.7,
+     "days_gt10mm_per_yr": 0.2,
+     "days_gt_p95_per_yr": 0.6,
+     "mean_intensity_gt_p95_mm": 10.5,
+     "days_gt10mm_by_month": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.12,
+      0.0,
+      0.0,
+      0.04
+     ],
+     "proxy_tan_slope_x_days_gt10mm": 0.03,
+     "proxy_tan_slope_x_p95_intensity": 1.544
+    },
+    "era5": {
+     "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+     "period": "2001-2025",
+     "wet_day_p95_mm": 6.5,
+     "days_gt10mm_per_yr": 0.08,
+     "days_gt_p95_per_yr": 0.36,
+     "mean_intensity_gt_p95_mm": 8.6,
+     "days_gt10mm_by_month": [
+      0.04,
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "proxy_tan_slope_x_days_gt10mm": 0.012,
+     "proxy_tan_slope_x_p95_intensity": 1.273
+    },
+    "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+    "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+   }
+  }
+ }
+}

@@ -26,7 +26,7 @@ _priority_props = {
 TOOLS = [
     {
         "name": "get_farm_analysis",
-        "description": "Corre el motor SI de CERES Ventures para una parcela: compara la práctica actual con tres alternativas (agua, suelo, ingreso, riesgo), ranking según prioridades, probabilidad de que cada una sea la mejor, riesgo pico, confianza y calidad de datos. Úsala antes de dar cualquier número o recomendación.",
+        "description": "Corre el motor SI de CERES Ventures para una parcela: compara la práctica actual con tres alternativas (agua, suelo, ingreso, riesgo), ranking según prioridades, probabilidad de que cada una sea la mejor, riesgo pico, confianza y calidad de datos. Incluye por qué se sugiere cada estrategia, beneficios, vacíos de información y riesgos a revisar con un técnico local. Úsala antes de dar cualquier número o recomendación.",
         "input_schema": {
             "type": "object",
             "properties": {"farm_id": {"type": "string", "enum": FARM_IDS}, **_priority_props},
@@ -92,6 +92,10 @@ def get_farm_analysis(farm_id: str, **kw) -> dict:
             "vs_current": s["deltas"],
             "wins_out_of_100_years": round(unc["rankFirstProbability"][s["id"]] * 100),
             "risk_peak": a["risk"]["strategies"][s["id"]]["peak"],
+            "why_es": (s.get("why") or {}).get("es"), "benefits_es": (s.get("benefits") or {}).get("es"),
+            "information_gaps_es": (s.get("gaps") or {}).get("es"), "risks_for_local_review_es": (s.get("risks") or {}).get("es"),
+            "soil_levers": s.get("soilLevers"), "needs": s.get("needs"), "recommended": s.get("recommended"),
+            "water_expected": s["water"].get("expected"),
         } for s in a["compare"]["strategies"]],
         "ranking": [r["id"] for r in a["tradeoffs"]["ranking"]],
         "confidence": unc["confidence"],

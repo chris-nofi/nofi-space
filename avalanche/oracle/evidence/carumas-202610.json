@@ -1,5 +1,31 @@
 {
   "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+  "_context": {
+    "soilMoisture": {
+      "value_m3m3": 0.083,
+      "n_retrievals": 15,
+      "baseline_2015_2025_m3m3": 0.086,
+      "dataset": "SMAP_SPL3SMP_E_v006",
+      "scale": "9 km (regional signal)",
+      "granules": [
+        "SMAP_L3_SM_P_E_20261001_R19240_001",
+        "SMAP_L3_SM_P_E_20261003_R19240_002",
+        "SMAP_L3_SM_P_E_20261006_R19240_001",
+        "SMAP_L3_SM_P_E_20261009_R19240_001",
+        "SMAP_L3_SM_P_E_20261012_R19240_001",
+        "SMAP_L3_SM_P_E_20261012_R19240_002",
+        "SMAP_L3_SM_P_E_20261014_R19240_001",
+        "SMAP_L3_SM_P_E_20261017_R19240_001",
+        "SMAP_L3_SM_P_E_20261020_R19240_001",
+        "SMAP_L3_SM_P_E_20261020_R19240_002",
+        "SMAP_L3_SM_P_E_20261022_R19240_002",
+        "SMAP_L3_SM_P_E_20261025_R19240_001",
+        "SMAP_L3_SM_P_E_20261025_R19240_002",
+        "SMAP_L3_SM_P_E_20261028_R19240_002",
+        "SMAP_L3_SM_P_E_20261030_R19240_001"
+      ]
+    }
+  },
   "farmKey": "moquegua:carumas",
   "period": 202610,
   "revision": 0,
@@ -12,7 +38,11 @@
         "ECOv002_L3T_JET_47019_020_19KCB_20261020T181602_0713_01"
       ],
       "scale": "70 m",
-      "stat": "mean ETdaily of 2 valid overpasses x 31 days"
+      "stat": "mean ETdaily of 2 valid overpasses x 31 days",
+      "pixel": [
+        -16.81,
+        -70.69
+      ]
     },
     "et0_mm": {
       "value": 162.1,
@@ -34,18 +64,35 @@
       "reason": "GES DISC returned 403 'EULA Acceptance Failure' for this Earthdata token"
     },
     "ndvi": {
-      "value": 0.482,
-      "dataset": "MOD13Q1_v061",
-      "composites": [
-        "2026-10-16"
+      "value": 0.325,
+      "dataset": "HLS_L30_S30_v2.0",
+      "granules": [
+        "HLS.L30.T19KCB.2026279T144733.v2.0",
+        "HLS.L30.T19KCB.2026287T144728.v2.0",
+        "HLS.L30.T19KCB.2026303T144732.v2.0",
+        "HLS.S30.T19KCB.2026275T144731.v2.0",
+        "HLS.S30.T19KCB.2026278T145731.v2.0",
+        "HLS.S30.T19KCB.2026280T144729.v2.0",
+        "HLS.S30.T19KCB.2026280T145941.v2.0",
+        "HLS.S30.T19KCB.2026283T145729.v2.0",
+        "HLS.S30.T19KCB.2026285T144731.v2.0",
+        "HLS.S30.T19KCB.2026288T145731.v2.0",
+        "HLS.S30.T19KCB.2026290T144729.v2.0",
+        "HLS.S30.T19KCB.2026290T145731.v2.0",
+        "HLS.S30.T19KCB.2026298T145721.v2.0",
+        "HLS.S30.T19KCB.2026300T144729.v2.0",
+        "HLS.S30.T19KCB.2026300T145931.v2.0",
+        "HLS.S30.T19KCB.2026303T145729.v2.0"
       ],
-      "stat": "median of 16-day composites (250 m)",
-      "substituteFor": "HLS_S30_v2.0",
-      "reason": "no clear HLS scene this month"
+      "stat": "monthly median of 16 clear 30 m scenes (Fmask)",
+      "pixel": [
+        -16.81,
+        -70.69
+      ]
     }
   },
   "engine": {
-    "version": "ceres pull_and_build.py (sha256 34f980fa36bb)",
+    "version": "ceres pull_and_build.py (sha256 e7c8cf06b293)",
     "priorities": {
       "water": 0.4,
       "soil": 0.25,
@@ -58,5 +105,98 @@
     "waterSavedBasis": "rainfed farm: no irrigation water saved; recommendation is about soil cover/erosion",
     "recommendationBasis": "dashboard + SI fixture recommendation (not recomputed: rainfed, no irrigation water to save)",
     "confidence": "low"
+  },
+  "extensions": {
+    "_label": "Extension block: not part of the required oracle schema. Partner/NON-NASA layers labelled per field.",
+    "soil": {
+      "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+      "point": [
+        -16.81,
+        -70.69
+      ],
+      "offset_m": 0,
+      "depth": "0-30 cm weighted",
+      "clay_pct": 15.93,
+      "sand_pct": 58.28,
+      "silt_pct": 25.77,
+      "soc_g_kg": 17.8,
+      "ph_h2o": 7.18,
+      "bulk_density_g_cm3": 1.16
+    },
+    "cover": {
+      "dataset": "ESA Sentinel-2 L2A 10 m (partner; Element84 Earth Search STAC, SCL cloud mask)",
+      "point": {
+        "lat": -16.81,
+        "lon": -70.69,
+        "kind": "app_point"
+      },
+      "ndvi_month_median": 0.166,
+      "n_clear_obs": 13,
+      "items": [
+        "S2A_19KCB_20261007_1_L2A",
+        "S2A_19KCB_20261017_1_L2A",
+        "S2A_19KCB_20261027_1_L2A",
+        "S2B_19KCB_20261007_0_L2A",
+        "S2B_19KCB_20261010_0_L2A",
+        "S2B_19KCB_20261017_0_L2A",
+        "S2B_19KCB_20261027_0_L2A",
+        "S2B_19KCB_20261030_0_L2A",
+        "S2C_19KCB_20261002_0_L2A",
+        "S2C_19KCB_20261005_0_L2A",
+        "S2C_19KCB_20261012_0_L2A",
+        "S2C_19KCB_20261015_0_L2A",
+        "S2C_19KCB_20261025_0_L2A"
+      ],
+      "ndvi_clim_this_month": 0.168,
+      "bare_threshold_ndvi": 0.2,
+      "bare_months": [
+        "Jan",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "bare_this_month": true,
+      "vulnerable_this_month": [],
+      "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+    },
+    "frost": {
+      "this_month": {
+        "series": "power_site_lapse",
+        "days_lt0": 0,
+        "days_lt2": 0,
+        "n_days": 31
+      },
+      "clim_1991_2020_days_lt0": 0.0,
+      "clim_1991_2020_days_lt2": 1.9,
+      "preferred_series": "power_site_lapse",
+      "preferred_reason": "POWER cell is ~700 m above the farm; lapse-adjusted POWER (+6.5 C/km) matches ERA5-Land Tmax/Tmin within ~1 C (see kepler-answers Q1)",
+      "raw_power_clim_days_lt0": 12.2,
+      "era5_land_clim_days_lt0": 0.0
+    },
+    "slope": {
+      "center_deg": 16.2,
+      "window_mean_deg": 15.9,
+      "window_max_deg": 18.1,
+      "center_pct": 29.1,
+      "elev_center_m": 3151.0,
+      "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+    },
+    "erosion": {
+      "proxy_tan_slope_x_days_gt10mm": {
+        "power": 0.171,
+        "era5": 6.757
+      },
+      "proxy_tan_slope_x_p95_intensity": {
+        "power": 3.206,
+        "era5": 5.415
+      },
+      "clim_days_gt10mm_this_month": {
+        "power": 0.04,
+        "era5": 0.04
+      },
+      "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+      "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+    }
   }
 }

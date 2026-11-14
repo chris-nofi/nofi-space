@@ -32,7 +32,7 @@
   function panel() {
     if (!S.open) return "";
     const c = ctx(), log = S.chats[c.farm] || [];
-    const chips = [T("¿Cuánto puedo ganar?", "How much could I earn?"), T("¿Por qué esa rotación?", "Why that rotation?"), T("¿Qué es ECOSTRESS?", "What is ECOSTRESS?"), T("¿Cómo sé que el dato es real?", "How do I know the data is real?")];
+    const chips = [T("¿Por qué esa rotación?", "Why that rotation?"), T("¿Cuáles son los vacíos de esa estrategia?", "What are that strategy's information gaps?"), T("¿Qué riesgos debo revisar con INIA?", "Which risks should I check with INIA?"), T("¿Qué es el NDVI?", "What is NDVI?"), T("¿Dónde está el registro verificable?", "Where is the verifiable record?")];
     return `<section id="ceres-panel" class="ceres-panel" role="dialog" aria-label="CERES">
       <header><span class="ceres-orb" aria-hidden="true"></span><div><b>CERES</b><small>${T("Voz de la superinteligencia", "Voice of the superintelligence")} · ${E(FARM_NAMES[c.farm] || c.farm)}</small></div>
         <button type="button" class="ceres-x" data-ceres="close" aria-label="${T("Cerrar", "Close")}">×</button></header>
@@ -46,7 +46,7 @@
         ${S.callStatus ? `<p class="ceres-status">${E(S.callStatus)}</p>` : ""}
         ${S.call && S.live.length ? `<div class="ceres-live">${S.live.map((l) => `<p class="${l.role === "agent" ? "c" : "u"}">${E(l.content)}</p>`).join("")}</div>` : ""}
         <div class="ceres-log" id="ceres-log">
-          ${log.length ? log.map((m) => `<p class="${m.role === "assistant" ? "c" : "u"}">${E(m.content)}</p>${proofChips(m.proofs)}`).join("") : `<p class="ceres-hint">${ORACLE ? T("Pregúntame sobre tu agua, tus rotaciones o cómo se guarda tu registro.", "Ask me about your water, your rotations or how your record is kept.") : T("Para conversar, conecta el oráculo en config.js. Mientras tanto, puedes escuchar el resumen.", "To chat, connect the oracle in config.js. Meanwhile you can listen to the summary.")}</p>`}
+          ${log.length ? log.map((m) => `<p class="${m.role === "assistant" ? "c" : "u"}">${E(m.content)}</p>${proofChips(m.proofs)}`).join("") : `<p class="ceres-hint">${ORACLE ? T("Pregúntame por tu rotación, tu suelo, el agua o los datos de la NASA.", "Ask me about your rotation, your soil, water or the NASA data.") : T("Para conversar, conecta el oráculo en config.js. Mientras tanto, puedes escuchar el resumen.", "To chat, connect the oracle in config.js. Meanwhile you can listen to the summary.")}</p>`}
           ${S.busy ? `<p class="c thinking">${T("Revisando los datos del satélite…", "Checking the satellite data…")}</p>` : ""}
           ${S.err ? `<p class="ceres-err">${E(S.err)}</p>` : ""}
         </div>
@@ -54,7 +54,7 @@
         <form class="ceres-form" data-ceres-form><label for="ceres-q" class="ceres-sr">${T("Tu pregunta", "Your question")}</label>
           <input id="ceres-q" maxlength="600" autocomplete="off" placeholder="${T("Escribe tu pregunta", "Type your question")}" ${!ORACLE || S.busy ? "disabled" : ""}>
           <button type="submit" class="ceres-btn primary" ${!ORACLE || S.busy ? "disabled" : ""}>${T("Enviar", "Send")}</button></form>
-        <p class="ceres-safe">${T("Para ti es gratis. CERES nunca te pedirá tu frase de recuperación ni tus claves.", "It's free for you. CERES will never ask for your recovery phrase or keys.")}</p>
+        <p class="ceres-safe">${T("CERES no reemplaza al técnico de la Agencia Agraria ni al INIA. Nunca pida claves ni frases de recuperación. Voz y respuestas generadas por SI.", "CERES does not replace the Agencia Agraria or INIA technician. Never share keys or recovery phrases. Voice and answers are SI-generated.")}</p>
       </div></section>`;
   }
 

@@ -18,6 +18,11 @@
     power: { es: "Clima: NASA POWER Daily v2 (AG), 0,5°×0,625°, 1981–2026 · ET₀ FAO-56 Penman-Monteith (Allen et al. 1998)", en: "Climate: NASA POWER Daily v2 (AG), 0.5°×0.625°, 1981–2026 · ET₀ FAO-56 Penman-Monteith (Allen et al. 1998)" },
     kc: { es: "Kc: FAO-56 Tabla 12 · eficiencias: Brouwer et al. 1989 (FAO, gravedad 60 %, goteo 90 %)", en: "Kc: FAO-56 Table 12 · efficiencies: Brouwer et al. 1989 (FAO, surface 60 %, drip 90 %)" },
     chirps: { es: "Lluvia: CHIRPS v3.0 mensual, 0,05°, UCSB CHC (sustituye a GPM IMERG); rango con NASA POWER y ERA5 (Copernicus, vía Open-Meteo)", en: "Rain: CHIRPS v3.0 monthly, 0.05°, UCSB CHC (stands in for GPM IMERG); range with NASA POWER and ERA5 (Copernicus, via Open-Meteo)" },
+    hls: { es: "HLS v2.0 (Landsat + Sentinel-2), 30 m, NASA LP DAAC · doi:10.5067/HLS/HLSS30.002", en: "HLS v2.0 (Landsat + Sentinel-2), 30 m, NASA LP DAAC · doi:10.5067/HLS/HLSS30.002" },
+    s2: { es: "Contiene datos modificados de Copernicus Sentinel 2024–2026 (ESA, socio), vía Element84 Earth Search", en: "Contains modified Copernicus Sentinel data 2024–2026 (ESA, partner), via Element84 Earth Search" },
+    soilgrids: { es: "SoilGrids 2.0, ISRIC (Poggio et al. 2021, CC-BY 4.0) · no es un producto NASA", en: "SoilGrids 2.0, ISRIC (Poggio et al. 2021, CC-BY 4.0) · not a NASA product" },
+    srtm: { es: "NASA JPL SRTM GL1 v3, 30 m (2000), vía OpenTopoData", en: "NASA JPL SRTM GL1 v3, 30 m (2000), via OpenTopoData" },
+    era5: { es: "ERA5 / ERA5-Land (Copernicus C3S/ECMWF, socio; Hersbach et al. 2020; Muñoz-Sabater et al. 2021), vía Open-Meteo", en: "ERA5 / ERA5-Land (Copernicus C3S/ECMWF, partner; Hersbach et al. 2020; Muñoz-Sabater et al. 2021), via Open-Meteo" },
     ecostress: { es: "ECOSTRESS L3T JET v002 ET diaria, 70 m, NASA JPL / LP DAAC · doi:10.5067/ECOSTRESS/ECO_L3T_JET.002", en: "ECOSTRESS L3T JET v002 daily ET, 70 m, NASA JPL / LP DAAC · doi:10.5067/ECOSTRESS/ECO_L3T_JET.002" },
     modis: { es: "MOD13Q1 v061 NDVI, 250 m, 16 días (Didan 2021) · doi:10.5067/MODIS/MOD13Q1.061", en: "MOD13Q1 v061 NDVI, 250 m, 16-day (Didan 2021) · doi:10.5067/MODIS/MOD13Q1.061" },
     si: { es: "Voz y respuestas de CERES generadas por SI", en: "CERES voice and answers are SI-generated" },
@@ -55,6 +60,37 @@
     return Math.min(...n.climate.climatology_2001_2025.tmin_monthly);
   }
 
+  // Plain-language soil-health explainers (copy, no numbers), linked from each strategy's soilLevers (Apollo W5)
+  const LEVERS = {
+    nfix: { es: ["Fija nitrógeno", "Las leguminosas (haba, arveja, tarwi, alfalfa, vicia) toman nitrógeno del aire con bacterias de sus raíces y dejan parte en el suelo para el siguiente cultivo. Menos fertilizante."], en: ["Fixes nitrogen", "Legumes (faba, pea, tarwi, alfalfa, vetch) take nitrogen from the air through root bacteria and leave some in the soil for the next crop. Less fertilizer."] },
+    cover: { es: ["Cubre el suelo", "Un suelo cubierto pierde menos agua por evaporación, no se lo lleva el viento ni la lluvia y se calienta menos."], en: ["Covers the soil", "Covered soil loses less water to evaporation, isn't carried off by wind or rain, and stays cooler."] },
+    deepRoot: { es: ["Raíz profunda", "Las raíces profundas abren el suelo, ayudan a que el agua entre y sacan nutrientes de abajo."], en: ["Deep roots", "Deep roots open the soil, help water soak in and bring up nutrients from below."] },
+    droughtTol: { es: ["Tolera la sequía", "Cultivos o manejos que aguantan semanas con poca agua sin perder toda la cosecha."], en: ["Drought tolerant", "Crops or practices that survive weeks of little water without losing the whole harvest."] },
+    erosion: { es: ["Frena la erosión", "En ladera, el suelo desnudo con lluvia fuerte se pierde. Zanjas, pastos y cobertura lo sujetan."], en: ["Slows erosion", "On slopes, bare soil under heavy rain washes away. Trenches, grass and cover hold it."] },
+    organicMatter: { es: ["Suma materia orgánica", "Raíces y restos de cultivo alimentan la vida del suelo y le ayudan a guardar agua y nutrientes."], en: ["Adds organic matter", "Roots and crop residue feed soil life and help it hold water and nutrients."] },
+    pestCycle: { es: ["Corta el ciclo de plagas", "Cambiar de familia de cultivo rompe el ciclo de plagas y enfermedades que se acumulan con el monocultivo (por ejemplo, gorgojo y nematodos en papa)."], en: ["Breaks pest cycles", "Switching crop families breaks pest and disease cycles that build up under monoculture (e.g. weevil and nematodes in potato)."] },
+    forage: { es: ["Da forraje", "Produce alimento para el ganado: importante si la familia vende leche o carne."], en: ["Gives forage", "Produces animal feed: important if the family sells milk or meat."] },
+    market: { es: ["Depende del mercado", "Necesita un comprador local confirmado antes de sembrar."], en: ["Depends on a market", "Needs a confirmed local buyer before planting."] },
+  };
+  const NEEDS = {
+    "drip-kit": { es: "Requiere equipo de goteo", en: "Needs a drip kit" },
+    "quinoa-buyer": { es: "Requiere comprador de quinua", en: "Needs a quinoa buyer" },
+    "tarwi-buyer": { es: "Requiere comprador de tarwi", en: "Needs a tarwi buyer" },
+  };
+  const IND = { ndvi: ["NDVI", ""], et0_mm: ["ET₀", "mm"], et_mm: ["ET", "mm"], precip_mm: ["Lluvia", "mm"] };
+  const DS = (d) => String(d || "").replace(/_/g, " ").replace("NASA POWER AG daily (FAO-56 Penman-Monteith)", "NASA POWER (FAO-56)");
+
+  function evidenceItems(cl) {
+    const ev = cl && cl.latestEvidence;
+    if (!ev) return [];
+    return Object.entries(ev.indicators).map(([k, v]) => ({
+      field: k, label: (IND[k] || [k])[0], unit: (IND[k] || [k, ""])[1], value: v.value ?? null, dataset: DS(v.dataset),
+      date: `${ev.period.slice(0, 4)}-${ev.period.slice(4)}`, scale: v.scale || (k === "et0_mm" ? "0.5°×0.625°" : k === "ndvi" && /HLS/.test(v.dataset) ? "30 m" : k === "ndvi" && /MOD13/.test(v.dataset) ? "250 m" : ""),
+      sourceKind: /CHIRPS/.test(v.dataset) ? "partner" : "nasa", note: v.reason || v.substituteFor && `substitute for ${v.substituteFor}` || v.stat || "",
+      file: ev.file,
+    }));
+  }
+
   function apply(DB) {
     if (!NASA || !NASA.farms) return false;
     for (const f of DB.FARMS) {
@@ -83,6 +119,10 @@
           s.water = Math.round(e.water.expected != null ? e.water.expected : e.water.p50);
           s.soil = Math.round(e.soil);
           s.recommended = Boolean(e.recommended);
+          s.benefits = e.benefits || s.benefits;
+          s.soilLevers = e.soilLevers || [];
+          s.needs = e.needs || [];
+          s.waterExpected = e.water.expected;
         }
         if (fx.voice) f.ceres = { es: fx.voice.es.text, en: fx.voice.en.text };
       }
@@ -94,10 +134,16 @@
         else if (eco.es) cur.evidence = eco;
       }
       f.citations = CITE;
+      f.evidenceItems = evidenceItems(cl);
+      f.latestEvidence = cl ? cl.latestEvidence : null;
+      f.ext = cl ? cl.extensions : null;
+      f.fieldPixel = cl ? cl.fieldPixel : null;
+      f.ndviSeries = cl ? cl.ndvi : null;
     }
     DB.REAL = { loaded: true, generated: NASA.generated, sources: NASA.sources, cite: CITE };
+    window.CeresRealData.db = DB;
     return true;
   }
 
-  window.CeresRealData = { apply, cite: CITE, months: MES };
+  window.CeresRealData = { apply, cite: CITE, months: MES, levers: LEVERS, needs: NEEDS };
 })();

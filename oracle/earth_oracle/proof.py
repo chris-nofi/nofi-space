@@ -189,8 +189,11 @@ def evidence_issues(ev: dict) -> list[dict]:
     from .real_data import REPRESENTATIVE
 
     if REPRESENTATIVE.get(farm, {}).get("ecostress") is False:
-        out.append({"code": "point_off_field", "es": "El punto del mapa probablemente no está sobre la chacra (píxel de desierto o mixto): confirmar la ubicación real antes de anclar.",
-                    "en": "The map point is probably not on the field (desert or mixed pixel): confirm the real location before attesting."})
+        fp = (ev.get("_context") or {}).get("fieldPixel")
+        where = f" ({fp['lat']}, {fp['lon']})" if fp else ""
+        where_en = where
+        out.append({"code": "point_off_field", "es": f"El punto de la app cae en suelo desnudo; el registro usa un píxel de cultivo provisional{where}. Confirmar la chacra con el agricultor antes de anclar.",
+                    "en": f"The app point is bare ground; the record uses a provisional crop pixel{where_en}. Confirm the field with the farmer before attesting."})
     nd = (ind.get("ndvi") or {}).get("value")
     if nd is not None and nd < 0.20:
         out.append({"code": "ndvi_below_0.20", "es": f"NDVI {nd} < 0,20: la regla anti-abandono bloquearía el crédito; mover el punto a la chacra antes de anclar.",

@@ -1,40 +1,115 @@
 {
- "source": "MOD13Q1 v061 NDVI, 250 m, 16-day (ORNL DAAC)",
- "farmId": "algarrobal",
+ "source": "Sentinel-2 L2A 10 m (ESA, partner), monthly median 2024-2026, SCL mask",
+ "dataset": "Sentinel-2_L2A",
+ "pointKind": "field_pixel_provisional",
  "monthly": [
-  0.185,
-  0.182,
-  0.177,
-  0.168,
-  0.19,
-  0.171,
-  0.174,
-  0.179,
-  0.152,
-  0.169,
-  0.173,
-  0.193
+  0.249,
+  0.313,
+  0.272,
+  0.259,
+  0.306,
+  0.26,
+  0.358,
+  0.317,
+  0.296,
+  0.268,
+  0.257,
+  0.282
  ],
- "std": [
-  0.088,
-  0.076,
-  0.076,
-  0.07,
-  0.073,
-  0.087,
-  0.08,
-  0.082,
-  0.07,
-  0.071,
-  0.072,
-  0.082
+ "nClear": [
+  20,
+  20,
+  25,
+  28,
+  16,
+  10,
+  6,
+  3,
+  6,
+  21,
+  18,
+  18
  ],
- "first": "2001-01-01",
- "last": "2026-10-16",
- "latest": {
-  "date": "2026-10-16",
-  "ndvi": 0.179
+ "fieldPixel": {
+  "lat": -17.6155,
+  "lon": -71.2588,
+  "dist_from_app_point_m": 532,
+  "ndvi_on_scene": 0.59,
+  "scene": "HLS.S30.T18KZF.2026293T145729.v2.0",
+  "ndvi_at_app_point_on_scene": null,
+  "basis": "nearest HLS pixel with NDVI>=0.5 (find_green_pixels.py); candidate - confirm with farmer"
  },
- "representative": false,
- "note": "MODIS pixel (~6 ha) is larger than the 1-2 ha field; HLS 30 m not yet in the package."
+ "representative": true,
+ "note": "Provisional field pixel 532 m from the app point (nearest HLS pixel with NDVI >= 0.5); confirm with the farmer. HLS at the app point reads bare ground.",
+ "context": {
+  "hlsAppPoint": {
+   "monthly_mean": [
+    0.063,
+    0.067,
+    0.065,
+    0.067,
+    0.071,
+    0.071,
+    0.058,
+    0.06,
+    0.064,
+    0.064,
+    0.064,
+    0.061
+   ],
+   "n_clear": [
+    21,
+    27,
+    37,
+    37,
+    11,
+    6,
+    2,
+    7,
+    3,
+    14,
+    11,
+    18
+   ],
+   "total_clear": 194,
+   "first": "2024-01-14",
+   "last": "2026-10-15"
+  },
+  "modis250m": {
+   "monthly": [
+    0.185,
+    0.182,
+    0.177,
+    0.168,
+    0.19,
+    0.171,
+    0.174,
+    0.179,
+    0.152,
+    0.169,
+    0.173,
+    0.193
+   ],
+   "first": "2001-01-01",
+   "last": "2026-10-16",
+   "latest": {
+    "date": "2026-10-16",
+    "ndvi": 0.179
+   }
+  },
+  "s2FieldPixel": [
+   0.249,
+   0.313,
+   0.272,
+   0.259,
+   0.306,
+   0.26,
+   0.358,
+   0.317,
+   0.296,
+   0.268,
+   0.257,
+   0.282
+  ]
+ }
 }

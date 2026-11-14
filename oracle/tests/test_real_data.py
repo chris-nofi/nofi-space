@@ -53,7 +53,7 @@ def test_real_evidence_records_and_issues():
     assert ok["source"] == "evidence" and ok["attestable"] and verify_bytes(ok["record"], ok["dataHash"])
     bad = summary(package("algarrobal", "202610"))
     codes = " ".join(i["en"] for i in bad["issues"])
-    assert not bad["attestable"] and "NDVI 0.179" in codes and "not on the field" in codes
+    assert not bad["attestable"] and "NDVI 0.069" in codes and "provisional crop pixel" in codes
     assert bad["et0Mm"] == 142.9  # Kepler's spot-check value
 
 

@@ -7,7 +7,7 @@ usage: data/.venv/bin/python data/earthdata/smap_harmony.py [start_year]
 """
 import concurrent.futures as cf, datetime as dt, io, json, os, sys, time
 from pathlib import Path
-import h5py, numpy as np, pandas as pd, requests
+import re, h5py, numpy as np, pandas as pd, requests
 RAW = Path(__file__).resolve().parents[1] / "raw"
 TOK = os.environ.get("EARTHDATA_TOKEN") or sys.exit("EARTHDATA_TOKEN not set")
 H = {"Authorization": f"Bearer {TOK}"}
@@ -46,7 +46,7 @@ def fetch(url):
             v = float(sm.reshape(sm.shape[-2], sm.shape[-1])[i0, j0])
             valid = sm[sm > 0]
             name = url.rsplit("/", 1)[-1]
-            return dict(date=f"{name[16:20]}-{name[20:22]}-{name[22:24]}", sm_am=None if v < 0 else round(v, 4),
+            return dict(date="-".join(re.search(r"_(\d{4})(\d{2})(\d{2})_R", name).groups()), sm_am=None if v < 0 else round(v, 4),
                         box_mean=round(float(valid.mean()), 4) if valid.size else None, n_valid_box=int(valid.size), granule=name)
         except Exception as e:
             err = str(e)[:80]; time.sleep(3 * (i + 1))

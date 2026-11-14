@@ -1,0 +1,119 @@
+{
+ "carumas": {
+  "scene": "HLS.S30.T19KCB.2026308T145721.v2.0",
+  "date": "2026-11-04",
+  "ndvi_at_point": 0.329,
+  "window_km": 3.03,
+  "share_pixels_ndvi_ge_0_5": 0.098,
+  "nearest_green_candidates": [
+   {
+    "lat": -16.80991,
+    "lon": -70.69032,
+    "ndvi": 0.509,
+    "dist_m": 30
+   },
+   {
+    "lat": -16.80883,
+    "lon": -70.68946,
+    "ndvi": 0.601,
+    "dist_m": 134
+   },
+   {
+    "lat": -16.81046,
+    "lon": -70.68891,
+    "ndvi": 0.502,
+    "dist_m": 134
+   },
+   {
+    "lat": -16.81099,
+    "lon": -70.69117,
+    "ndvi": 0.548,
+    "dist_m": 170
+   },
+   {
+    "lat": -16.80963,
+    "lon": -70.69172,
+    "ndvi": 0.594,
+    "dist_m": 182
+   }
+  ]
+ },
+ "samegua": {
+  "scene": "HLS.S30.T19KBB.2026308T145721.v2.0",
+  "date": "2026-11-04",
+  "ndvi_at_point": 0.049,
+  "window_km": 3.03,
+  "share_pixels_ndvi_ge_0_5": 0.102,
+  "nearest_green_candidates": [
+   {
+    "lat": -17.17996,
+    "lon": -70.90147,
+    "ndvi": 0.558,
+    "dist_m": 150
+   },
+   {
+    "lat": -17.17862,
+    "lon": -70.90061,
+    "ndvi": 0.559,
+    "dist_m": 162
+   },
+   {
+    "lat": -17.17836,
+    "lon": -70.89919,
+    "ndvi": 0.507,
+    "dist_m": 201
+   },
+   {
+    "lat": -17.17833,
+    "lon": -70.90201,
+    "ndvi": 0.676,
+    "dist_m": 277
+   },
+   {
+    "lat": -17.17941,
+    "lon": -70.90287,
+    "ndvi": 0.518,
+    "dist_m": 306
+   }
+  ]
+ },
+ "algarrobal": {
+  "scene": "HLS.S30.T18KZF.2026293T145729.v2.0",
+  "date": "2026-10-20",
+  "ndvi_at_point": null,
+  "window_km": 3.03,
+  "share_pixels_ndvi_ge_0_5": 0.022,
+  "nearest_green_candidates": [
+   {
+    "lat": -17.6155,
+    "lon": -71.2588,
+    "ndvi": 0.59,
+    "dist_m": 532
+   },
+   {
+    "lat": -17.61585,
+    "lon": -71.26303,
+    "ndvi": 0.537,
+    "dist_m": 566
+   },
+   {
+    "lat": -17.61521,
+    "lon": -71.25739,
+    "ndvi": 0.505,
+    "dist_m": 618
+   },
+   {
+    "lat": -17.61572,
+    "lon": -71.25597,
+    "ndvi": 0.656,
+    "dist_m": 658
+   },
+   {
+    "lat": -17.61727,
+    "lon": -71.2661,
+    "ndvi": 0.683,
+    "dist_m": 711
+   }
+  ]
+ }
+}

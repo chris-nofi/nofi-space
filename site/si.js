@@ -7,7 +7,8 @@
   const ORACLE = (CFG.oracleUrl || "").replace(/\/$/, "");
   const FX = window.AGUA_SI_FIXTURES || {};
   const DEFAULT_PR = { water: 40, soil: 25, income: 25, resilience: 10 };
-  const S = { tab: "compare", pr: { ...DEFAULT_PR }, sc: { rainPct: 0, tempDeltaC: 0 }, sel: {}, cache: {}, pending: null, err: "", timer: 0 };
+  const DEFAULT_CONS = { water: "typical", noDrip: false, noQuinoa: false, noTarwi: false, needsForage: false, soilGoal: "" };
+  const S = { tab: "compare", pr: { ...DEFAULT_PR }, cons: { ...DEFAULT_CONS }, sc: { rainPct: 0, tempDeltaC: 0 }, sel: {}, cache: {}, pending: null, err: "", timer: 0 };
   window.AguaClara.voice = window.AguaClara.voice || {};
 
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -17,20 +18,68 @@
   const MONTHS = { es: "E F M A M J J A S O N D".split(" "), en: "J F M A M J J A S O N D".split(" ") };
   const HAZ = { frost: ["Helada", "Frost"], heat: ["Calor", "Heat"], water: ["Falta de agua", "Water shortage"], bare: ["Suelo desnudo", "Bare soil"], salinity: ["Salinidad", "Salinity"] };
   const CRIT = { water: ["Agua", "Water"], soil: ["Suelo", "Soil"], income: ["Ingreso", "Income"], resilience: ["Resiliencia", "Resilience"] };
-  const isDefault = () => JSON.stringify(S.pr) === JSON.stringify(DEFAULT_PR) && S.sc.rainPct === 0 && S.sc.tempDeltaC === 0;
-  const key = (farm) => `${farm}|${JSON.stringify(S.pr)}|${JSON.stringify(S.sc)}`;
+  const consDefault = () => JSON.stringify(S.cons) === JSON.stringify(DEFAULT_CONS);
+  const prDefault = () => JSON.stringify(S.pr) === JSON.stringify(DEFAULT_PR);
+  const isDefault = () => prDefault() && consDefault() && S.sc.rainPct === 0 && S.sc.tempDeltaC === 0;
+  // the engine result depends on the scenario only; priorities and constraints are re-ranked locally (offline too)
+  const key = (farm) => `${farm}|${JSON.stringify(S.sc)}`;
+  const scenarioDefault = () => S.sc.rainPct === 0 && S.sc.tempDeltaC === 0;
 
-  function result(farm) {
+  /* Offline re-rank (Apollo W3). Uses the engine's own criteria (tradeoffs.radar, 0-1 per criterion) and formula
+     score = Σ w_k × criterion_k with w = normalized priorities. Farmer constraints adjust it transparently:
+     water scarce ×1.5 / secure ×0.6 on the water weight; soil goal +0.08 if the strategy has that soil lever;
+     needs forage +0.05 for forage strategies; no buyer −0.15; no drip kit = not eligible as the top pick. */
+  function rerank(d, lang) {
+    const w = { ...S.pr };
+    if (S.cons.water === "scarce") w.water *= 1.5;
+    if (S.cons.water === "secure") w.water *= 0.6;
+    const tot = Object.values(w).reduce((a, b) => a + b, 0) || 1;
+    Object.keys(w).forEach((k) => (w[k] /= tot));
+    const byId = Object.fromEntries(d.compare.strategies.map((s) => [s.id, s]));
+    const rows = Object.keys(d.tradeoffs.radar).map((id) => {
+      const c = d.tradeoffs.radar[id], s = byId[id] || {}, lv = s.soilLevers || [], needs = s.needs || [];
+      let score = Object.keys(CRIT).reduce((a, k) => a + w[k] * (c[k] || 0), 0);
+      const adj = [], flags = [];
+      if (S.cons.soilGoal && lv.includes(S.cons.soilGoal)) { score += 0.08; adj.push(T(lang, "+ meta de suelo", "+ soil goal")); }
+      if (S.cons.needsForage && lv.includes("forage")) { score += 0.05; adj.push(T(lang, "+ da forraje", "+ gives forage")); }
+      if ((S.cons.noQuinoa && needs.includes("quinoa-buyer")) || (S.cons.noTarwi && needs.includes("tarwi-buyer"))) { score -= 0.15; adj.push(T(lang, "− sin comprador", "− no buyer")); }
+      if (S.cons.noDrip && needs.includes("drip-kit")) flags.push(T(lang, "Requiere equipo de goteo que usted marcó que no tiene", "Needs a drip kit you said you don't have"));
+      return { id, score: Math.round(score * 1000) / 1000, adj, flags, paretoOptimal: (d.tradeoffs.ranking.find((r) => r.id === id) || {}).paretoOptimal };
+    });
+    rows.sort((a, b) => (a.flags.length - b.flags.length) || (b.score - a.score));
+    const top = rows[0].id;
+    const out = { ...d, tradeoffs: { ...d.tradeoffs, ranking: rows, priorities: w }, compare: { ...d.compare, strategies: d.compare.strategies.map((s) => ({ ...s, recommended: s.id === top })) } };
+    if (!isDefault() || !d.voice) out.voice = { ...(d.voice || {}), [lang]: { text: localVoice(out, lang) } };
+    return out;
+  }
+
+  function localVoice(d, lang) {
+    const st = d.compare.strategies, cur = st.find((s) => s.current), top = st.find((s) => s.recommended);
+    const unit = d.units === "m3" ? T(lang, "m³ por hectárea al año", "m³ per hectare a year") : T(lang, "mm al año", "mm a year");
+    const wv = (s) => num(s.water.expected ?? s.water.p50, lang);
+    if (!top || top.id === cur.id) return T(lang, `Con tus prioridades, tu práctica actual (${cur.name.es}) sigue siendo la mejor opción. Revísalo con la Agencia Agraria o INIA.`, `With your priorities, your current practice (${cur.name.en}) is still the best option. Review it with the Agencia Agraria or INIA.`);
+    return T(lang,
+      `Con tus prioridades, la mejor opción es ${top.name.es}: unos ${wv(top)} ${unit} frente a ${wv(cur)} hoy, ${top.deltas.soilPts >= 0 ? "+" : ""}${Math.round(top.deltas.soilPts)} puntos de suelo. Es un apoyo para decidir: revísalo con la Agencia Agraria o INIA.`,
+      `With your priorities, the best option is ${top.name.en}: about ${wv(top)} ${unit} versus ${wv(cur)} today, ${top.deltas.soilPts >= 0 ? "+" : ""}${Math.round(top.deltas.soilPts)} soil points. It supports your decision: review it with the Agencia Agraria or INIA.`);
+  }
+
+  function baseResult(farm) {
     const live = S.cache[key(farm)];
     if (live) return { data: live, source: "live" };
-    if (isDefault() && FX[farm]) return { data: FX[farm], source: "bundled" };
+    if (scenarioDefault() && FX[farm]) return { data: FX[farm], source: prDefault() && consDefault() ? "bundled" : "local" };
     const anyLive = Object.entries(S.cache).filter(([k]) => k.startsWith(farm + "|")).pop();
     if (anyLive) return { data: anyLive[1], source: "stale" };
     return FX[farm] ? { data: FX[farm], source: "bundled" } : null;
   }
 
+  function result(farm, lang) {
+    const b = baseResult(farm);
+    if (!b) return null;
+    return { ...b, data: rerank(b.data, lang || (window.AguaClara.ctx || {}).lang || "es") };
+  }
+
   async function fetchLive(ctx) {
-    if (!ORACLE) return;
+    if (!ORACLE || scenarioDefault()) return;
     const k = key(ctx.farm);
     if (S.cache[k] || S.pending === k) return;
     S.pending = k;
@@ -59,14 +108,24 @@
 
   function controls(ctx) {
     const L = ctx.lang, off = !ORACLE;
-    return `<section class="card si-controls">
+    const sel = (id, opts) => `<select class="si-select" data-si-cons="${id}">${opts.map(([v, es, en]) => `<option value="${v}" ${S.cons[id] === v ? "selected" : ""}>${T(L, es, en)}</option>`).join("")}</select>`;
+    const chk = (id, es, en) => `<label class="si-check"><input type="checkbox" data-si-cons="${id}" ${S.cons[id] ? "checked" : ""}> ${T(L, es, en)}</label>`;
+    return `<section class="card si-controls si-controls-3">
       <div class="si-ctl-group"><span class="eyeline">${T(L, "MIS PRIORIDADES", "MY PRIORITIES")}</span>
-        ${Object.keys(CRIT).map((k) => slider(k, CRIT[k][L === "es" ? 0 : 1], S.pr[k], 0, 100, 5, "", off)).join("")}</div>
+        ${Object.keys(CRIT).map((k) => slider(k, CRIT[k][L === "es" ? 0 : 1], S.pr[k], 0, 100, 5, "", false)).join("")}
+        <p class="si-note">${T(L, "Funciona sin conexión: el ranking se recalcula aquí mismo.", "Works offline: the ranking is recalculated right here.")}</p></div>
+      <div class="si-ctl-group"><span class="eyeline">${T(L, "MI SITUACIÓN", "MY SITUATION")}</span>
+        <label class="si-slider"><span><b>${T(L, "Agua disponible", "Water available")}</b></span>${sel("water", [["scarce", "Escasa", "Scarce"], ["typical", "Normal", "Typical"], ["secure", "Segura", "Secure"]])}</label>
+        <label class="si-slider"><span><b>${T(L, "Lo que más quiero para mi suelo", "My main soil goal")}</b></span>${sel("soilGoal", [["", "Sin preferencia", "No preference"], ["nfix", "Fijar nitrógeno", "Fix nitrogen"], ["cover", "Cubrir el suelo", "Cover the soil"], ["organicMatter", "Más materia orgánica", "More organic matter"], ["erosion", "Frenar la erosión", "Stop erosion"]])}</label>
+        ${chk("noDrip", "No tengo equipo de goteo", "I don't have a drip kit")}
+        ${chk("noQuinoa", "No tengo comprador de quinua", "No quinoa buyer")}
+        ${chk("noTarwi", "No tengo comprador de tarwi", "No tarwi buyer")}
+        ${chk("needsForage", "Necesito forraje para mis animales", "I need forage for my animals")}
+        <button type="button" class="text-btn" data-si-reset>${T(L, "Restablecer", "Reset")}</button></div>
       <div class="si-ctl-group"><span class="eyeline">${T(L, "¿Y SI…?", "WHAT IF…?")}</span>
         ${slider("rainPct", T(L, "Lluvia", "Rain"), S.sc.rainPct, -50, 50, 5, "%", off)}
         ${slider("tempDeltaC", T(L, "Calentamiento", "Warming"), S.sc.tempDeltaC, 0, 3, 0.5, " °C", off)}
-        ${off ? `<p class="si-note">${T(L, "Conecta el oráculo (config.js) para recalcular. Ahora ves resultados precalculados del motor SI.", "Connect the oracle (config.js) to recalculate. You're seeing precomputed SI engine results.")}</p>`
-              : `<button type="button" class="text-btn" data-si-reset>${T(L, "Restablecer", "Reset")}</button>`}
+        ${off ? `<p class="si-note">${T(L, "Los escenarios de lluvia y calor vuelven a correr el motor: necesitan el oráculo (config.js).", "Rain and warming scenarios re-run the engine: they need the oracle (config.js).")}</p>` : ""}
       </div></section>
       <div class="si-tabs" role="tablist">${[["compare", T(L, "Comparar", "Compare")], ["tradeoffs", T(L, "Compensaciones", "Trade-offs")], ["risk", T(L, "Riesgo", "Risk")], ["uncertainty", T(L, "Incertidumbre", "Uncertainty")]]
         .map(([id, label], i) => `<button type="button" role="tab" aria-selected="${S.tab === id}" class="${S.tab === id ? "active" : ""}" data-si-tab="${id}"><span>0${i + 1}</span>${label}</button>`).join("")}</div>
@@ -76,7 +135,7 @@
   // ---------- modules ----------
   function header(ctx, r) {
     const L = ctx.lang, d = r.data, v = d.voice?.[L];
-    const badge = { live: T(L, "EN VIVO · ORÁCULO", "LIVE · ORACLE"), bundled: T(L, "PRECALCULADO · MOTOR SI", "PRECOMPUTED · SI ENGINE"), stale: T(L, "ÚLTIMO RESULTADO", "LAST RESULT") }[r.source];
+    const badge = { live: T(L, "EN VIVO · ORÁCULO", "LIVE · ORACLE"), bundled: T(L, "MOTOR SI · DATOS NASA", "SI ENGINE · NASA DATA"), local: T(L, "RE-ORDENADO CON TUS PRIORIDADES", "RE-RANKED WITH YOUR PRIORITIES"), stale: T(L, "ÚLTIMO RESULTADO", "LAST RESULT") }[r.source];
     const busy = S.pending === key(ctx.farm);
     return `<article class="card si-ceres"><div class="si-ceres-top"><span class="eyeline">CERES · ${T(L, "VOZ DE LA SI", "VOICE OF THE SI")}</span>
         <span class="si-badges"><span class="si-badge">${badge}</span><span class="si-badge conf-${d.uncertainty.confidence}">${T(L, "Confianza", "Confidence")}: ${{ high: T(L, "alta", "high"), medium: T(L, "media", "medium"), low: T(L, "baja", "low") }[d.uncertainty.confidence]}</span>${busy ? `<span class="si-badge">${T(L, "Calculando…", "Calculating…")}</span>` : ""}</span></div>
@@ -86,8 +145,20 @@
       ${S.err ? `<p class="si-err">${E(S.err)}</p>` : ""}</article>`;
   }
 
+  function ficha(ctx, s) {
+    const db = window.CeresRealData && window.CeresRealData.db, L = ctx.lang;
+    const f = db && db.FARMS.find((x) => x.id === ctx.farm), st = f && f.strategies.find((x) => x.id === s.id);
+    if (!st) return "";
+    const g = (o) => (o && (o[L] || o.es)) || "";
+    return `<details class="si-ficha" onclick="event.stopPropagation()"><summary>${T(L, "Ver ficha", "See details")}</summary><dl>
+      <dt>${T(L, "Por qué", "Why")}</dt><dd>${E(g(st.why))}</dd>${st.benefits ? `<dt>${T(L, "Beneficios", "Benefits")}</dt><dd>${E(g(st.benefits))}</dd>` : ""}
+      <dt>${T(L, "Evidencia", "Evidence")}</dt><dd>${E(g(st.evidence))}</dd><dt>${T(L, "Vacíos de información", "Information gaps")}</dt><dd>${E(g(st.gaps))}</dd>
+      <dt>${T(L, "Riesgos a revisar con un técnico", "Risks for local review")}</dt><dd>${E(g(st.risks))}</dd></dl></details>`;
+  }
+
   function compareTab(ctx, d) {
     const L = ctx.lang, top = d.tradeoffs.ranking[0].id, unit = d.units === "m3" ? "m³/ha/año" : "mm/año";
+    const rk = (id) => d.tradeoffs.ranking.find((r) => r.id === id) || {};
     return `<div class="si-compare">${d.compare.strategies.map((s) => {
       const w = d.uncertainty.rankFirstProbability[s.id];
       const tags = [s.current ? `<span class="si-tag cur">${T(L, "Actual", "Current")}</span>` : "", s.id === top ? `<span class="si-tag top">${T(L, "Mejor para ti", "Best for you")}</span>` : ""].join("");
@@ -99,7 +170,9 @@
         <div><dt>${T(L, "Ingreso", "Income")}</dt><dd>S/ ${num(s.incomePenHa, L)} <small>/ha</small> ${delta(s.deltas.incomePct, "%", s.deltas.incomePct >= 0)}</dd></div>
         <div><dt>${T(L, "Déficit", "Deficit")}</dt><dd>${num(s.deficitPct, L, 1)}%</dd></div></dl>
         <div class="si-wins"><span style="width:${Math.round(w * 100)}%"></span></div>
-        <small class="muted">${T(L, `Mejor opción en ${Math.round(w * 100)} de 100 años simulados`, `Best option in ${Math.round(w * 100)} of 100 simulated years`)}</small></button>`;
+        <small class="muted">${T(L, `Mejor opción en ${Math.round(w * 100)} de 100 años simulados (prioridades por defecto)`, `Best option in ${Math.round(w * 100)} of 100 simulated years (default priorities)`)}</small>
+        ${(rk(s.id).flags || []).map((f) => `<span class="si-flag">${E(f)}</span>`).join("")}${(rk(s.id).adj || []).length ? `<small class="muted">${E(rk(s.id).adj.join(" · "))}</small>` : ""}
+        ${ficha(ctx, s)}</button>`;
     }).join("")}</div>`;
   }
 
@@ -119,8 +192,8 @@
     return `<div class="si-two"><article class="card"><span class="eyeline">${T(L, "ACTUAL VS ALTERNATIVA", "CURRENT VS ALTERNATIVE")}</span>${radar(d, [cur, sel], L)}
         <div class="si-legend"><span><i class="s0"></i>${name(cur)}</span><span><i class="s1"></i>${name(sel)}</span></div></article>
       <article class="card"><span class="eyeline">${T(L, "RANKING SEGÚN TUS PRIORIDADES", "RANKING BY YOUR PRIORITIES")}</span>
-        <ol class="si-rank">${d.tradeoffs.ranking.map((r) => `<li><button type="button" data-si-pick="${r.id}" class="${r.id === sel ? "picked" : ""}"><b>${name(r.id)}</b><span class="si-bar"><span style="width:${Math.round(r.score * 100)}%"></span></span><small>${num(r.score * 100, L)}${r.paretoOptimal ? ` · ${T(L, "no superada en todo", "not beaten on everything")}` : ""}</small></button></li>`).join("")}</ol>
-        <p class="si-note">${T(L, "Puntaje = suma de cada prioridad × criterio (agua, suelo, ingreso, resiliencia), de 0 a 1.", "Score = sum of each priority × criterion (water, soil, income, resilience), 0 to 1.")}</p></article></div>`;
+        <ol class="si-rank">${d.tradeoffs.ranking.map((r) => `<li><button type="button" data-si-pick="${r.id}" class="${r.id === sel ? "picked" : ""}"><b>${name(r.id)}</b><span class="si-bar"><span style="width:${Math.round(r.score * 100)}%"></span></span><small>${num(r.score * 100, L)}${r.paretoOptimal ? ` · ${T(L, "no superada en todo", "not beaten on everything")}` : ""}${(r.flags || []).length ? ` · ${E(r.flags[0])}` : ""}${(r.adj || []).length ? ` · ${E(r.adj.join(" "))}` : ""}</small></button></li>`).join("")}</ol>
+        <p class="si-note">${T(L, "Puntaje = suma de cada prioridad × criterio (agua, suelo, ingreso, resiliencia), de 0 a 1. Ajustes por tu situación: agua escasa ×1,5 / segura ×0,6 en el peso del agua; meta de suelo +0,08; forraje +0,05; sin comprador −0,15; sin equipo de goteo = no puede ser la recomendación.", "Score = sum of each priority × criterion (water, soil, income, resilience), 0 to 1. Your situation adjusts it: scarce water ×1.5 / secure ×0.6 on the water weight; soil goal +0.08; forage +0.05; no buyer −0.15; no drip kit = can't be the recommendation.")}</p></article></div>`;
   }
 
   function riskTab(ctx, d) {
@@ -158,14 +231,53 @@
         <p class="si-note"><b>${T(L, "Confianza", "Confidence")}:</b> ${T(L, "alta si la dispersión es < 25 % y gana ≥ 60 % de los años; media si < 50 % y ≥ 35 %; nunca más que media mientras haya datos de ejemplo.", "high if spread < 25 % and it wins ≥ 60 % of years; medium if < 50 % and ≥ 35 %; never above medium while example data is in use.")}</p></article></div>`;
   }
 
+  /* W4: season timeline from real NDVI (HLS 30 m / Sentinel-2 10 m field pixel / MODIS 250 m), bare months
+     (NDVI < 0.20, Sentinel-2 method) and vulnerable months (bare + rain or frost), plus simulated risk peaks. */
+  const MNAME = { es: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"], en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] };
+  const EN_IDX = Object.fromEntries(MNAME.en.map((m, i) => [m, i]));
+  function seasonBlock(ctx, d) {
+    const L = ctx.lang, cl = (window.AGUA_SI_CLIMATE || {})[ctx.farm];
+    if (!cl || !cl.ndvi || !cl.ndvi.monthly) return "";
+    const nd = cl.ndvi, ext = cl.extensions || {}, cover = ext.cover || {};
+    const thr = cover.bare_threshold_ndvi ?? 0.2;
+    const bare = new Set((cover.bare_months || []).map((m) => EN_IDX[m]));
+    const vul = Object.fromEntries((cover.vulnerable_months || []).map((v) => [EN_IDX[v.month], v.reasons]));
+    const cur = d && d.compare.strategies.find((s) => s.current);
+    const grid = cur && d.risk.strategies[cur.id] ? d.risk.strategies[cur.id].grid : [];
+    const riskTop = (m) => { let best = null; for (const h of grid) if (h.hazard !== "bare" && h.monthly[m] >= 0.3 && (!best || h.monthly[m] > best.v)) best = { h: h.hazard, v: h.monthly[m] }; return best; };
+    const kind = nd.pointKind === "field_pixel_provisional"
+      ? T(L, `píxel de cultivo provisional (${cl.fieldPixel ? cl.fieldPixel.dist_from_app_point_m + " m del punto de la app" : ""}; confirmar con el agricultor)`, `provisional crop pixel (${cl.fieldPixel ? cl.fieldPixel.dist_from_app_point_m + " m from the app point" : ""}; confirm with the farmer)`)
+      : T(L, "punto de la app", "app point");
+    const hlsApp = nd.context && nd.context.hlsAppPoint && nd.pointKind === "field_pixel_provisional" ? nd.context.hlsAppPoint.monthly_mean : null;
+    const cells = nd.monthly.map((v, m) => {
+      const isBare = bare.has(m) || (v != null && v < thr), rk = riskTop(m), vr = vul[m];
+      const title = `${MNAME[L][m]} · NDVI ${v == null ? T(L, "sin escena", "no scene") : v.toFixed(2)}${nd.nClear ? ` · ${nd.nClear[m]} ${T(L, "escenas", "scenes")}` : ""}${vr ? " · " + vr.join("; ") : ""}${rk ? " · " + T(L, "riesgo simulado: ", "simulated risk: ") + HAZ[rk.h][L === "es" ? 0 : 1] : ""}`;
+      return `<div class="ss-cell ${isBare ? "bare" : ""} ${vr ? "vul" : ""}" title="${E(title)}" tabindex="0">
+        <span class="ss-bar" style="--v:${v == null ? 0 : Math.min(1, v / 0.8)}"></span>
+        <b>${MNAME[L][m]}</b><small>${v == null ? "—" : v.toFixed(2)}</small>
+        ${isBare ? `<i class="tag bare">${T(L, "desnudo", "bare")}</i>` : ""}${vr ? `<i class="tag vul">${T(L, "vulnerable", "vulnerable")}</i>` : ""}${rk ? `<i class="tag risk">${HAZ[rk.h][L === "es" ? 0 : 1]}</i>` : ""}</div>`;
+    }).join("");
+    const bareList = [...bare].sort((a, b) => a - b).map((m) => MNAME[L][m]);
+    const opp = bareList.length
+      ? T(L, `Meses con suelo desnudo: ${bareList.join(", ")}. Son la ventana para una cobertura o abono verde${(cover.vulnerable_months || []).length ? "; los marcados «vulnerable» coinciden con lluvia y suelo desnudo (riesgo de erosión)" : ""}.`, `Bare-soil months: ${bareList.join(", ")}. They are the window for a cover crop or green manure${(cover.vulnerable_months || []).length ? "; months marked “vulnerable” combine rain and bare soil (erosion risk)" : ""}.`)
+      : T(L, "No hay meses con suelo desnudo en este píxel (NDVI ≥ 0,20 todo el año).", "No bare-soil months at this pixel (NDVI ≥ 0.20 all year).");
+    return `<article class="card si-season"><div class="card-header"><div><span class="eyeline">${T(L, "TEMPORADAS · SUELO DESNUDO Y MESES VULNERABLES", "SEASONS · BARE SOIL AND VULNERABLE MONTHS")}</span>
+        <h3>${T(L, "El año de tu parcela visto desde el satélite", "Your field's year seen from space")}</h3></div></div>
+      <div class="ss-grid">${cells}</div>
+      <p class="si-note">${E(opp)}</p>
+      ${hlsApp ? `<p class="si-note">${T(L, "En el punto de la app, HLS 30 m marca suelo desnudo todo el año", "At the app point, HLS 30 m reads bare ground all year")} (NDVI ${Math.min(...hlsApp).toFixed(2)}–${Math.max(...hlsApp).toFixed(2)}).</p>` : ""}
+      <p class="cite">NDVI: ${E(nd.source || "")} · ${E(kind)} · ${T(L, "umbral desnudo", "bare threshold")} ${thr} · ${T(L, "riesgos: simulación del motor SI con clima NASA POWER", "risks: SI engine simulation on NASA POWER climate")}</p></article>`;
+  }
+
   function paint(ctx) {
     const box = document.getElementById("si-results");
     if (!box) return;
-    const r = result(ctx.farm);
+    const r = result(ctx.farm, ctx.lang);
     if (!r) { box.innerHTML = `<p class="si-note">${T(ctx.lang, "Sin datos para esta parcela.", "No data for this farm.")}</p>`; return; }
     window.AguaClara.voice[ctx.farm] = r.data.voice;
+    window.AguaClara.setTop?.(ctx.farm, r.data.tradeoffs.ranking[0].id);
     const tab = { compare: compareTab, tradeoffs: tradeoffsTab, risk: riskTab, uncertainty: uncertaintyTab }[S.tab];
-    box.innerHTML = header(ctx, r) + tab(ctx, r.data);
+    box.innerHTML = header(ctx, r) + seasonBlock(ctx, r.data) + tab(ctx, r.data);
   }
 
   function mount(ctx) {
@@ -173,10 +285,16 @@
     if (!root) return;
     root.innerHTML = controls(ctx);
     paint(ctx);
-    if (!isDefault() || !FX[ctx.farm]) fetchLive(ctx);
+    if (!scenarioDefault() || !FX[ctx.farm]) fetchLive(ctx);
   }
 
   // events live on document: #app is re-rendered by app.js, si-root is re-mounted by the hook
+  document.addEventListener("change", (e) => {
+    const el = e.target.closest?.("[data-si-cons]");
+    if (!el) return;
+    S.cons[el.dataset.siCons] = el.type === "checkbox" ? el.checked : el.value;
+    paint(window.AguaClara.ctx);
+  });
   document.addEventListener("input", (e) => {
     const el = e.target.closest?.("[data-si]");
     if (!el) return;
@@ -193,8 +311,12 @@
     if (tab) { S.tab = tab.dataset.siTab; mount(ctx); return; }
     const pick = e.target.closest?.("[data-si-pick]");
     if (pick) { S.sel[ctx.farm] = pick.dataset.siPick; paint(ctx); return; }
-    if (e.target.closest?.("[data-si-reset]")) { S.pr = { ...DEFAULT_PR }; S.sc = { rainPct: 0, tempDeltaC: 0 }; mount(ctx); }
+    if (e.target.closest?.("[data-si-reset]")) { S.pr = { ...DEFAULT_PR }; S.cons = { ...DEFAULT_CONS }; S.sc = { rainPct: 0, tempDeltaC: 0 }; mount(ctx); }
   });
 
-  window.AguaClara.hooks.push((ctx) => { if (ctx.view === "intel") mount(ctx); });
+  window.AguaClara.hooks.push((ctx) => {
+    if (ctx.view === "intel") mount(ctx);
+    const sr = document.getElementById("season-root");
+    if (sr) sr.innerHTML = seasonBlock(ctx, FX[ctx.farm]);
+  });
 })();

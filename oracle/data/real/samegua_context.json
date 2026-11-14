@@ -399,15 +399,238 @@
    }
   ]
  },
- "generated": "2026-11-14T01:22:24",
+ "fieldPixel": {
+  "lat": -17.17996,
+  "lon": -70.90147,
+  "dist_from_app_point_m": 150,
+  "ndvi_on_scene": 0.558,
+  "scene": "HLS.S30.T19KBB.2026308T145721.v2.0",
+  "ndvi_at_app_point_on_scene": 0.049,
+  "basis": "nearest HLS pixel with NDVI>=0.5 (find_green_pixels.py); candidate - confirm with farmer"
+ },
+ "extensions": {
+  "soil": {
+   "label": "NON-NASA (ISRIC SoilGrids 2.0, 250 m, machine-learning model; uncertain in hyper-arid/irrigated valleys)",
+   "point": [
+    -17.17996,
+    -70.90147
+   ],
+   "offset_m": 0,
+   "depth": "0-30 cm weighted",
+   "clay_pct": 13.85,
+   "sand_pct": 62.33,
+   "silt_pct": 23.8,
+   "soc_g_kg": 12.57,
+   "ph_h2o": 7.93,
+   "bulk_density_g_cm3": 1.27
+  },
+  "cover": {
+   "point": {
+    "lat": -17.17996,
+    "lon": -70.90147,
+    "kind": "field_pixel"
+   },
+   "bare_threshold_ndvi": 0.2,
+   "s2_median_ndvi_by_month_2024_2026": [
+    0.572,
+    0.615,
+    0.596,
+    0.592,
+    0.67,
+    0.681,
+    0.65,
+    0.628,
+    0.635,
+    0.616,
+    0.603,
+    0.635
+   ],
+   "s2_obs_by_month": [
+    49,
+    33,
+    72,
+    82,
+    69,
+    67,
+    71,
+    60,
+    65,
+    68,
+    53,
+    54
+   ],
+   "hls_median_ndvi_by_month": [
+    0.058,
+    0.06,
+    0.052,
+    0.045,
+    0.048,
+    0.044,
+    0.051,
+    0.052,
+    0.054,
+    0.055,
+    0.058,
+    0.06
+   ],
+   "bare_months": [],
+   "vulnerable_months": [],
+   "method": "Monthly median of SCL-masked S2 L2A NDVI (classes 4/5/6 kept; 0-3, 7-11 dropped) 2024-01..2026-11; HLS fills months with no S2. Bare = median NDVI < 0.20. Vulnerable = month meeting >=2 of: bare, rainy (ERA5 1991-2020 >=10% of annual), frost (>=5 d Tmin<2C, preferred series per farm)."
+  },
+  "frost": {
+   "preferred": "era5_land",
+   "preferredReason": "shares the Carumas POWER cell (~2,275 m above the farm); a 14.8 C lapse shift is too large to trust, so ERA5-Land (0.1 deg) is used",
+   "series": {
+    "source": "ERA5-Land via Open-Meteo archive API (0.1 deg) - labelled 'ERA5 via Open-Meteo'",
+    "clim_1991_2020_days_lt0_by_month": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "clim_1991_2020_days_lt2_by_month": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "clim_1991_2020_days_lt0_yr": 0.0,
+    "clim_1991_2020_days_lt2_yr": 0.0,
+    "recent_years": {
+     "2021": {
+      "lt0": 0,
+      "lt2": 0,
+      "n_days": 365,
+      "min_c": 12.1
+     },
+     "2022": {
+      "lt0": 0,
+      "lt2": 0,
+      "n_days": 365,
+      "min_c": 11.0
+     },
+     "2023": {
+      "lt0": 0,
+      "lt2": 0,
+      "n_days": 365,
+      "min_c": 11.6
+     },
+     "2024": {
+      "lt0": 0,
+      "lt2": 0,
+      "n_days": 366,
+      "min_c": 12.7
+     },
+     "2025": {
+      "lt0": 0,
+      "lt2": 0,
+      "n_days": 365,
+      "min_c": 12.2
+     },
+     "2026": {
+      "lt0": 0,
+      "lt2": 0,
+      "n_days": 311,
+      "min_c": 10.6
+     }
+    },
+    "last_date": "2026-11-07"
+   },
+   "powerRawCell": {
+    "clim_1991_2020_days_lt0_yr": 154.2,
+    "clim_1991_2020_days_lt2_yr": 229.9
+   }
+  },
+  "slope": {
+   "center_deg": 6.3,
+   "window_mean_deg": 5.5,
+   "window_max_deg": 6.7,
+   "center_pct": 11.0,
+   "elev_center_m": 1558.0,
+   "method": "Horn (1981) 3x3 finite difference on SRTM GL1 30 m sampled on a 5x5 grid (30 m spacing) via OpenTopoData; centre = field point, window = 9 cells over 90x90 m"
+  },
+  "erosion": {
+   "rank": "low",
+   "power": {
+    "source": "NASA POWER PRECTOTCORR daily (MERRA-2 bias-corrected; QC: 2022-09-12/13 spike not in CHIRPS)",
+    "period": "2001-2025",
+    "wet_day_p95_mm": 6.7,
+    "days_gt10mm_per_yr": 0.6,
+    "days_gt_p95_per_yr": 1.76,
+    "mean_intensity_gt_p95_mm": 11.3,
+    "days_gt10mm_by_month": [
+     0.08,
+     0.16,
+     0.04,
+     0.0,
+     0.0,
+     0.08,
+     0.04,
+     0.0,
+     0.04,
+     0.04,
+     0.0,
+     0.12
+    ],
+    "proxy_tan_slope_x_days_gt10mm": 0.058,
+    "proxy_tan_slope_x_p95_intensity": 1.084
+   },
+   "era5": {
+    "source": "ERA5 (0.25 deg) daily precipitation via Open-Meteo archive API (ERA5-Land precip returned null); known wet bias over the western Andes",
+    "period": "2001-2025",
+    "wet_day_p95_mm": 11.5,
+    "days_gt10mm_per_yr": 3.44,
+    "days_gt_p95_per_yr": 2.08,
+    "mean_intensity_gt_p95_mm": 15.0,
+    "days_gt10mm_by_month": [
+     0.84,
+     1.6,
+     0.68,
+     0.16,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.16
+    ],
+    "proxy_tan_slope_x_days_gt10mm": 0.331,
+    "proxy_tan_slope_x_p95_intensity": 1.448
+   },
+   "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
+   "imergStatus": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+  }
+ },
+ "smap": null,
+ "generated": "2026-11-14T02:32:28",
  "sources": {
   "power": "NASA POWER Daily API v2, community AG (MERRA-2/GEOS-IT; CERES radiation) https://power.larc.nasa.gov/",
   "modis": "MOD13Q1 v061 NDVI 250 m 16-day, ORNL DAAC MODIS Web Service https://modis.ornl.gov/rst/api/v1/",
   "hls": "HLS L30/S30 v2.0 30 m (NASA LP DAAC) https://doi.org/10.5067/HLS/HLSS30.002",
   "ecostress": "ECOSTRESS L3T JET v002 ETdaily 70 m (NASA LP DAAC) https://doi.org/10.5067/ECOSTRESS/ECO_L3T_JET.002",
+  "sentinel2": "Contains modified Copernicus Sentinel-2 L2A data 2024-2026 (ESA), via Element84 Earth Search STAC (partner)",
+  "soilgrids": "Poggio et al. 2021, SoilGrids 2.0, ISRIC, CC-BY 4.0 (NON-NASA)",
+  "era5": "Copernicus ERA5 / ERA5-Land via Open-Meteo Historical API https://open-meteo.com/en/docs/historical-weather-api",
   "smap": "SMAP L3 Enhanced 9 km SPL3SMP_E v006 (NSIDC DAAC) https://doi.org/10.5067/M20OXIZHY3RJ",
   "srtm": "NASA SRTM GL1 30 m via OpenTopoData https://www.opentopodata.org/datasets/srtm/",
-  "chirps": "CHIRPS v3.0 monthly, UCSB Climate Hazards Center https://data.chc.ucsb.edu/products/CHIRPS/v3.0/",
-  "era5": "Copernicus ERA5 / ERA5-Land via Open-Meteo Historical API https://open-meteo.com/en/docs/historical-weather-api"
+  "chirps": "CHIRPS v3.0 monthly, UCSB Climate Hazards Center https://data.chc.ucsb.edu/products/CHIRPS/v3.0/"
  }
 }

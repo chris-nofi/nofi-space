@@ -1,0 +1,377 @@
+{
+ "source": "ISRIC SoilGrids 2.0 REST https://rest.isric.org/soilgrids/v2.0/ (NON-NASA, 250 m, modeled)",
+ "depth": "0-30 cm thickness-weighted mean of 0-5, 5-15, 15-30 cm",
+ "farms": {
+  "carumas": {
+   "app_point": {
+    "requested": [
+     -16.81,
+     -70.69
+    ],
+    "used": [
+     -16.81,
+     -70.69
+    ],
+    "offset_m": 0,
+    "values": {
+     "bdod": {
+      "mean_0_30": 1.16,
+      "by_depth": {
+       "0-5cm": 1.13,
+       "5-15cm": 1.15,
+       "15-30cm": 1.18
+      },
+      "uncertainty_0_5": 7,
+      "unit": "kg/dm\u00b3"
+     },
+     "clay": {
+      "mean_0_30": 15.93,
+      "by_depth": {
+       "0-5cm": 13.7,
+       "5-15cm": 14.4,
+       "15-30cm": 17.7
+      },
+      "uncertainty_0_5": 48,
+      "unit": "%"
+     },
+     "phh2o": {
+      "mean_0_30": 7.18,
+      "by_depth": {
+       "0-5cm": 7.1,
+       "5-15cm": 7.2,
+       "15-30cm": 7.2
+      },
+      "uncertainty_0_5": 4,
+      "unit": "-"
+     },
+     "sand": {
+      "mean_0_30": 58.28,
+      "by_depth": {
+       "0-5cm": 60.0,
+       "5-15cm": 58.6,
+       "15-30cm": 57.5
+      },
+      "uncertainty_0_5": 8,
+      "unit": "%"
+     },
+     "silt": {
+      "mean_0_30": 25.77,
+      "by_depth": {
+       "0-5cm": 26.2,
+       "5-15cm": 27.0,
+       "15-30cm": 24.8
+      },
+      "uncertainty_0_5": 15,
+      "unit": "%"
+     },
+     "soc": {
+      "mean_0_30": 17.8,
+      "by_depth": {
+       "0-5cm": 27.6,
+       "5-15cm": 21.9,
+       "15-30cm": 11.8
+      },
+      "uncertainty_0_5": 73,
+      "unit": "g/kg"
+     }
+    }
+   }
+  },
+  "samegua": {
+   "app_point": {
+    "requested": [
+     -17.18,
+     -70.9
+    ],
+    "used": [
+     -17.18,
+     -70.9
+    ],
+    "offset_m": 0,
+    "values": {
+     "bdod": {
+      "mean_0_30": 1.27,
+      "by_depth": {
+       "0-5cm": 1.26,
+       "5-15cm": 1.27,
+       "15-30cm": 1.28
+      },
+      "uncertainty_0_5": 6,
+      "unit": "kg/dm\u00b3"
+     },
+     "clay": {
+      "mean_0_30": 13.88,
+      "by_depth": {
+       "0-5cm": 12.5,
+       "5-15cm": 12.6,
+       "15-30cm": 15.2
+      },
+      "uncertainty_0_5": 65,
+      "unit": "%"
+     },
+     "phh2o": {
+      "mean_0_30": 7.95,
+      "by_depth": {
+       "0-5cm": 8.0,
+       "5-15cm": 8.0,
+       "15-30cm": 7.9
+      },
+      "uncertainty_0_5": 4,
+      "unit": "-"
+     },
+     "sand": {
+      "mean_0_30": 62.85,
+      "by_depth": {
+       "0-5cm": 64.1,
+       "5-15cm": 63.8,
+       "15-30cm": 61.8
+      },
+      "uncertainty_0_5": 9,
+      "unit": "%"
+     },
+     "silt": {
+      "mean_0_30": 23.27,
+      "by_depth": {
+       "0-5cm": 23.4,
+       "5-15cm": 23.6,
+       "15-30cm": 23.0
+      },
+      "uncertainty_0_5": 31,
+      "unit": "%"
+     },
+     "soc": {
+      "mean_0_30": 12.08,
+      "by_depth": {
+       "0-5cm": 13.8,
+       "5-15cm": 13.3,
+       "15-30cm": 10.7
+      },
+      "uncertainty_0_5": 54,
+      "unit": "g/kg"
+     }
+    }
+   },
+   "field_pixel": {
+    "requested": [
+     -17.17996,
+     -70.90147
+    ],
+    "used": [
+     -17.17996,
+     -70.90147
+    ],
+    "offset_m": 0,
+    "values": {
+     "bdod": {
+      "mean_0_30": 1.27,
+      "by_depth": {
+       "0-5cm": 1.25,
+       "5-15cm": 1.25,
+       "15-30cm": 1.28
+      },
+      "uncertainty_0_5": 7,
+      "unit": "kg/dm\u00b3"
+     },
+     "clay": {
+      "mean_0_30": 13.85,
+      "by_depth": {
+       "0-5cm": 12.5,
+       "5-15cm": 12.5,
+       "15-30cm": 15.2
+      },
+      "uncertainty_0_5": 67,
+      "unit": "%"
+     },
+     "phh2o": {
+      "mean_0_30": 7.93,
+      "by_depth": {
+       "0-5cm": 7.9,
+       "5-15cm": 8.0,
+       "15-30cm": 7.9
+      },
+      "uncertainty_0_5": 4,
+      "unit": "-"
+     },
+     "sand": {
+      "mean_0_30": 62.33,
+      "by_depth": {
+       "0-5cm": 63.6,
+       "5-15cm": 63.4,
+       "15-30cm": 61.2
+      },
+      "uncertainty_0_5": 9,
+      "unit": "%"
+     },
+     "silt": {
+      "mean_0_30": 23.8,
+      "by_depth": {
+       "0-5cm": 23.9,
+       "5-15cm": 24.2,
+       "15-30cm": 23.5
+      },
+      "uncertainty_0_5": 30,
+      "unit": "%"
+     },
+     "soc": {
+      "mean_0_30": 12.57,
+      "by_depth": {
+       "0-5cm": 14.5,
+       "5-15cm": 13.8,
+       "15-30cm": 11.1
+      },
+      "uncertainty_0_5": 52,
+      "unit": "g/kg"
+     }
+    }
+   }
+  },
+  "algarrobal": {
+   "app_point": {
+    "requested": [
+     -17.62,
+     -71.26
+    ],
+    "used": [
+     -17.62,
+     -71.26
+    ],
+    "offset_m": 0,
+    "values": {
+     "bdod": {
+      "mean_0_30": 1.32,
+      "by_depth": {
+       "0-5cm": 1.29,
+       "5-15cm": 1.32,
+       "15-30cm": 1.33
+      },
+      "uncertainty_0_5": 8,
+      "unit": "kg/dm\u00b3"
+     },
+     "clay": {
+      "mean_0_30": 14.92,
+      "by_depth": {
+       "0-5cm": 14.3,
+       "5-15cm": 15.7,
+       "15-30cm": 14.6
+      },
+      "uncertainty_0_5": 156,
+      "unit": "%"
+     },
+     "phh2o": {
+      "mean_0_30": 7.7,
+      "by_depth": {
+       "0-5cm": 7.7,
+       "5-15cm": 7.7,
+       "15-30cm": 7.7
+      },
+      "uncertainty_0_5": 4,
+      "unit": "-"
+     },
+     "sand": {
+      "mean_0_30": 66.92,
+      "by_depth": {
+       "0-5cm": 67.4,
+       "5-15cm": 66.7,
+       "15-30cm": 66.9
+      },
+      "uncertainty_0_5": 10,
+      "unit": "%"
+     },
+     "silt": {
+      "mean_0_30": 18.17,
+      "by_depth": {
+       "0-5cm": 18.3,
+       "5-15cm": 17.6,
+       "15-30cm": 18.5
+      },
+      "uncertainty_0_5": 62,
+      "unit": "%"
+     },
+     "soc": {
+      "mean_0_30": 28.23,
+      "by_depth": {
+       "0-5cm": 40.6,
+       "5-15cm": 23.6,
+       "15-30cm": 27.2
+      },
+      "uncertainty_0_5": 113,
+      "unit": "g/kg"
+     }
+    }
+   },
+   "field_pixel": {
+    "requested": [
+     -17.6155,
+     -71.2588
+    ],
+    "used": [
+     -17.6155,
+     -71.2588
+    ],
+    "offset_m": 0,
+    "values": {
+     "bdod": {
+      "mean_0_30": 1.31,
+      "by_depth": {
+       "0-5cm": 1.28,
+       "5-15cm": 1.31,
+       "15-30cm": 1.32
+      },
+      "uncertainty_0_5": 9,
+      "unit": "kg/dm\u00b3"
+     },
+     "clay": {
+      "mean_0_30": 14.15,
+      "by_depth": {
+       "0-5cm": 13.5,
+       "5-15cm": 14.4,
+       "15-30cm": 14.2
+      },
+      "uncertainty_0_5": 142,
+      "unit": "%"
+     },
+     "phh2o": {
+      "mean_0_30": 7.8,
+      "by_depth": {
+       "0-5cm": 7.8,
+       "5-15cm": 7.8,
+       "15-30cm": 7.8
+      },
+      "uncertainty_0_5": 4,
+      "unit": "-"
+     },
+     "sand": {
+      "mean_0_30": 66.52,
+      "by_depth": {
+       "0-5cm": 67.1,
+       "5-15cm": 66.7,
+       "15-30cm": 66.2
+      },
+      "uncertainty_0_5": 10,
+      "unit": "%"
+     },
+     "silt": {
+      "mean_0_30": 19.35,
+      "by_depth": {
+       "0-5cm": 19.5,
+       "5-15cm": 18.9,
+       "15-30cm": 19.6
+      },
+      "uncertainty_0_5": 60,
+      "unit": "%"
+     },
+     "soc": {
+      "mean_0_30": 25.73,
+      "by_depth": {
+       "0-5cm": 38.4,
+       "5-15cm": 21.4,
+       "15-30cm": 24.4
+      },
+      "uncertainty_0_5": 163,
+      "unit": "g/kg"
+     }
+    }
+   }
+  }
+ }
+}

@@ -143,11 +143,10 @@ Resulting crop water need (POWER 2001–2025):
   - Label the soil benefit as "agronomic expectation, not measured".
 
 ### 10. Soil data for Moquegua (SoilGrids null) and salinity labeling
-- Not pulled in this run. Alternatives, in order:
-  1. INIA / MIDAGRI soil studies for the Moquegua and Ilo valleys (e.g. the "Estudio de suelos" of the Proyecto Especial Regional Pasto Grande, if obtainable from the regional government).
-  2. FAO HWSD v2.0 (1 km, global; coarse but never null).
-  3. ISRIC WoSIS soil profile points, if any are near.
-  (IGAC is Colombian and not applicable.)
+- **Update 2026-11-14: SoilGrids 2.0 is NOT null in Moquegua.** The REST query returned valid 250 m pixels at all three app points and both field pixels (no nearest-pixel search needed). Values are 0–30 cm weighted, labelled NON-NASA, in `data/out/soilgrids.json`:
+  Carumas clay 15.9 / sand 58.3 / silt 25.8 %, SOC 17.8 g/kg, pH 7.18, BD 1.16; Samegua 13.9/62.3/23.8, SOC 12.6, pH 7.93, BD 1.27; El Algarrobal 14.2/66.5/19.4, SOC 25.7 (implausibly high for the hyper-arid coast, treat as unverified), pH 7.80, BD 1.31. All three are sandy loam.
+- Better local source: INIA (2026-08) "¿Qué tan fértiles son los suelos agrícolas de Moquegua?", 2,053 georeferenced samples (pH, P, K, EC, OM, texture): https://repositorio.inia.gob.pe/items/53633680-5a7c-41b5-ad62-d9b4a71c3a18. No downloadable table; request the points near the farms from INIA EEA Moquegua. Fallbacks: FAO HWSD v2.0 (1 km), ISRIC WoSIS profiles, INGEMMET Serie Q soil maps (1:50,000).
+- Slope, frost, Sentinel-2 cover and erosion proxy: see `data/sources-uncertainty-gaps.md`.
 - Salinity: without EC measurements, label it **"riesgo de salinidad (inferido: clima hiperárido + riego por gravedad + sin lluvia de lavado), no medido"**. The physical basis: CHIRPS ~27 mm/yr and ET₀ 1,430–1,490 mm/yr give an aridity index P/ET₀ ≈ 0.02 (hyper-arid < 0.05, UNEP).
 - Recommend one field EC test via the Agencia Agraria.
 

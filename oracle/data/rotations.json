@@ -1,5 +1,5 @@
 {
- "_note": "Each strategy is an average year of a multi-year rotation: `years` are weighted (weights sum to 1). A segment is {crop, start (month 1-12), months}; segments may wrap past December. Months with no crop are bare (or residue-covered). `current: true` marks the existing practice. Irrigated water = gross applied at the field: net need / efficiency (FAO Training Manual 4: surface 0.60, drip 0.90, micro/sprinkler strips 0.75). supply='current': no canal delivery records, so supply = what the current practice applies (Kepler, CONNECT-REAL-DATA §4.3).",
+ "_note": "Each strategy is an average year of a multi-year rotation: `years` are weighted (weights sum to 1). A segment is {crop, start (month 1-12), months}; segments may wrap past December. Months with no crop are bare (or residue-covered). `current: true` marks the existing practice. Irrigated water = gross applied at the field: net need / efficiency (FAO Training Manual 4: surface 0.60, drip 0.90, micro/sprinkler strips 0.75). supply='current': no canal delivery records, so supply = what the current practice applies (Kepler, CONNECT-REAL-DATA §4.3). soilLevers/needs/benefits per strategy feed the cards, soil explainers and the offline re-rank constraints (Apollo W2/W3).",
  "farms": {
   "carumas": {
    "water": "rainfed",
@@ -24,7 +24,31 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "pestCycle"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "Es lo que ya sabe manejar; semilla y mercado conocidos.",
+      "en": "What you already know how to manage; known seed and market."
+     },
+     "why": {
+      "es": "Es lo que se siembra hoy.",
+      "en": "What is planted today."
+     },
+     "gaps": {
+      "es": "Sin datos de rendimiento por parcela.",
+      "en": "No plot-level yield data."
+     },
+     "risks": {
+      "es": "Plagas de suelo acumuladas y menos infiltración.",
+      "en": "Soil pests build up; less infiltration."
+     },
+     "mainRisk": {
+      "es": "Helada jun–ago",
+      "en": "Frost Jun–Aug"
+     }
     },
     {
      "id": "haba-avena",
@@ -63,7 +87,35 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "nfix",
+      "cover",
+      "organicMatter",
+      "pestCycle",
+      "forage"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "La haba fija nitrógeno; la avena-vicia cubre el suelo en la época seca y da forraje; corta el ciclo de plagas de la papa.",
+      "en": "Faba fixes nitrogen; oat-vetch covers the soil in the dry season and gives forage; breaks the potato pest cycle."
+     },
+     "why": {
+      "es": "La haba fija nitrógeno y la avena-vicia cubre el suelo en la época seca, guardando humedad.",
+      "en": "Faba bean fixes nitrogen and oat-vetch covers the soil in the dry season, keeping moisture in."
+     },
+     "gaps": {
+      "es": "Sin ensayos publicados en Carumas: evidencia transferida de otras zonas altoandinas.",
+      "en": "No published trials in Carumas: evidence transferred from other high-Andean areas."
+     },
+     "risks": {
+      "es": "Helada en junio–agosto; disponibilidad local de semilla de vicia.",
+      "en": "Frost in June–August; local vetch seed supply."
+     },
+     "mainRisk": {
+      "es": "Helada sobre la haba",
+      "en": "Frost on faba bean"
+     }
     },
     {
      "id": "tarwi",
@@ -102,7 +154,37 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "nfix",
+      "deepRoot",
+      "droughtTol",
+      "pestCycle",
+      "market"
+     ],
+     "needs": [
+      "tarwi-buyer"
+     ],
+     "benefits": {
+      "es": "El tarwi fija nitrógeno, tiene raíz profunda y tolera la sequía; la cebada diversifica el ingreso.",
+      "en": "Tarwi fixes nitrogen, roots deep and tolerates drought; barley diversifies income."
+     },
+     "why": {
+      "es": "El tarwi es una leguminosa andina tolerante a sequía, de raíz profunda.",
+      "en": "Tarwi is a drought-tolerant, deep-rooted Andean legume."
+     },
+     "gaps": {
+      "es": "Comercialización local en Moquegua no verificada.",
+      "en": "Local market in Moquegua not verified."
+     },
+     "risks": {
+      "es": "Requiere desamargado; más mano de obra.",
+      "en": "Needs debittering; more labor."
+     },
+     "mainRisk": {
+      "es": "Mercado de tarwi",
+      "en": "Tarwi market"
+     }
     },
     {
      "id": "descanso",
@@ -142,7 +224,34 @@
        ]
       }
      ],
-     "infiltrationBonus": 0.15
+     "infiltrationBonus": 0.15,
+     "soilLevers": [
+      "nfix",
+      "cover",
+      "erosion",
+      "organicMatter"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "El descanso con pastos y zanjas guarda agua en el suelo y frena la erosión en la ladera.",
+      "en": "Resting with pasture and trenches keeps water in the soil and slows erosion on the slope."
+     },
+     "why": {
+      "es": "Descanso de la tierra con zanjas de infiltración: máxima agua retenida en la cuenca.",
+      "en": "Fallow with infiltration trenches: the most water kept in the basin."
+     },
+     "gaps": {
+      "es": "Medir la infiltración real requiere puntos en campo.",
+      "en": "Measuring real infiltration needs field points."
+     },
+     "risks": {
+      "es": "Un año sin cosecha de papa en esa parcela.",
+      "en": "One year without a potato harvest on that plot."
+     },
+     "mainRisk": {
+      "es": "Menos ingreso a corto plazo",
+      "en": "Less short-term income"
+     }
     }
    ]
   },
@@ -169,7 +278,33 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "nfix",
+      "cover",
+      "forage"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "Forraje estable todo el año y suelo cubierto; la alfalfa fija nitrógeno.",
+      "en": "Stable year-round forage and covered soil; alfalfa fixes nitrogen."
+     },
+     "why": {
+      "es": "Forraje estable para ganado lechero.",
+      "en": "Steady forage for dairy cattle."
+     },
+     "gaps": {
+      "es": "No sabemos cuánta agua llega realmente en cada turno.",
+      "en": "We don't know how much water each turn actually delivers."
+     },
+     "risks": {
+      "es": "Si Pasto Grande baja, la alfalfa es lo primero que sufre.",
+      "en": "If Pasto Grande drops, alfalfa suffers first."
+     },
+     "mainRisk": {
+      "es": "Turno de agua recortado",
+      "en": "Water turn cut"
+     }
     },
     {
      "id": "maiz-arveja",
@@ -193,7 +328,33 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "nfix",
+      "forage",
+      "pestCycle"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "Sigue dando forraje (maíz chala) y la arveja fija nitrógeno con menos agua.",
+      "en": "Still gives forage (fodder maize) and pea fixes nitrogen with less water."
+     },
+     "why": {
+      "es": "El maíz chala sigue dando forraje y la arveja de temporada fresca pide poca agua y fija nitrógeno.",
+      "en": "Forage maize keeps feed coming; cool-season pea needs little water and fixes nitrogen."
+     },
+     "gaps": {
+      "es": "Rendimientos locales de arveja por confirmar con la Agencia Agraria.",
+      "en": "Local pea yields to confirm with the Agencia Agraria."
+     },
+     "risks": {
+      "es": "Más mano de obra en la cosecha de arveja.",
+      "en": "More labor at pea harvest."
+     },
+     "mainRisk": {
+      "es": "Precio de arveja",
+      "en": "Pea price"
+     }
     },
     {
      "id": "cebada-frijol",
@@ -217,7 +378,33 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "nfix",
+      "pestCycle",
+      "forage"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "La cebada aprovecha el invierno de menor evaporación; el frijol fija nitrógeno.",
+      "en": "Barley uses the low-evaporation winter; bean fixes nitrogen."
+     },
+     "why": {
+      "es": "La cebada de invierno aprovecha los meses de menor evaporación.",
+      "en": "Winter barley uses the low-evaporation months."
+     },
+     "gaps": {
+      "es": "Variedades de frijol para 1,500 m no evaluadas aquí.",
+      "en": "Bean varieties for 1,500 m not tested here."
+     },
+     "risks": {
+      "es": "Golpe de calor en verano.",
+      "en": "Summer heat stress."
+     },
+     "mainRisk": {
+      "es": "Calor sobre el frijol",
+      "en": "Heat on beans"
+     }
     },
     {
      "id": "quinua",
@@ -251,7 +438,36 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "droughtTol",
+      "pestCycle",
+      "market",
+      "nfix"
+     ],
+     "needs": [
+      "quinoa-buyer"
+     ],
+     "benefits": {
+      "es": "La quinua tolera sequía y sal leve y corta ciclos de plagas; vuelve a la alfalfa.",
+      "en": "Quinoa tolerates drought and mild salinity and breaks pest cycles; returns to alfalfa."
+     },
+     "why": {
+      "es": "La quinua tolera sequía y salinidad leve y corta ciclos de plagas.",
+      "en": "Quinoa tolerates drought and mild salinity and breaks pest cycles."
+     },
+     "gaps": {
+      "es": "Comprador local no identificado.",
+      "en": "No local buyer identified."
+     },
+     "risks": {
+      "es": "Precio volátil.",
+      "en": "Volatile price."
+     },
+     "mainRisk": {
+      "es": "Mercado de quinua",
+      "en": "Quinoa market"
+     }
     }
    ],
    "supply": "current",
@@ -281,7 +497,29 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [],
+     "needs": [],
+     "benefits": {
+      "es": "Sin inversión nueva; manejo conocido.",
+      "en": "No new investment; familiar management."
+     },
+     "why": {
+      "es": "Práctica actual.",
+      "en": "Current practice."
+     },
+     "gaps": {
+      "es": "Sin mediciones de sal en el suelo.",
+      "en": "No soil salinity measurements."
+     },
+     "risks": {
+      "es": "Sales acumuladas y estrés en verano.",
+      "en": "Salt build-up and summer stress."
+     },
+     "mainRisk": {
+      "es": "Salinidad",
+      "en": "Salinity"
+     }
     },
     {
      "id": "deficit",
@@ -300,7 +538,31 @@
         }
        ]
       }
-     ]
+     ],
+     "soilLevers": [
+      "droughtTol"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "Ahorra agua sin equipo nuevo, recortando riego en etapas que el olivo tolera.",
+      "en": "Saves water with no new equipment, cutting irrigation in stages the olive tolerates."
+     },
+     "why": {
+      "es": "Menos riego en las etapas en que el olivo lo tolera.",
+      "en": "Less water in growth stages olives tolerate."
+     },
+     "gaps": {
+      "es": "Cultivo perenne: es una estrategia de manejo, no una rotación.",
+      "en": "Perennial crop: a management strategy, not a rotation."
+     },
+     "risks": {
+      "es": "Recortar en floración baja la cosecha.",
+      "en": "Cutting at flowering lowers yield."
+     },
+     "mainRisk": {
+      "es": "Calibrar el estrés",
+      "en": "Calibrating stress"
+     }
     },
     {
      "id": "cover",
@@ -320,7 +582,34 @@
        ]
       }
      ],
-     "coverEfficiency": 0.6
+     "coverEfficiency": 0.6,
+     "soilLevers": [
+      "nfix",
+      "cover",
+      "organicMatter",
+      "erosion"
+     ],
+     "needs": [],
+     "benefits": {
+      "es": "La leguminosa protege el suelo y suma materia orgánica (pero aquí solo crece si se riega).",
+      "en": "The legume protects soil and adds organic matter (but here it only grows if irrigated)."
+     },
+     "why": {
+      "es": "Protege el suelo y aporta nitrógeno en la época de neblina.",
+      "en": "Protects soil and adds nitrogen in the fog season."
+     },
+     "gaps": {
+      "es": "Aporte real de la neblina invernal sin medir.",
+      "en": "Winter fog contribution unmeasured."
+     },
+     "risks": {
+      "es": "En el desierto la cobertura compite por agua.",
+      "en": "In the desert a cover crop competes for water."
+     },
+     "mainRisk": {
+      "es": "Gasta más agua",
+      "en": "Uses more water"
+     }
     },
     {
      "id": "drip",
@@ -341,7 +630,35 @@
       }
      ],
      "efficiency": 0.9,
-     "coverEfficiency": 0.75
+     "coverEfficiency": 0.75,
+     "soilLevers": [
+      "cover",
+      "organicMatter",
+      "nfix"
+     ],
+     "needs": [
+      "drip-kit"
+     ],
+     "benefits": {
+      "es": "El goteo pone el agua al pie del árbol y la cobertura en franjas cuida el suelo con poca agua extra.",
+      "en": "Drip puts water at the tree and strip cover protects soil with little extra water."
+     },
+     "why": {
+      "es": "Agua al pie del árbol y cobertura solo entre hileras.",
+      "en": "Water at the tree base, cover only between rows."
+     },
+     "gaps": {
+      "es": "Costo del goteo sin financiamiento.",
+      "en": "Drip cost unfunded."
+     },
+     "risks": {
+      "es": "Goteros se tapan con agua salobre.",
+      "en": "Emitters clog with brackish water."
+     },
+     "mainRisk": {
+      "es": "Inversión inicial",
+      "en": "Upfront cost"
+     }
     }
    ],
    "supply": "current",

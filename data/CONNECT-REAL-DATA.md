@@ -183,7 +183,8 @@ Put these values into the CERES prompt's `<<FARM_CONTEXT>>` (`oracle/scripts/ret
 | 584, 596, 626 | strategy text naming ECOSTRESS | OK as *method* descriptions ("would be guided by…"); not observations |
 | 679, 692 | "HLS · NDVI stable", "ECOSTRESS ESI · normal range" | ESI was not pulled. Remove the ESI check or mark it "pendiente" |
 
-### 4.3 El Algarrobal fix (single source of truth)
+### 4.3 El Algarrobal fix (single source of truth): FINAL, 2026-11-14
+> **Status: final.** The numbers below are re-verified against `data/out/algarrobal.json → strategies_recomputed` after the CHIRPS/POWER QC rerun. The patch sits in `data/patched/ceres-ai/` (diff: `data/patched/algarrobal-fix.diff`, 127 lines) and has **not** been copied over `/workspace/ceres-ai/` yet. Apply it as in §1 step 2. New context from the extension layers: El Algarrobal has 0 frost days and ~0 days of rain over 10 mm, so the May–Sep strip cover faces no frost or erosion constraint. Its only cost is the extra water already counted in 12,890.
 Origin of the conflict, traced in code:
 - **12,500 m³/ha/yr** = `app.js` l.549 hand-typed `water: 12500`. It also equals `annual()` (`app.js` l.812: Σ illustrative `et` [41.7 mm/day·months] × 30 × 10 = 12,510). So it is an illustrative crop-ET number, not an engine output.
 - **8,068 m³/ha/yr** = `si-data.js` algarrobal `compare.strategies[current].water.p50 = 8067.6`, output of the missing `earth_oracle` engine on **synthetic** climate.
@@ -301,3 +302,11 @@ The token is read from the environment and never printed. Don't write it to any 
 - [ ] Samegua temperature-based numbers are labeled (POWER cell mismatch) or come from ERA5-Land.
 - [ ] `python data/build_evidence.py` reruns cleanly; `node oracle/build-attestation.mjs evidence/algarrobal-202610.json --chain 880024` produces a digest offline. Do **not** sign or send.
 - [ ] Spot-check one value by hand, e.g. `data/out/algarrobal_daily.csv` October 2026 ET0 sum = evidence `et0_mm` (142.9).
+
+## 10. Extension layers (soil, Sentinel-2 cover, frost, slope, erosion), added 2026-11-14
+- File: `data/out/risk_extensions.json` (`farms.<id>.{soil,cover,frost,slope,erosion}`), built by `data/partner/risk_build.py`. Sources and caveats: `data/sources-uncertainty-gaps.md`.
+- Each evidence JSON now has a top-level `extensions` block (soil, cover for that month with S2 items, frost that month plus climatology, slope, erosion proxy). Required fields (`farmKey, period, revision, indicators, engine`) are unchanged. `build-attestation.mjs` still reads only those, and the block is included in the canonical `dataHash`.
+- UI suggestions: Carumas card "Suelo desnudo Sep–Ene · ventana de erosión Dic–Ene (pendiente 16°)"; frost card "Heladas (<2 °C) ~24 días/año, pico Jul" from `frost[preferred]`; soil chip "Franco arenoso · pH 7.2 (SoilGrids, no NASA)".
+- Citations: Sentinel-2 "Contains modified Copernicus Sentinel data 2024–2026 (ESA), via Element84 Earth Search"; SoilGrids "Poggio et al. 2021, SoilGrids 2.0, ISRIC (CC-BY 4.0)"; ERA5 "Hersbach et al. 2020 / Muñoz-Sabater et al. 2021, ERA5(-Land), via Open-Meteo"; SRTM "NASA JPL (2013) SRTM GL1 v3, via OpenTopoData".
+- Frost: use `frost.preferred`. Never show raw POWER Tmin for Carumas or Samegua, because that cell sits at 3,851 m.
+- Erosion: show it as a relative rank (high, medium, low), not a number. IMERG is blocked by the GES DISC EULA.

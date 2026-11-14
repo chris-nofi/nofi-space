@@ -58,3 +58,16 @@ Add new results below as tasks complete.
 | Kepler §9 checklist | `node --check app.js` OK; `CERES_NASA_DATA.farms` has 3 keys; El Algarrobal overview, strategy SUGERIDA, SI top rank and CERES text all say drip + strip cover, 12,882 m³/ha, −24.5 % vs 17,064; no "ECOSTRESS/HLS muestra/shows" strings; climate labeled; citations under charts; CHIRPS rain with POWER/ERA5 range; Samegua temperature from ERA5-Land; spot-check El Algarrobal Oct 2026 ET₀ = 142.9 mm |
 | Site headless | 5 pages × 3 farms, no runtime errors, no illustrative-data strings |
 | Not done | Retell prompt (CERES reads live tools, no static prompt to regenerate); evidence hash vs `build-attestation.mjs` unconfirmed; no signing or transactions |
+
+## Challenge alignment (Sat 14 Nov 2026, ~03:00 Peru)
+- Kepler v2 data package imported: HLS, provisional field pixels, SoilGrids, Sentinel-2, frost, slope, erosion. 12 evidence files with extensions.
+- `pytest` 51 passed.
+- `node site/tests/consistency.mjs`: all checks pass.
+- Headless acceptance:
+  - offline re-rank changes the top pick on the SI and Strategies views
+  - no-drip flag works
+  - CERES summary follows the re-rank
+  - season timeline, soil, frost and slope cards, and glossary render
+  - farmer ES has no crypto words and no "Agua Clara"
+  - no runtime errors
+- Status per item: `docs/11_ALIGNMENT_STATUS.md`.
