@@ -183,6 +183,16 @@ function farmContext(D, farmId, lang) {
   return `CONTEXTO: el usuario está viendo la parcela '${f.id}' (${f.label?.es}), ${f.crop?.es ?? ""}, ${f.ha} ha, ${Math.round(f.elevation_m ?? 0)} m. Parcelas disponibles: ${names}. Idioma preferido: ${lang}. Usa tus herramientas con este farm_id salvo que el usuario hable de otra parcela.`;
 }
 
+// Slider priorities from the /app drawer (water, soil, income), so CERES re-ranks the same way the farmer sees it.
+export function priorityContext(p) {
+  if (!p || typeof p !== "object") return "";
+  const n = (v) => (typeof v === "number" && Number.isFinite(v) && v >= 0 && v <= 1 ? v : null);
+  const w = n(p.water), so = n(p.soil), inc = n(p.income);
+  if (w === null || so === null || inc === null || w + so + inc === 0) return "";
+  const pct = (v) => Math.round(v * 100);
+  return `\nPRIORIDADES DEL USUARIO (deslizadores del panel): agua ${pct(w)}, suelo ${pct(so)}, ingreso ${pct(inc)}. Si hablas de la mejor opción, llama a get_farm_analysis con water=${w}, soil=${so}, income=${inc} y usa ranking_with_your_priorities. Si tu ranking no coincide con la opción que el panel muestra primero, dilo con claridad: el panel ordena con índices de ejemplo y el motor SI también pesa déficit hídrico y riesgo.`;
+}
+
 // Questions asked by voice are answered out loud: short, warm, spoken sentences (no lists, symbols or hashes).
 const VOICE_STYLE = {
   es: "MODO VOZ: tu respuesta se leerá en voz alta. Habla como una persona cercana y cálida: 2 a 4 frases cortas, máximo unas 70 palabras, sin listas, viñetas, flechas, símbolos ni códigos o hashes. Di los números como se dicen (\"unos 126 milímetros al año\"). Si hay más detalle, ofrece contarlo con una pregunta corta al final. Mantén el recordatorio de revisarlo con la Agencia Agraria o INIA cuando des una recomendación.",
@@ -231,7 +241,7 @@ export function createChatHandler({ data, env = process.env, fetchImpl = fetch, 
 
     const params = {
       model: env.CERES_TEXT_MODEL || DEFAULT_MODEL, max_tokens: 1200, tools: TOOLS,
-      system: [...system, { type: "text", text: farmContext(data, farmId, lang) + (body.mode === "voice" ? "\n\n" + VOICE_STYLE[lang] : "") }],
+      system: [...system, { type: "text", text: farmContext(data, farmId, lang) + priorityContext(body.priorities) + (body.mode === "voice" ? "\n\n" + VOICE_STYLE[lang] : "") }],
     };
     const trace = [];
     try {

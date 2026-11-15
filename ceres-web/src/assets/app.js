@@ -1,6 +1,7 @@
 // /app — Google Maps field dashboard + field drawer (spec: mentor/farm-map-x402-plan.md §1–§3).
 import { loadSite, scoreFor, band, fmt, L, esc, periodLabel, rankStrategies, verifyOnChain } from "./data.js";
 import { mountFarmMap } from "./maps.js";
+import { mountCeres, stopCeres } from "./ceres-chat.js";
 
 const cfg = window.CERES_CONFIG ?? {};
 const T = {
@@ -16,7 +17,7 @@ const T = {
     season: "Temporada (12 meses)", bare: "suelo desnudo (NDVI < umbral)", frost: "≥5 días con helada (<2 °C)", ndvi: "verdor NDVI",
     record: "Registro verificable", anchored: "Quedó un registro verificable de este puntaje y de la evidencia. Cualquiera puede comprobar que esos datos no se cambiaron.",
     notAnchored: "Aún no anclado. La evidencia ya tiene su huella; falta guardarla en el registro.", checking: "Comprobando registro…", noReg: "Registro aún no desplegado.",
-    seeRecord: "Ver registro", fingerprint: "Huella de la evidencia", talk: "Pregúntale a CERES por voz, en español", full: "Análisis completo",
+    seeRecord: "Ver registro", fingerprint: "Huella de la evidencia", full: "Análisis completo (panel anterior)",
     pixel: "píxel de cultivo (provisional; confirmar con el agricultor)", apppt: "punto de la app", judges: "Para jurados / API",
     loadErr: "No se pudieron cargar los datos.",
   },
@@ -32,7 +33,7 @@ const T = {
     season: "Season (12 months)", bare: "bare soil (NDVI < threshold)", frost: "≥5 frost days (<2 °C)", ndvi: "NDVI greenness",
     record: "Verifiable record", anchored: "A verifiable record of this score's evidence was saved. Anyone can check the data was not changed.",
     notAnchored: "Not anchored yet. The evidence already has its fingerprint; it still has to be written to the registry.", checking: "Checking record…", noReg: "Registry not deployed yet.",
-    seeRecord: "View record", fingerprint: "Evidence fingerprint", talk: "Ask CERES by voice, in Spanish", full: "Full analysis",
+    seeRecord: "View record", fingerprint: "Evidence fingerprint", full: "Full analysis (previous dashboard)",
     pixel: "cultivation pixel (provisional; confirm with the farmer)", apppt: "app point", judges: "For judges / API",
     loadErr: "Could not load the data.",
   },
@@ -113,9 +114,20 @@ function strategiesSection(farmId) {
     <p><small class="muted">${tt.pri}</small></p>
     <div class="sliders" id="sliders">${slider("water", tt.priW)}${slider("soil", tt.priS)}${slider("income", tt.priI)}</div>
     <div id="cards">${cards}</div>
+    ${disagree(S, ranked)}
     <p><small class="dim">${esc(S.waterSource)}</small></p>
     ${S.engine?.confidence ? `<p><small class="dim">${state.lang === "es" ? "Confianza del motor" : "Engine confidence"}: ${esc(S.engine.confidence)}${S.engine.basis ? ` · ${esc(S.engine.basis)}` : ""}</small></p>` : ""}
   </section>`;
+}
+
+// When the slider ranking and the SI engine's pick differ, say so instead of showing two silent "winners".
+function disagree(S, ranked) {
+  const pick = S.engine?.pick && S.list.find(s => s.id === S.engine.pick);
+  if (!pick || ranked[0]?.id === pick.id) return "";
+  const a = esc(L(ranked[0].name, state.lang)), b = esc(L(pick.name, state.lang));
+  return `<p class="note" style="margin:4px 0 10px"><small>${state.lang === "es"
+    ? `Con tus prioridades, la nº 1 es <b>${a}</b>. El motor SI sugiere <b>${b}</b> porque también pesa el déficit hídrico y el riesgo modelados, que no salen en estas tarjetas. Las cifras de esta chacra aún son datos de ejemplo: revísalo con la Agencia Agraria o el INIA.`
+    : `With your priorities, #1 is <b>${a}</b>. The SI engine suggests <b>${b}</b> because it also weighs modelled water deficit and risk, which these cards don't show. This field's figures are still example data: check with the Agencia Agraria or INIA.`}</small></p>`;
 }
 
 function seasonSection(farmId) {
@@ -171,10 +183,10 @@ async function renderDrawer() {
     ${/PENDING|PARTIAL/i.test(f.fieldPixelStatus ?? "") ? `<p class="note warnbox" style="margin-top:12px"><small>${esc(f.fieldPixelStatus)}</small></p>` : ""}
     ${scoreSection(sc)}
     ${strategiesSection(f.id)}
+    <section class="dsec" id="ceres" aria-label="CERES"><div id="ceres-chat"></div>
+      <p style="margin-top:10px"><small><a href="/legacy/?farm=${esc(f.id)}">${tt.full}</a>${state.lang === "en" ? ` · <a href="/pagar/">${tt.judges} →</a> · <a href="/api-docs/">API docs</a>` : ""}</small></p></section>
     ${seasonSection(f.id)}
     ${recordSection(sc)}
-    <section class="dsec"><h2>CERES</h2><p><a class="btn" href="/legacy/?farm=${esc(f.id)}&ceres=1">🎙 ${tt.talk}</a> <a class="btn ghost" href="/legacy/?farm=${esc(f.id)}">${tt.full}</a></p>
-      ${state.lang === "en" ? `<p><small><a href="/pagar/">${tt.judges} →</a> · <a href="/api-docs/">API docs</a></small></p>` : ""}</section>
   </div>`;
   $("#close").addEventListener("click", () => openFarm(null));
   $("#period").addEventListener("change", (e) => { state.period = Number(e.target.value); renderDrawer(); });
@@ -185,11 +197,27 @@ async function renderDrawer() {
     const tmp = document.createElement("div"); tmp.innerHTML = strategiesSection(f.id);
     $("#cards").innerHTML = tmp.querySelector("#cards").innerHTML;
     void S;
+    mountCeresFor(f, sc);
   }));
+  mountCeresFor(f, sc);
   checkRecord(sc);
 }
 
+// CERES in the drawer, pre-loaded with the open farm's score and the #1 option the farmer sees with their sliders.
+function mountCeresFor(f, sc) {
+  const el = document.getElementById("ceres-chat");
+  if (!el) return;
+  mountCeres(el, { farmId: f.id, lang: state.lang, ctx: () => {
+    const S = state.site.strategies[f.id];
+    const top = S ? rankStrategies(S.list, state.pri ?? S.defaultPriorities)[0] : null;
+    return { farmName: L(f.label, state.lang), score: sc.score.score, confidence: sc.score.confidence, periodLabel: periodLabel(sc.meta.period, state.lang),
+      topOption: top ? L(top.name, state.lang) : "—", enginePick: S?.engine?.pick && top?.id !== S.engine.pick ? L(S.list.find(x => x.id === S.engine.pick)?.name, state.lang) : null,
+      priorities: state.pri ? { water: state.pri.water, soil: state.pri.soil, income: state.pri.income } : null };
+  } });
+}
+
 function openFarm(id) {
+  if (id !== state.farm) stopCeres();
   state.farm = id; state.period = null; state.pri = null;
   const url = new URL(location.href);
   if (id) url.searchParams.set("farm", id); else url.searchParams.delete("farm");
@@ -199,6 +227,15 @@ function openFarm(id) {
   renderDrawer().catch(e => { $("#drawer").innerHTML = `<div class="empty">${t().loadErr} ${esc(e.message)}</div>`; });
   if (id && matchMedia("(max-width:900px)").matches) $("#drawer").scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
+// Nav "Talk to CERES": open a field if none is open (El Algarrobal, the anchored one), then jump to CERES in the drawer.
+document.querySelector("[data-ceres-nav]")?.addEventListener("click", async (e) => {
+  e.preventDefault();
+  if (!state.site) return;
+  if (!state.farm) openFarm("algarrobal");
+  for (let i = 0; i < 40 && !document.getElementById("ceres-chat")?.childElementCount; i++) await new Promise(r => setTimeout(r, 50));
+  document.getElementById("ceres")?.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 $("#lang").addEventListener("click", async () => {
   state.lang = state.lang === "es" ? "en" : "es"; LS.set("ceres.lang", state.lang);

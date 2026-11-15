@@ -128,3 +128,14 @@ test("model API failure → 502 without internals", async () => {
     assert.deepEqual(await r.json(), { error: "model_unavailable" });
   } finally { console.error = orig; }
 });
+
+test("slider priorities from /app reach the model as context; junk priorities are ignored", async () => {
+  const { priorityContext } = await import("../netlify/ceres-chat.mjs");
+  assert.match(priorityContext({ water: 0.4, soil: 0.25, income: 0.25 }), /agua 40, suelo 25, ingreso 25/);
+  for (const bad of [null, "x", { water: 2, soil: 0, income: 0 }, { water: "0.4", soil: 0.2, income: 0.1 }, { water: 0, soil: 0, income: 0 }]) assert.equal(priorityContext(bad), "");
+  const fc = fakeClaude();
+  await createChatHandler({ data, env: { ANTHROPIC_API_KEY: "k" }, fetchImpl: fc.fetchImpl })(post({ farmId: "carumas", priorities: { water: 0.7, soil: 0.2, income: 0.1 }, mode: "voice", messages: [{ role: "user", content: "hola" }] }));
+  const sys = fc.calls[0].req.system.map(s => s.text).join("\n");
+  assert.match(sys, /PRIORIDADES DEL USUARIO/);
+  assert.match(sys, /MODO VOZ/);
+});

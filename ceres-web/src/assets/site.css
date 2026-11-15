@@ -156,3 +156,50 @@ table.t th{color:var(--muted);font-weight:600}
 .formmsg{min-height:1.4em;font-size:.9rem;margin:6px 0 0}
 .formmsg.ok{color:var(--ok)} .formmsg.err{color:var(--coral)}
 section[id]{scroll-margin-top:72px}
+
+/* CERES in the /app drawer (C1): chat + voice on the dark theme. */
+.cc{background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:14px;display:grid;gap:10px}
+.cc-head{display:flex;align-items:center;gap:10px}
+.cc-head b{display:block;letter-spacing:.14em;font-size:.86rem;color:var(--mint)}
+.cc-head small{display:block;color:var(--muted);font-size:.78rem}
+.cc-orb{width:34px;height:34px;border-radius:50%;flex:none;background:radial-gradient(circle at 34% 30%,#e9fff9 0,#5af1d3 22%,#138d9e 60%,#0b3543 100%);box-shadow:0 0 0 3px rgba(90,241,211,.18)}
+.cc-orb.talking{animation:cc-breathe 1.6s ease-in-out infinite}
+.cc-orb.listening{box-shadow:0 0 0 4px rgba(240,138,126,.45)}
+.cc-talk{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:14px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;border:1px solid rgba(125,240,215,.35);background:linear-gradient(135deg,#0f6b72 0%,#0b4452 100%);box-shadow:0 10px 24px -14px rgba(0,0,0,.7);transition:transform .15s,border-color .2s}
+.cc-talk:hover{transform:translateY(-1px);border-color:var(--mint)}
+.cc-talk-ic{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;flex:none;background:var(--mint);color:var(--navy)}
+.cc-talk-ic svg{width:22px;height:22px}
+.cc-talk-tx{display:grid;gap:2px;min-width:0}
+.cc-talk-tx b{font-size:1rem}
+.cc-talk-tx small{font-size:.76rem;color:#a8efe0}
+.cc-talk.listening .cc-talk-ic{background:var(--coral);color:#3b0e08;animation:cc-ping 1.4s ease-out infinite}
+.cc-wave{margin-left:auto;display:flex;align-items:center;gap:3px;height:22px}
+.cc-wave i{display:block;width:4px;height:8px;border-radius:2px;background:var(--mint);animation:cc-wave 1s ease-in-out infinite}
+.cc-wave i:nth-child(2){animation-delay:.15s}.cc-wave i:nth-child(3){animation-delay:.3s}.cc-wave i:nth-child(4){animation-delay:.45s}
+.cc-log{display:grid;gap:8px;align-content:start;max-height:min(420px,55vh);min-height:120px;overflow-y:auto;padding:10px;background:var(--bg2);border:1px solid var(--line);border-radius:12px}
+.cc-log p{margin:0;font-size:.9rem;line-height:1.5;padding:8px 11px;border-radius:12px;max-width:90%;white-space:pre-wrap}
+.cc-log p.u{justify-self:end;background:var(--teal-brand);color:#fff}
+.cc-log p.c{justify-self:start;background:var(--panel2);border:1px solid var(--line2);color:var(--ink)}
+.cc-log p.thinking{color:var(--muted)}
+.cc-log p.interim{opacity:.65;font-style:italic}
+.cc-msg{display:grid;gap:5px;justify-items:start}
+.cc-foot{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cc-say{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 8px;border-radius:999px;font:700 .76rem var(--font);color:var(--mint);background:rgba(125,240,215,.08);border:1px solid rgba(125,240,215,.3);cursor:pointer}
+.cc-say svg{width:15px;height:15px}
+.cc-say:hover{background:rgba(125,240,215,.16)}
+.cc-say.on{background:var(--mint);color:var(--navy)}
+.cc-proof{font-size:.72rem;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:2px 8px}
+.cc-err{color:var(--coral)!important;font-size:.84rem}
+.cc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.cc-chips button{flex:none;white-space:nowrap;font:600 .78rem var(--font);color:var(--ink);background:transparent;border:1px solid var(--line2);border-radius:999px;padding:6px 11px;cursor:pointer}
+.cc-chips button:hover{border-color:var(--mint)}
+.cc-chips button:disabled,.cc-form :disabled{opacity:.5;cursor:not-allowed}
+.cc-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}
+.cc-form input{min-width:0;font:inherit;font-size:.92rem;color:var(--ink);background:var(--bg2);border:1px solid var(--line2);border-radius:10px;padding:10px 12px}
+.cc-form input:focus{outline:none;border-color:var(--mint)}
+.cc-safe{margin:0;font-size:.74rem;color:var(--dim)}
+.cc-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@keyframes cc-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08);box-shadow:0 0 0 8px rgba(90,241,211,.25)}}
+@keyframes cc-ping{0%{box-shadow:0 0 0 0 rgba(240,138,126,.7)}100%{box-shadow:0 0 0 14px rgba(240,138,126,0)}}
+@keyframes cc-wave{0%,100%{height:6px}50%{height:20px}}
+@media (prefers-reduced-motion:reduce){.cc-orb.talking,.cc-talk.listening .cc-talk-ic,.cc-wave i{animation:none}}
