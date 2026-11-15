@@ -6,6 +6,9 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+  # The build also reads ../site (legacy dashboard + CERES chat), ../ceres-ai, ../avalanche and ../oracle, so a change
+  # in any of them must rebuild (by default Netlify only watches the base directory). Exit 0 = skip, 1 = build.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../site ../ceres-ai ../avalanche ../oracle"
 
 [build.environment]
   NODE_VERSION = "20"
