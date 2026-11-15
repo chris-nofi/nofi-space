@@ -2,16 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#06171d">
+<meta name="theme-color" content="#0D303E">
 <title>Ceres · x402 field API</title>
 <meta name="description" content="Pay-per-request NASA farm evidence and Ceres Field Scores over x402 on Avalanche Fuji (testnet).">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">
+<link rel="icon" href="/assets/brand/Ceres_Ventures_App_Icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/Ceres_Favicon_32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/brand/Ceres_Apple_Touch_Icon_180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="CERES Ventures by NØFI Labs">
+<meta property="og:image" content="https://ceres-ventures-preview.netlify.app/assets/brand/Ceres_Ventures_Logo_Dark.png">
+<meta property="og:image:alt" content="CERES Ventures by NØFI Labs">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
 <style>main{padding:28px 0 64px} h2{margin-top:36px} .kv{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;font-size:.92rem} .kv dt{color:var(--muted)} .kv dd{margin:0;word-break:break-all}</style>
 <script src="/assets/config.js"></script>
 </head>
 <body>
 <header class="nav"><div class="wrap">
-  <a class="brand" href="/"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#103a49"/><path d="M32 9C24 21 16 29 16 40a16 16 0 0 0 32 0C48 29 40 21 32 9Z" fill="none" stroke="#9df5e4" stroke-width="3.5"/><path d="M22 41c4-5 7-5 10 0 4 5 8 5 12 0" stroke="#83d7dc" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>CERES</a>
+  <a class="brand" href="/" aria-label="CERES Ventures by NØFI Labs · inicio / home"><img class="brand-full" src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="" width="153" height="50"><img class="brand-icon" src="/assets/brand/Ceres_Ventures_App_Icon.svg" alt="" width="34" height="34"></a>
   <div class="nav-actions"><a class="btn sm" href="/pagar/">Try it</a></div>
 </div></header>
 <main class="wrap">
@@ -77,6 +85,7 @@ curl -i $BASE/v1/field/algarrobal/score -H "PAYMENT-SIGNATURE: base64({x402Versi
   </dl>
   <p class="note" style="margin-top:24px">Running on Fuji C-Chain today. The same contracts deploy unchanged to the NØFI L1 (880024), which gives us stablecoin gas and an oracle allowlist.</p>
 </main>
+<footer class="slim"><div class="wrap foot-row"><a class="foot-brand" href="/"><img src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="CERES Ventures by NØFI Labs" width="245" height="80" loading="lazy"></a><p><a href="/">Ceres Ventures</a> · <a href="/app/">Map</a> · <a href="/verify/">Verify</a> · <a href="/api-docs/">API</a> · <a href="/pagar/">x402</a></p></div></footer>
 <script>
   const base = (window.CERES_CONFIG?.oracleBase || location.origin);
   document.getElementById("base").textContent = base;

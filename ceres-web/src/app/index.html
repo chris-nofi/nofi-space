@@ -3,10 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06171d">
+<meta name="theme-color" content="#0D303E">
 <meta name="description" content="Mapa de chacras de Moquegua con puntaje de suelo y agua a partir de datos NASA, opciones de rotación y registro verificable.">
 <title>Ceres · Mapa de chacras</title>
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/Ceres_Ventures_App_Icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/Ceres_Favicon_32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/brand/Ceres_Apple_Touch_Icon_180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="CERES Ventures by NØFI Labs">
+<meta property="og:image" content="https://ceres-ventures-preview.netlify.app/assets/brand/Ceres_Ventures_Logo_Dark.png">
+<meta property="og:image:alt" content="CERES Ventures by NØFI Labs">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
   html,body{height:100%}
@@ -15,8 +22,11 @@
   .shell{flex:1;display:grid;grid-template-columns:1fr 440px;min-height:0}
   .mapcol{position:relative;min-height:0}
   .mapcol .mapbox{position:absolute;inset:0;border-radius:0;border:0}
+  .mapcol .map-fallback{padding-top:68px}
+  .navtitle{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  @media (max-width:440px){.navtitle{display:none}}
   .farmbar{position:absolute;z-index:5;top:12px;left:12px;right:12px;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
-  .farmbar button{pointer-events:auto;display:flex;align-items:center;gap:8px;background:rgba(6,23,29,.9);border:1px solid var(--line2);color:var(--ink);border-radius:10px;padding:6px 10px 6px 6px;font:600 .85rem var(--font);cursor:pointer}
+  .farmbar button{pointer-events:auto;display:flex;align-items:center;gap:8px;background:rgba(9,38,50,.92);border:1px solid var(--line2);color:var(--ink);border-radius:10px;padding:6px 10px 6px 6px;font:600 .85rem var(--font);cursor:pointer}
   .farmbar button[aria-pressed="true"]{border-color:var(--mint)}
   .farmbar .badge{min-width:30px;height:30px;font-size:.85rem;border-radius:9px;box-shadow:none}
   .drawer{background:var(--bg2);border-left:1px solid var(--line);overflow-y:auto;min-height:0;overscroll-behavior:contain}
@@ -37,7 +47,7 @@
   .strat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
   .strat.top{border-color:var(--mint)}
   .strat h3{font-size:1rem;margin:0 0 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .strat .rank{font:800 .8rem var(--font);color:#04211f;background:var(--mint);border-radius:6px;padding:1px 7px}
+  .strat .rank{font:800 .8rem var(--font);color:var(--navy);background:var(--mint);border-radius:6px;padding:1px 7px}
   .strat dl{display:grid;grid-template-columns:max-content 1fr;gap:3px 10px;margin:8px 0 0;font-size:.86rem}
   .strat dt{color:var(--dim)} .strat dd{margin:0;color:#cfe3e1}
   .kpis{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem;margin-top:4px}
@@ -57,14 +67,15 @@
     .mapcol{height:56vh;min-height:320px}
     .drawer{border-left:0;border-top:1px solid var(--line);overflow:visible}
   }
+  @media (max-width:600px){.farmbar{flex-wrap:nowrap;overflow-x:auto;pointer-events:auto;scrollbar-width:none;padding-bottom:2px}.farmbar::-webkit-scrollbar{display:none}.farmbar button{flex:none}}
 </style>
 <script src="/assets/config.js"></script>
 </head>
 <body>
 <header class="nav">
   <div class="wrap" style="max-width:none">
-    <a class="brand" href="/"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#103a49"/><path d="M32 9C24 21 16 29 16 40a16 16 0 0 0 32 0C48 29 40 21 32 9Z" fill="none" stroke="#9df5e4" stroke-width="3.5"/><path d="M22 41c4-5 7-5 10 0 4 5 8 5 12 0" stroke="#83d7dc" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>CERES</a>
-    <span class="muted" data-t="title" style="font-size:.9rem">Mapa de chacras</span>
+    <a class="brand" href="/" aria-label="CERES Ventures by NØFI Labs · inicio / home"><img class="brand-full" src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="" width="153" height="50"><img class="brand-icon" src="/assets/brand/Ceres_Ventures_App_Icon.svg" alt="" width="34" height="34"></a>
+    <span class="muted navtitle" data-t="title">Mapa de chacras</span>
     <div class="nav-actions">
       <a class="btn ghost sm" href="/legacy/" data-t="ceres">Hablar con CERES</a>
       <button class="lang" id="lang" type="button" aria-label="Cambiar idioma / Change language">EN</button>

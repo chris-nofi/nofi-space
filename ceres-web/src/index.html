@@ -3,12 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06171d">
+<meta name="theme-color" content="#0D303E">
 <title>Ceres Ventures · NASA field scores for Moquegua</title>
 <meta name="description" content="A map of Moquegua farms, scored with NASA data and recorded so it can be checked. Free for farmers; pay-per-lookup API for insurers, lenders, co-ops and exporters on Avalanche (Fuji testnet).">
 <meta property="og:title" content="Ceres Ventures · NASA field scores for Moquegua">
 <meta property="og:description" content="Each field gets a NASA soil-and-water score and a verifiable record. NASA Space Apps 2026 · Moquegua.">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/Ceres_Ventures_App_Icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/Ceres_Favicon_32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/brand/Ceres_Apple_Touch_Icon_180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="CERES Ventures by NØFI Labs">
+<meta property="og:image" content="https://ceres-ventures-preview.netlify.app/assets/brand/Ceres_Ventures_Logo_Dark.png">
+<meta property="og:image:alt" content="CERES Ventures by NØFI Labs">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
   .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:center}
@@ -34,7 +41,7 @@
 <a class="sr-only" href="#main">Skip to content</a>
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#103a49"/><path d="M32 9C24 21 16 29 16 40a16 16 0 0 0 32 0C48 29 40 21 32 9Z" fill="none" stroke="#9df5e4" stroke-width="3.5"/><path d="M22 41c4-5 7-5 10 0 4 5 8 5 12 0" stroke="#83d7dc" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>CERES VENTURES</a>
+    <a class="brand" href="/" aria-label="CERES Ventures by NØFI Labs · inicio / home"><img class="brand-full" src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="" width="153" height="50"><img class="brand-icon" src="/assets/brand/Ceres_Ventures_App_Icon.svg" alt="" width="34" height="34"></a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#how" data-i="nav.how">How it works</a><a href="#example" data-i="nav.map">The map</a><a href="#data" data-i="nav.data">NASA data</a>
       <a href="#buyers" data-i="nav.buyers">For buyers</a><a href="#verifiable" data-i="nav.ver">Verifiable</a><a href="#api" data-i="nav.builders">For builders</a>
@@ -208,6 +215,7 @@ GET /v1/field/algarrobal/score
 </main>
 
 <footer>
+  <div class="wrap"><a class="foot-brand" href="/"><img src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="CERES Ventures by NØFI Labs" width="245" height="80" loading="lazy"></a></div>
   <div class="wrap grid g2">
     <div>
       <p data-i="foot.attr">Data: NASA (ECOSTRESS, HLS, SMAP, POWER, MODIS, SRTM; GPM IMERG pending), ESA Copernicus Sentinel-2, ECMWF ERA5-Land, ISRIC SoilGrids, CHIRPS (UCSB CHC). Map imagery © Google.</p>

@@ -168,6 +168,8 @@ if (existsSync(join(LEGACY, "dashboard.html"))) {
   const html = readFileSync(join(LEGACY, "dashboard.html"), "utf8").replace(/(src|href)="\/(?!\/|legacy\/)/g, '$1="/legacy/');
   write(join(LDIST, "index.html"), html);
 }
+// Official brand pack, also under /legacy/brand/ (legacy HTML paths are rewritten to /legacy/…).
+cpSync(join(WEB, "src", "assets", "brand"), join(LDIST, "brand"), { recursive: true });
 // Keep the legacy dashboard on the SAME evidence and NASA bundle as the new site (no stale copies).
 if (existsSync(join(LDIST, "evidence"))) for (const f of evidenceFiles) cpSync(join(EVID, f), join(LDIST, "evidence", f));
 if (existsSync(join(LDIST, "ceres-nasa-data.js")) && existsSync(join(SA, "data", "out", "ceres-nasa-data.js"))) cpSync(join(SA, "data", "out", "ceres-nasa-data.js"), join(LDIST, "ceres-nasa-data.js"));
