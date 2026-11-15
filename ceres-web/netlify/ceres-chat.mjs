@@ -5,9 +5,20 @@
 // Needs ANTHROPIC_API_KEY in the Netlify environment (server-side only). Without it the route answers 503 and the
 // widget says the key is not configured.
 
-// Netlify AI Gateway injects ANTHROPIC_API_KEY + ANTHROPIC_BASE_URL into functions; that key only works through the
-// gateway URL. A key you set yourself (no base URL) goes straight to the Anthropic API.
-const apiUrl = (env) => `${String(env.ANTHROPIC_BASE_URL || "https://api.anthropic.com").replace(/\/+$/, "")}/v1/messages`;
+// Model credentials, in order: a key you set yourself (ANTHROPIC_API_KEY without base URL → Anthropic API), the
+// Netlify AI Gateway's injected ANTHROPIC_API_KEY + ANTHROPIC_BASE_URL, or its always-on NETLIFY_AI_GATEWAY_KEY/_URL.
+// Values are read from process.env and from Netlify.env (Functions v2), because injection is per function instance.
+const readVar = (env, k) => env?.[k] || globalThis.Netlify?.env?.get?.(k) || "";
+export function resolveModelAccess(env) {
+  const key = readVar(env, "ANTHROPIC_API_KEY"), base = readVar(env, "ANTHROPIC_BASE_URL");
+  if (key) return { key, url: `${String(base || "https://api.anthropic.com").replace(/\/+$/, "")}/v1/messages`, via: base ? "gateway-anthropic-vars" : "own-key" };
+  const gk = readVar(env, "NETLIFY_AI_GATEWAY_KEY"), gu = readVar(env, "NETLIFY_AI_GATEWAY_URL") || readVar(env, "NETLIFY_AI_GATEWAY_BASE_URL");
+  if (gk && gu) return { key: gk, url: `${String(gu).replace(/\/+$/, "")}/anthropic/v1/messages`, via: "gateway-generic-vars" };
+  return null;
+}
+const presence = (env) => Object.fromEntries(["ANTHROPIC_API_KEY", "ANTHROPIC_BASE_URL", "NETLIFY_AI_GATEWAY_KEY", "NETLIFY_AI_GATEWAY_URL", "NETLIFY_AI_GATEWAY_BASE_URL"]
+  .map(k => [k, Boolean(env?.[k]) ? "process" : globalThis.Netlify?.env?.get?.(k) ? "netlify" : "-"]));
+
 const DEFAULT_MODEL = "claude-sonnet-5-5";
 const MAX_TOOL_ROUNDS = 4;
 const FARM_IDS = ["carumas", "samegua", "algarrobal"];
@@ -188,8 +199,12 @@ export function createChatHandler({ data, env = process.env, fetchImpl = fetch, 
   return async function handle(req) {
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type", "access-control-allow-methods": "POST" } });
     if (req.method !== "POST") return json(405, { error: "method_not_allowed" }, { allow: "POST" });
-    const key = env.ANTHROPIC_API_KEY;
-    if (!key) return json(503, { error: "ceres_not_configured", detail: "ANTHROPIC_API_KEY is not set on this deployment" });
+    const access = resolveModelAccess(env);
+    if (!access) {
+      console.error("ceres chat: no model credentials", JSON.stringify(presence(env)));
+      return json(503, { error: "ceres_not_configured", detail: "No model credentials on this function instance (ANTHROPIC_API_KEY / Netlify AI Gateway)." });
+    }
+    const key = access.key;
 
     // Best-effort abuse guard (per function instance): the endpoint spends model credits.
     const ip = req.headers.get("x-nf-client-connection-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "anon";
@@ -215,9 +230,9 @@ export function createChatHandler({ data, env = process.env, fetchImpl = fetch, 
     const trace = [];
     try {
       for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
-        const r = await fetchImpl(apiUrl(env), { method: "POST", headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" }, body: JSON.stringify({ ...params, messages: history }) });
+        const r = await fetchImpl(access.url, { method: "POST", headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" }, body: JSON.stringify({ ...params, messages: history }) });
         if (!r.ok) {
-          console.error("ceres chat: model API", r.status, (await r.text()).slice(0, 200));
+          console.error("ceres chat: model API", r.status, access.via, (await r.text()).slice(0, 200));
           return json(502, { error: "model_unavailable" });
         }
         const msg = await r.json();

@@ -6,7 +6,7 @@ import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { createChatHandler, makeTools, cleanHistory } from "../netlify/ceres-chat.mjs";
+import { createChatHandler, makeTools, cleanHistory, resolveModelAccess } from "../netlify/ceres-chat.mjs";
 
 const WEB = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DATA = join(WEB, "netlify", "functions", "_x402", "ceres-data.mjs");
@@ -109,6 +109,14 @@ test("Netlify AI Gateway: requests go to ANTHROPIC_BASE_URL when it is set, else
     await createChatHandler({ data, env, fetchImpl: fc.fetchImpl })(post({ farmId: "algarrobal", messages: [{ role: "user", content: "hola" }] }));
     assert.equal(fc.calls[0].url, expected);
   }
+});
+
+test("credential resolution: own key, gateway Anthropic vars, generic gateway vars, none", () => {
+  assert.equal(resolveModelAccess({ ANTHROPIC_API_KEY: "a" }).via, "own-key");
+  assert.equal(resolveModelAccess({ ANTHROPIC_API_KEY: "a", ANTHROPIC_BASE_URL: "https://g/x" }).url, "https://g/x/v1/messages");
+  const g = resolveModelAccess({ NETLIFY_AI_GATEWAY_KEY: "n", NETLIFY_AI_GATEWAY_URL: "https://gw.netlify/" });
+  assert.equal(g.via, "gateway-generic-vars"); assert.equal(g.key, "n");
+  assert.equal(resolveModelAccess({}), null);
 });
 
 test("model API failure → 502 without internals", async () => {
