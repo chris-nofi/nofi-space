@@ -38,6 +38,7 @@ evidence directory, source map or secret → build fails and dist/ is deleted.
 | **Complete canonical evidence record** (indicators with granules/pixels/methods, `_context`, engine, extensions as packaged) + dataHash + proof + receipt | `GET /v1/field/:id/evidence`, alias `/v1/earth/:farm/:period` | x402 (0.05 test USDC) |
 | `/v1/farms`, `/health` | Function | Free, sanitized (no evidence, no secrets) |
 | CERES chat `POST /v1/ceres/chat` | Function (needs `ANTHROPIC_API_KEY`) | Free for farmers; grounded only in the public data above (summaries, strategy model, sanitized SI analysis and climate, season). No tool returns the canonical evidence; buyers are pointed to the Evidence API. Best-effort per-IP rate limit (12 questions / 5 min per instance). |
+| CERES voice `GET/POST /v1/ceres/voice` | Function (natural voice needs `ELEVENLABS_API_KEY`; optional `CERES_VOICE_ID`, `CERES_TTS_MODEL`) | Free for farmers. Speaks text the visitor already has on screen (summary or a CERES answer); hashes and links are not read aloud. Without the key, GET reports `enabled:false` and the widget uses the best browser voice. Voice input uses the browser's speech recognition (Chrome, Edge, Safari); voice questions get short spoken answers (`mode:"voice"`). Rate limit 30 clips / 5 min per IP per instance, 1,500 characters per clip. |
 
 **Honest overlap.** Several values inside a full record are also public in summary form (e.g. the month's NDVI
 median in the season strip, headline indicator values in the legacy dashboard, soil/frost context). What is sold is
@@ -77,7 +78,7 @@ that is an on-chain write and needs owner approval.
 ```bash
 cd avalanche && forge test                      # 28/28
 cd avalanche/x402 && npm ci && npm test         # 27/27 (10 boundary tests + anvil e2e + score)
-cd ceres-web && npm ci && npm test              # 8/8 (fresh guarded build + leak audit + negative controls + function wrapper)
+cd ceres-web && npm ci && npm test              # 23/23 (guarded build + leak audit + chat + voice routes)
 ```
 
 The x402 boundary tests prove: anonymous → 402 with no premium bytes on every paid route; malformed / invalid /

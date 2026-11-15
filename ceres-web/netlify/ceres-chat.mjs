@@ -183,6 +183,12 @@ function farmContext(D, farmId, lang) {
   return `CONTEXTO: el usuario está viendo la parcela '${f.id}' (${f.label?.es}), ${f.crop?.es ?? ""}, ${f.ha} ha, ${Math.round(f.elevation_m ?? 0)} m. Parcelas disponibles: ${names}. Idioma preferido: ${lang}. Usa tus herramientas con este farm_id salvo que el usuario hable de otra parcela.`;
 }
 
+// Questions asked by voice are answered out loud: short, warm, spoken sentences (no lists, symbols or hashes).
+const VOICE_STYLE = {
+  es: "MODO VOZ: tu respuesta se leerá en voz alta. Habla como una persona cercana y cálida: 2 a 4 frases cortas, máximo unas 70 palabras, sin listas, viñetas, flechas, símbolos ni códigos o hashes. Di los números como se dicen (\"unos 126 milímetros al año\"). Si hay más detalle, ofrece contarlo con una pregunta corta al final. Mantén el recordatorio de revisarlo con la Agencia Agraria o INIA cuando des una recomendación.",
+  en: "VOICE MODE: your answer will be read aloud. Speak like a warm, friendly person: 2 to 4 short sentences, about 70 words at most, no lists, bullets, arrows, symbols, codes or hashes. Say numbers the way people say them (\"about 126 millimeters a year\"). If there is more detail, offer it with a short question at the end. Keep the reminder to check with the Agencia Agraria or INIA when you recommend something.",
+};
+
 const json = (status, body, extra = {}) => new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...extra } });
 
 /**
@@ -225,7 +231,7 @@ export function createChatHandler({ data, env = process.env, fetchImpl = fetch, 
 
     const params = {
       model: env.CERES_TEXT_MODEL || DEFAULT_MODEL, max_tokens: 1200, tools: TOOLS,
-      system: [...system, { type: "text", text: farmContext(data, farmId, lang) }],
+      system: [...system, { type: "text", text: farmContext(data, farmId, lang) + (body.mode === "voice" ? "\n\n" + VOICE_STYLE[lang] : "") }],
     };
     const trace = [];
     try {
