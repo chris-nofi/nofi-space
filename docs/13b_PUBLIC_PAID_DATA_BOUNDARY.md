@@ -57,7 +57,7 @@ payment receipt, not exclusive access to NASA numbers.
 ## 4. The on-chain URI of algarrobal/202610
 
 The anchored attestation (tx `0x9bd56d2d…9f21`) records the URI
-`https://ceres-ventures-preview.netlify.app/data/evidence/algarrobal-202610.json`. After release that URL answers
+`https://ceres-ventures-preview.netlify.app/data/evidence/algarrobal-202610.json`. (On 15 Nov the site was renamed to ceres-ventures.netlify.app, so that old host no longer resolves; the same path on the new host answers 410. Revision 1 of this month points its URI at the paid Evidence API on ceres-ventures.netlify.app.) After release that URL answers
 **410** with a bilingual page (`/evidence-moved/`) that explains the Evidence API and the free hash check. The
 `dataHash` is unaffected. If the owner wants the URI itself to point elsewhere, a revision-1 attestation can correct it;
 that is an on-chain write and needs owner approval.

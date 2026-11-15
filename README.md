@@ -47,7 +47,7 @@ The dashboard runs on example data with no network. To use live NASA data, run t
 
 ## Status (15 Nov 2026)
 
-Live: **https://gleaming-sunflower-16cdde.netlify.app** (production; same build at ceres-ventures-preview.netlify.app), built from `ceres-web/` on branch `feat/ceres-web-integration`. Read `docs/12_CERES_SYSTEM_DESIGN.md` and `docs/13b_PUBLIC_PAID_DATA_BOUNDARY.md`.
+Live: **https://ceres-ventures.netlify.app** (submission URL; the same build is also at gleaming-sunflower-16cdde.netlify.app), built from `ceres-web/` on branch `feat/ceres-web-integration`. Read `docs/12_CERES_SYSTEM_DESIGN.md` and `docs/13b_PUBLIC_PAID_DATA_BOUNDARY.md`.
 
 | Piece | State |
 |---|---|
