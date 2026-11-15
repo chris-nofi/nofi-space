@@ -171,7 +171,9 @@ export function createHandler({ cfg = loadConfig(), evidence = loadEvidence(), f
       };
       return send(req, res, 200, body, { "PAYMENT-RESPONSE": b64(s) });
     } catch (e) {
-      return send(req, res, 500, { error: "internal", detail: String(e.message).slice(0, 200) });
+      // Never echo internals (paths, payloads, evidence) to the caller; log a short line server-side only.
+      console.error("oracle internal error:", String(e?.message ?? e).slice(0, 200));
+      return send(req, res, 500, { error: "internal" });
     }
   };
 }

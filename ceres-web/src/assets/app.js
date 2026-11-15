@@ -67,22 +67,11 @@ async function mountMap() {
   if (state.farm) state.map.select?.(state.farm);
 }
 
-function sources(ev) {
-  const i = ev.indicators, x = ev.extensions ?? {}, c = ev._context ?? {};
-  const chips = [];
-  const add = (name, detail) => name && chips.push(`<span class="chip" title="${esc(name)}"><b>${esc(name)}</b>${detail ? ` ${esc(detail)}` : ""}</span>`);
-  add(i.et_mm?.dataset, i.et_mm?.scale);
-  add(i.et0_mm?.dataset?.replace(" (FAO-56 Penman-Monteith)", ""), "FAO-56");
-  add(i.ndvi?.dataset, "30 m");
-  if (x.cover) add("Sentinel-2 L2A (ESA)", "10 m");
-  if (c.soilMoisture) add(c.soilMoisture.dataset, c.soilMoisture.scale?.split(" ")[0]);
-  add(i.precip_mm?.dataset, i.precip_mm?.scale);
-  if (x.slope) add("SRTM GL1", "30 m");
-  if (x.soil) add("SoilGrids 2.0 (NON-NASA)", "250 m");
-  return chips.join("");
+function sources(list) {
+  return (list ?? []).map(c => `<span class="chip" title="${esc(c.name)}"><b>${esc(c.name)}</b>${c.detail ? ` ${esc(c.detail)}` : ""}</span>`).join("");
 }
 
-function scoreSection(sc, ev) {
+function scoreSection(sc) {
   const s = sc.score, tt = t();
   const bars = Object.entries(s.components).map(([k, c]) =>
     `<div class="bar"><span>${esc(tt.comps[k] ?? k)}</span><div class="track" role="img" aria-label="${esc(tt.comps[k] ?? k)}: ${c.value} / 100"><div class="fill" style="width:${Math.max(0, Math.min(100, c.value))}%"></div></div><span class="v">${fmt(c.value, 1, state.lang)}</span></div>`).join("");
@@ -93,7 +82,7 @@ function scoreSection(sc, ev) {
       <small>${tt.of} · <span class="mono">${esc(s.formulaVersion)}</span> · ${esc(periodLabel(s.period, state.lang))}</small></div></div>
     <div class="bars" style="margin-top:14px">${bars}</div>
     ${missing.length ? `<p class="note warnbox" style="margin-top:10px"><small>${state.lang === "es" ? "Sin dato este mes" : "No data this month"}: ${missing.map(k => esc(tt.comps[k])).join(", ")}. ${state.lang === "es" ? "Los pesos se reparten entre los demás componentes." : "Weights are spread over the other components."}</small></p>` : ""}
-    <div class="chips">${sources(ev)}</div>
+    <div class="chips">${sources(s.sources)}</div>
     ${s.confidenceReasons.length ? `<details class="gaps"><summary>${tt.why} (${s.confidenceReasons.length})</summary><ul>${s.confidenceReasons.map(r => `<li>${esc(r)}</li>`).join("")}</ul></details>` : ""}
     <details class="gaps"><summary>${tt.gaps} (${s.gaps.length})</summary><ul>${s.gaps.map(g => `<li>${esc(g)}</li>`).join("")}</ul></details>
     <p><small class="dim">${tt.soilNote}</small></p><p><small class="dim">${tt.disclaimer}</small></p>
@@ -180,7 +169,7 @@ async function renderDrawer() {
       <select id="period" style="margin-left:6px;background:var(--panel);color:var(--ink);border:1px solid var(--line2);border-radius:8px;padding:5px 8px;font:inherit">
         ${periods.map(p => `<option value="${p}" ${p === sc.meta.period ? "selected" : ""}>${esc(periodLabel(p, state.lang))}</option>`).join("")}</select></label>
     ${/PENDING|PARTIAL/i.test(f.fieldPixelStatus ?? "") ? `<p class="note warnbox" style="margin-top:12px"><small>${esc(f.fieldPixelStatus)}</small></p>` : ""}
-    ${scoreSection(sc, sc.ev)}
+    ${scoreSection(sc)}
     ${strategiesSection(f.id)}
     ${seasonSection(f.id)}
     ${recordSection(sc)}

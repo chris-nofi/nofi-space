@@ -28,6 +28,13 @@
   <p class="lead">Look up a Moquegua field's Ceres Field Score or its full evidence bundle. Pay per request in Circle test USDC with an x402 signature; get the data, the Snowtrace payment receipt and the WaterProofRegistry proof.</p>
   <p class="note warnbox"><b>Testnet demo pricing. Not a commercial offer.</b> Farmers use the map and CERES free. We designed the API for insurers, lenders, co-ops and exporters; we have no paying customers on this testnet.</p>
 
+  <h2 id="free-vs-paid">Free vs paid</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Free · public</h3><p class="muted">The <a href="/app/">farm dashboard</a>, monthly headline scores with confidence and data gaps, dataset labels, strategy comparison, season view, and every evidence fingerprint (<code>dataHash</code>) with its on-chain record, checkable at <a href="/verify/">/verify/</a>. Served as precomputed public summaries (<code>/data/public/summaries.json</code>, schema <code>ceres-public-summary.v1</code>).</p></div>
+    <div class="card"><h3>Paid · x402</h3><p class="muted">Machine-readable score with component inputs, weights and quality reasons; and the complete canonical evidence record (source datasets, observation metadata, provenance) whose sha256 is the on-chain fingerprint. Only returned after the payment settles. The complete record is not available from any static URL.</p></div>
+  </div>
+  <p class="note warnbox" style="margin-top:12px"><b>Fuji testnet demonstration.</b> Prices below are test USDC, not commercial prices; commercial pricing will be announced. Source NASA and partner datasets may be public: CERES charges for engineering, validation, standardized delivery and analysis, not for exclusive ownership of satellite data. Records published before this change remain in Git history and past deploys. <a href="/#pricing">Pricing &amp; Access →</a></p>
+
   <h2>Network</h2>
   <dl class="kv" id="net">
     <dt>Network</dt><dd><code>eip155:43113</code> (Avalanche Fuji C-Chain)</dd>
@@ -42,11 +49,11 @@
   <div class="scroll-x"><table class="t">
     <thead><tr><th>Method · path</th><th>Price</th><th>Returns</th></tr></thead>
     <tbody>
-      <tr><td><code>GET /v1/field/{id}/score[?period=YYYYMM]</code></td><td>0.02 USDC</td><td><code>ceres-field-score.v1</code>: score, confidence + reasons, five components with inputs, weights used, data gaps, evidence <code>dataHash</code>, <code>proof</code></td></tr>
-      <tr><td><code>GET /v1/field/{id}/evidence[?period=YYYYMM]</code></td><td>0.05 USDC</td><td>The full evidence JSON and its <code>dataHash</code> (sha256 of the canonical JSON: keys sorted recursively, no whitespace), <code>proof</code></td></tr>
-      <tr><td><code>GET /v1/earth/{farm}/{period}</code></td><td>0.05 USDC</td><td>Older compact shape, kept as an alias</td></tr>
+      <tr id="score"><td><code>GET /v1/field/{id}/score[?period=YYYYMM]</code></td><td>0.02 test USDC</td><td><code>ceres-field-score.v1</code>: score, confidence + reasons, five components with inputs, weights used, data gaps, evidence <code>dataHash</code>, <code>proof</code></td></tr>
+      <tr id="evidence"><td><code>GET /v1/field/{id}/evidence[?period=YYYYMM]</code></td><td>0.05 test USDC</td><td>The full evidence JSON and its <code>dataHash</code> (sha256 of the canonical JSON: keys sorted recursively, no whitespace), <code>proof</code></td></tr>
+      <tr><td><code>GET /v1/earth/{farm}/{period}</code></td><td>0.05 test USDC</td><td>Older compact shape, kept as an alias (paid, not a free alternative)</td></tr>
       <tr><td><code>GET /v1/farms</code></td><td>free</td><td>Fields, months available, routes and prices</td></tr>
-      <tr><td><code>GET /health</code></td><td>free</td><td>Network, asset, payTo, registry, configuration status</td></tr>
+      <tr><td><code>GET /health</code></td><td>free</td><td>Network, asset, payTo, registry, configuration status (no evidence, no secrets)</td></tr>
     </tbody>
   </table></div>
   <p><code>{id}</code> = <code>algarrobal</code> · <code>carumas</code> · <code>samegua</code>. Months: 202607–202610. Default: latest.</p>

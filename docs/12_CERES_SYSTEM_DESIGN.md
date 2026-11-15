@@ -1,5 +1,7 @@
 # Ceres Ventures — System design: how it all works together + the new website
 
+> **Update (14 Nov 2026):** raw evidence is no longer published statically. See `docs/13b_PUBLIC_PAID_DATA_BOUNDARY.md` for the public/paid boundary.
+
 **For:** Codex and Chris's devs. **Written by:** Claude, Saturday 14 November 2026, ~05:45 Peru time (UTC-5).
 **Deadline:** Sunday 15 November 2026, 23:59 Peru time.
 **State:** the website, map, score, x402 API (as a Netlify Function) and Fuji contracts are **built and tested locally**.
@@ -45,7 +47,7 @@ contracts deploy unchanged to the NØFI L1 (880024), which gives us stablecoin g
      ▼           ▼                              ▼                                      ▼
  Website (free)          x402 oracle (paid)                   Attester (oracle key, Chris)        Verify page
  ceres-web/dist          Netlify Function /v1/*               oracle/build-attestation.mjs        /verify/<dataHash>
-  /data/evidence/*.json   same evidence, inlined at build      → cast send attest(...)             raw eth_call
+  /data/public/summaries.json  allowlisted public summaries (see 13b); full evidence only via x402      → cast send attest(...)             raw eth_call
   field-score.mjs ◄──────── same field-score.mjs ──┐                 │                          to Fuji RPC
   (browser computes)      402 → EIP-3009 sig → 200 │                 ▼                               │
                           facilitator settles      │        WaterProofRegistry (Fuji 43113) ◄────────┘
@@ -94,7 +96,7 @@ ceres-ai/                       previous dashboard (Agua Clara) → served uncha
 
 | File (in dist) | Built from | Used by |
 |---|---|---|
-| `/data/evidence/<farm>-<period>.json` | `avalanche/oracle/evidence/` (placeholders refused) | score, drawer chips, verify download |
+| `/data/public/summaries.json` | built from `avalanche/oracle/evidence/` (placeholders refused); the full records are server-only (x402) since 13b | score, drawer chips, verify (hash only) |
 | `/data/index.json` | evidence + `attestations.json` | farm list, periods, `dataHash` per month, `farmId = keccak256(farmKey)`, `verify` selector, anchored txs |
 | `/data/farms.json` | `ceres-ai/app.js` DB + evidence `_context.fieldPixel` | map markers, labels, crop, ha, elevation, region facts (sourced) |
 | `/data/strategies.json` | `ceres-ai/app.js` DB texts; El Algarrobal water from `data/out/ceres-site-data.json` `strategies_recomputed` | drawer options, landing example |

@@ -3,7 +3,7 @@
 // For paid routes set the same env vars as on Netlify (X402_PAY_TO, FACILITATOR_PRIVATE_KEY, …).
 import http from "node:http";
 import { readFileSync, existsSync, statSync } from "node:fs";
-import { join, extname, dirname } from "node:path";
+import { join, extname, dirname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const WEB = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -19,9 +19,13 @@ http.createServer(async (req, res) => {
     const r = await fn(new Request(url, { method: req.method, headers: req.headers, body }));
     res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(Buffer.from(await r.arrayBuffer())); return;
   }
-  let p = decodeURIComponent(url.pathname);
+  // Like a static host without Netlify Forms: no POST handling (the inquiry form must show its error state here).
+  if (!["GET", "HEAD"].includes(req.method)) { res.writeHead(405, { "content-type": "text/plain", allow: "GET, HEAD" }); res.end("method not allowed"); return; }
+  let p;
+  try { p = decodeURIComponent(url.pathname); } catch { res.writeHead(400); res.end("bad path"); return; }
   if (p.startsWith("/verify/") && p !== "/verify/") p = "/verify/index.html";
   let f = join(DIST, p);
+  if (!resolve(f).startsWith(resolve(DIST) + sep) && resolve(f) !== resolve(DIST)) { res.writeHead(404); res.end("not found"); return; }
   if (existsSync(f) && statSync(f).isDirectory()) f = join(f, "index.html");
   if (!existsSync(f) && existsSync(join(DIST, p + "/index.html"))) { res.writeHead(301, { location: p + "/" }); res.end(); return; }
   if (!existsSync(f)) { res.writeHead(404, { "content-type": "text/plain" }); res.end("not found"); return; }

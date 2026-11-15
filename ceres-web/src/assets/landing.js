@@ -55,6 +55,35 @@ const ES = {
   "foot.nasa": "La NASA no respalda este proyecto. Solo red de prueba: no se mueve dinero real.",
   "foot.ai": "Uso de IA: el equipo usó Claude y otras herramientas de IA para escribir código, procesar datos y redactar textos; el equipo revisó los resultados. CERES usa un modelo de IA para explicar resultados; no cambia los datos.",
   "foot.verify": "Verificar un registro",
+  "nav.pricing": "Precios y acceso", "buy.cta2": "Ver precios y acceso",
+  "ex.h2": "Olivar de El Algarrobal, calculado desde su registro de evidencia NASA.",
+  "pr.eyebrow": "Precios y acceso", "pr.h2": "Gratis para agricultores. Diseñado para instituciones.",
+  "pr.lead": "CERES mantiene accesible la información útil para el campo. Las empresas pagan por acceso API estructurado, evidencia verificable detallada e integraciones a medida.",
+  "pr.get": "Qué recibes", "pr.how": "Cómo accedes", "pr.demo": "Demo red de prueba Fuji", "pr.unit": "USDC de prueba por consulta",
+  "pr.tba": "Precio comercial por anunciar", "pr.try": "Probar demo x402", "pr.api.acc": "Pago por consulta x402 vía HTTPS: sin cuenta ni suscripción.",
+  "pr.free.tag": "Gratis", "pr.free.aud": "Agricultores · asesores de campo · cooperativas", "pr.free.h": "Panel agrícola CERES",
+  "pr.free.price": "Gratis", "pr.free.pricenote": "panel público, sin billetera ni registro",
+  "pr.free.g1": "Mapa interactivo de las chacras piloto", "pr.free.g2": "Puntaje mensual con nivel de confianza y vacíos de datos",
+  "pr.free.g3": "Opciones de rotación ordenadas según tus prioridades", "pr.free.g4": "Vista de temporada y comprobación gratuita del registro en cadena",
+  "pr.free.acc": "Ábrelo en cualquier navegador, en español o inglés.", "pr.free.cta": "Explorar mapa gratis",
+  "pr.api.aud": "Desarrolladores · fintechs · cooperativas", "pr.score.h": "API de puntuación de parcelas",
+  "pr.score.g1": "Puntaje legible por máquina para cualquier chacra piloto y mes", "pr.score.g2": "Entradas por componente, pesos y razones de calidad de datos",
+  "pr.score.g3": "Huella de la evidencia, prueba en cadena y recibo de pago", "pr.score.cta": "Ver API",
+  "pr.ev.aud": "Aseguradoras · auditores · analistas · compradores", "pr.ev.h": "API de evidencia verificable",
+  "pr.ev.g1": "El registro de evidencia canónico completo de una chacra y mes", "pr.ev.g2": "Conjuntos de datos fuente, metadatos de observación y procedencia",
+  "pr.ev.g3": "El JSON exacto para recalcular su huella y compararla con la de la cadena", "pr.ev.cta": "Ver API de evidencia",
+  "pr.ent.tag": "A medida", "pr.ent.aud": "Bancos · aseguradoras · plataformas agrícolas", "pr.ent.h": "Inteligencia CERES para empresas",
+  "pr.ent.price": "Propuesta a medida", "pr.ent.pricenote": "definida contigo", "pr.ent.k": "En conversación", "pr.planned": "Planificado",
+  "pr.ent.g1": "Integraciones privadas y exportaciones programadas", "pr.ent.g2": "Analítica de cartera sobre muchas chacras", "pr.ent.g3": "Cobertura de chacras más allá del piloto",
+  "pr.ent.acc": "Cuéntanos tu caso de uso; te respondemos qué es posible hoy y qué no.", "pr.ent.cta": "Solicitar integración",
+  "pr.why": "Los datos de la NASA y de otras fuentes pueden ser públicos. CERES cobra por la ingeniería, la validación, la entrega estandarizada y el análisis con valor agregado, no por ser dueño exclusivo de datos satelitales públicos.",
+  "pr.disc.h": "Solo red de prueba.", "pr.disc": "Demostración en la red de prueba Fuji. Los montos son USDC de prueba, no precios comerciales. No hay pagos en producción ni contratos empresariales.",
+  "pr.verified": "El flujo de pago x402 ya se completó de punta a punta en Fuji con USDC de prueba.",
+  "ent.h": "Solicitar integración", "ent.p": "Para bancos, aseguradoras, plataformas agrícolas y otras instituciones. Leemos cada consulta; nada aquí es un compromiso de nivel de servicio.",
+  "ent.name": "Nombre", "ent.email": "Correo de trabajo", "ent.org": "Organización", "ent.use": "Caso de uso", "ent.pick": "Elige uno",
+  "ent.u1": "Seguro agrícola", "ent.u2": "Crédito agrícola", "ent.u3": "Cooperativa o junta de riego", "ent.u4": "Plataforma agrícola o producto de datos",
+  "ent.u5": "Exportador, ESG o auditoría", "ent.u6": "Otro", "ent.msg": "Mensaje (opcional)",
+  "ent.consent": "Acepto que CERES Ventures use estos datos para responder a esta consulta.", "ent.send": "Enviar consulta",
 };
 const EN = {};
 document.querySelectorAll("[data-i]").forEach(el => { EN[el.dataset.i] = el.textContent; });
@@ -113,6 +142,29 @@ function renderRecords() {
   el.innerHTML = `<table class="t"><thead><tr><th>${lang === "es" ? "Chacra" : "Field"}</th><th>${lang === "es" ? "Mes" : "Month"}</th><th>Block</th><th>Tx</th></tr></thead><tbody>
     ${rows.map(([k, r]) => { const [farm, period] = k.split("/"); return `<tr><td>${esc(farm)}</td><td>${esc(period)}</td><td>${esc(r.block ?? "—")}</td><td><a class="mono" href="${esc(cfg.explorer)}/tx/${esc(r.tx)}" target="_blank" rel="noopener">${esc(r.tx.slice(0, 14))}…</a></td></tr>`; }).join("")}</tbody></table>`;
 }
+
+
+// Enterprise inquiry → Netlify Forms (form-name "enterprise-inquiry"). Success is shown ONLY on a 2xx answer.
+const FMSG = {
+  en: { invalid: "Please fill in name, a valid work email, organization, use case and consent.", sending: "Sending…", ok: "Thanks. Your inquiry was received.", err: "We could not send your inquiry right now. Please try again later." },
+  es: { invalid: "Completa nombre, un correo de trabajo válido, organización, caso de uso y consentimiento.", sending: "Enviando…", ok: "Gracias. Recibimos tu consulta.", err: "No pudimos enviar tu consulta ahora. Inténtalo más tarde." },
+};
+const entForm = document.getElementById("entForm");
+entForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById("entMsg"), m = FMSG[lang] ?? FMSG.en, btn = entForm.querySelector("button[type=submit]");
+  const fd = new FormData(entForm);
+  if (fd.get("company-website")) return; // honeypot
+  const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(fd.get("email") ?? ""));
+  if (!entForm.checkValidity() || !okEmail) { msg.className = "formmsg err"; msg.textContent = m.invalid; entForm.querySelector(":invalid")?.focus(); return; }
+  btn.disabled = true; msg.className = "formmsg"; msg.textContent = m.sending;
+  try {
+    const r = await fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(fd).toString() });
+    if (!r.ok) throw new Error(String(r.status));
+    entForm.reset(); msg.className = "formmsg ok"; msg.textContent = m.ok;
+  } catch { msg.className = "formmsg err"; msg.textContent = m.err; }
+  finally { btn.disabled = false; }
+});
 
 document.getElementById("lang").addEventListener("click", () => { lang = lang === "es" ? "en" : "es"; LS.set("ceres.lang.landing", lang); applyLang(); });
 

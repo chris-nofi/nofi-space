@@ -24,16 +24,19 @@
 <main class="wrap">
   <p class="eyebrow">Registro verificable · Verifiable record</p>
   <h1>Comprueba que la evidencia no cambió</h1>
-  <p class="muted">Cada mes, Ceres guarda la huella (sha256) del archivo de evidencia de cada chacra en el contrato WaterProofRegistry de Avalanche (red de prueba Fuji). Aquí cualquiera puede comprobarla, sin billetera.</p>
+  <p class="muted">Cada mes, Ceres guarda la huella (sha256) del registro de evidencia completo de cada chacra en el contrato WaterProofRegistry de Avalanche (red de prueba Fuji). Aquí cualquiera puede comprobar, gratis y sin billetera, si una huella está registrada en la cadena. <span lang="en">Anyone can check, free and without a wallet, whether a fingerprint is recorded on-chain.</span></p>
   <div class="card">
     <label>Chacra / Field <select id="farm"></select></label>
     <label>Mes / Month <select id="period"></select></label>
     <label>Huella / dataHash <input id="hash" spellcheck="false" autocomplete="off"></label>
     <p style="margin-top:14px"><button class="btn" id="check" type="button">Comprobar / Check</button>
-      <a class="btn ghost" id="dl" href="#" download>Descargar evidencia</a></p>
+      <a class="btn ghost" href="/api-docs/#evidence" style="white-space:normal;text-align:left">Evidencia completa vía x402 · Detailed evidence via x402</a></p>
     <div class="res" id="res" aria-live="polite"></div>
   </div>
-  <p class="note" style="margin-top:16px"><small>Re-calcula tú mismo: <code>sha256</code> del JSON con las claves ordenadas recursivamente y sin espacios. Debe dar la misma huella. · Recompute it yourself: sha256 of the JSON with keys sorted recursively and no whitespace.</small></p>
+  <div class="note" style="margin-top:16px"><p style="margin:0 0 6px"><b>Qué prueba esta página · What this page proves</b></p>
+    <p style="margin:0"><small><b>1. «La huella está registrada en la cadena»</b> (gratis): el contrato confirma que esta huella fue anclada para esta chacra y mes. · <b>“The fingerprint is recorded on-chain”</b> (free): the contract confirms this fingerprint was anchored for this field and month.</small></p>
+    <p style="margin:6px 0 0"><small><b>2. «Mi archivo de evidencia da esa huella»</b>: requiere tener el archivo. Quien compra la evidencia por la API x402 recibe el JSON exacto; calcula <code>sha256</code> del JSON con las claves ordenadas recursivamente y sin espacios, y compáralo. · <b>“My evidence file hashes to that value”</b> requires the file. A buyer of the x402 Evidence API receives the exact JSON; compute <code>sha256</code> of the JSON with keys sorted recursively and no whitespace, and compare.</small></p>
+    <p style="margin:6px 0 0"><small>La huella prueba integridad (que esos bytes no cambiaron), no que las mediciones sean científicamente correctas. · The fingerprint proves integrity (those bytes did not change), not that the measurements are scientifically correct.</small></p></div>
   <p class="muted"><small id="reg"></small></p>
 </main>
 <footer class="slim"><div class="wrap foot-row"><a class="foot-brand" href="/"><img src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="CERES Ventures by NØFI Labs" width="245" height="80" loading="lazy"></a><p><a href="/">Ceres Ventures</a> · <a href="/app/">Mapa</a> · <a href="/verify/">Verificar</a> · <a href="/api-docs/">API</a> · <a href="/pagar/">x402</a></p></div></footer>
@@ -45,7 +48,7 @@ const index = await (await fetch("/data/index.json")).json();
 const farms = Object.values(index.farms);
 $("farm").innerHTML = farms.map(f => `<option value="${esc(f.id)}">${esc(f.id)}</option>`).join("");
 const fillPeriods = () => { const f = index.farms[$("farm").value]; $("period").innerHTML = f.periods.slice().reverse().map(p => `<option>${p.period}</option>`).join(""); sync(); };
-const sync = () => { const f = index.farms[$("farm").value], p = f.periods.find(x => x.period === Number($("period").value)); $("hash").value = p.dataHash; $("dl").href = p.file; };
+const sync = () => { const f = index.farms[$("farm").value], p = f.periods.find(x => x.period === Number($("period").value)); $("hash").value = p.dataHash; };
 $("farm").onchange = fillPeriods; $("period").onchange = sync;
 $("reg").innerHTML = cfg.registry ? `Contrato: <a href="${esc(cfg.explorer)}/address/${esc(cfg.registry)}" target="_blank" rel="noopener" class="mono">${esc(cfg.registry)}</a> · Avalanche Fuji (43113)` : "Registro aún no desplegado en Fuji.";
 // /verify/<dataHash> deep link
@@ -64,9 +67,9 @@ async function check() {
   const r = await verifyOnChain(cfg, index, f, p, h);
   const match = known && known.dataHash.toLowerCase() === h.toLowerCase();
   const msg = {
-    anchored: `<p><span class="pill ok">✓ anclado</span> La huella coincide con el registro en Avalanche. Los datos no cambiaron.</p>`,
-    not_anchored: `<p><span class="pill low">no anclado</span> El registro no tiene esta huella para ${esc(f)} ${p}. ${match ? "La huella corresponde al archivo publicado; ese mes aún no se guardó." : "Esta huella no corresponde al archivo publicado."}</p>`,
-    no_registry: `<p><span class="pill low">sin registro</span> El contrato aún no está desplegado. ${match ? "La huella corresponde al archivo publicado." : ""}</p>`,
+    anchored: `<p><span class="pill ok">✓ registrada · recorded</span> Esta huella está registrada en Avalanche para ${esc(f)} ${p}. · This fingerprint is recorded on Avalanche for ${esc(f)} ${p}.</p>`,
+    not_anchored: `<p><span class="pill low">no anclado</span> El registro no tiene esta huella para ${esc(f)} ${p}. ${match ? "La huella corresponde al registro de Ceres para ese mes; ese mes aún no se ancló." : "Esta huella no corresponde al registro de Ceres para ese mes."}</p>`,
+    no_registry: `<p><span class="pill low">sin registro</span> El contrato aún no está desplegado. ${match ? "La huella corresponde al registro de Ceres para ese mes." : ""}</p>`,
     error: `<p><span class="pill warn">error</span> No se pudo leer Fuji: ${esc(r.detail ?? "")}</p>`,
   }[r.status];
   $("res").innerHTML = msg + (att?.tx ? `<p><a href="${esc(cfg.explorer)}/tx/${esc(att.tx)}" target="_blank" rel="noopener">Ver transacción en Snowtrace ↗</a></p>` : "");

@@ -15,7 +15,7 @@ Only use numbers that are on screen in the current build.
 Captions: label CERES as "AI voice". Show the CHIRPS/IMERG note if rain appears on screen.
 
 ## B. Team1 Avalanche cut: 2–3 minutes
-1. **Open the app.** El Algarrobal → drip + strip cover, 12,882 m³/ha/yr (−24.5 %) → evidence chips → "Descargar evidencia (JSON)".
+1. **Open the app.** El Algarrobal → drip + strip cover, 12,882 m³/ha/yr (−24.5 %) → evidence chips → "Evidencia completa vía x402" (was "Descargar evidencia (JSON)".
 2. **Show the record.** "Registro verificable" → nofiscan record. The `dataHash` must match the downloaded JSON. *Needs the validator revived and the registry deployed and attested first.*
 3. **x402.** Judge page or the CERES agent calls `GET /v1/earth/algarrobal/202610` → HTTP 402 → wallet **signature** (no gas) → data + payment tx link on nofiscan.
 4. **Why our own L1.** One sentence: dollar gas (tUSD), allowlisted oracle writers, we set the fee. Stop there.

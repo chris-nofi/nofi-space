@@ -1,11 +1,12 @@
-// Data layer shared by the landing page and /app. Every number on the site comes from these files:
-//   /data/index.json       farm-months, dataHash per month, anchored records
-//   /data/farms.json       positions (cultivation pixel vs app point), labels
-//   /data/strategies.json  rotation / management options (texts + water figures + sources)
-//   /data/season.json      12-month cover + frost strip
-//   /data/evidence/*.json  the evidence bundles (same bytes the x402 API sells and the registry anchors)
-// The Ceres Field Score is computed in the browser by the SAME module the API uses (field-score.mjs).
-import { fieldScore } from "./field-score.mjs";
+// Data layer shared by the landing page and /app. Every number on the site comes from these PUBLIC files:
+//   /data/index.json             farm-months, dataHash per month (public verification handle), anchored records
+//   /data/public/summaries.json  ceres-public-summary.v1: score, confidence, component display values, caveats,
+//                                dataset labels. Precomputed at build time from the canonical evidence.
+//   /data/farms.json             positions (cultivation pixel vs app point), labels
+//   /data/strategies.json        rotation / management options (texts + water figures + sources)
+//   /data/season.json            12-month cover + frost strip
+// The complete canonical evidence (the bytes behind each dataHash) is NOT served statically: it is sold by the
+// x402 Evidence API (/v1/field/:id/evidence). The browser never needs it to render the free dashboard.
 
 const cache = new Map();
 const getJSON = (url) => {
@@ -17,20 +18,19 @@ export async function loadSite() {
   const [index, farms, strategies, season] = await Promise.all([
     getJSON("/data/index.json"), getJSON("/data/farms.json"), getJSON("/data/strategies.json"), getJSON("/data/season.json"),
   ]);
-  return { index, farms: farms.farms, facts: farms.facts ?? [], strategies, season };
+  const summaries = await getJSON(index.summaries ?? "/data/public/summaries.json");
+  return { index, summaries: summaries.items ?? {}, farms: farms.farms, facts: farms.facts ?? [], strategies, season };
 }
 
-export async function loadEvidence(index, farmId, period) {
+/** Public summary for a farm-month (latest when period is omitted). Same field names the UI used from the score engine. */
+export async function scoreFor(index, farmId, period) {
   const f = index.farms[farmId];
   if (!f) throw new Error(`unknown farm ${farmId}`);
-  const p = f.periods.find(x => x.period === Number(period ?? f.latest)) ?? f.periods.at(-1);
-  const ev = await getJSON(p.file);
-  return { ev, meta: p, farm: f };
-}
-
-export async function scoreFor(index, farmId, period) {
-  const { ev, meta, farm } = await loadEvidence(index, farmId, period);
-  return { ev, meta, farm, score: fieldScore(ev) };
+  const meta = f.periods.find(x => x.period === Number(period ?? f.latest)) ?? f.periods.at(-1);
+  const summaries = (await getJSON(index.summaries ?? "/data/public/summaries.json")).items ?? {};
+  const score = summaries[`${farmId}/${meta.period}`];
+  if (!score) throw new Error(`no public summary for ${farmId} ${meta.period}`);
+  return { meta, farm: f, score };
 }
 
 export const band = (s) => s == null ? "na" : s < 40 ? "b0" : s < 60 ? "b1" : s < 80 ? "b2" : "b3";
