@@ -103,6 +103,14 @@ test("history cleaning mirrors agent.py: roles merged, assistant-first dropped, 
   assert.equal(h[1].content.length, 600);
 });
 
+test("Netlify AI Gateway: requests go to ANTHROPIC_BASE_URL when it is set, else to the Anthropic API", async () => {
+  for (const [env, expected] of [[{ ANTHROPIC_API_KEY: "k", ANTHROPIC_BASE_URL: "https://gw.example/anthropic/" }, "https://gw.example/anthropic/v1/messages"], [{ ANTHROPIC_API_KEY: "k" }, "https://api.anthropic.com/v1/messages"]]) {
+    const fc = fakeClaude();
+    await createChatHandler({ data, env, fetchImpl: fc.fetchImpl })(post({ farmId: "algarrobal", messages: [{ role: "user", content: "hola" }] }));
+    assert.equal(fc.calls[0].url, expected);
+  }
+});
+
 test("model API failure → 502 without internals", async () => {
   const handle = createChatHandler({ data, env: { ANTHROPIC_API_KEY: "k" }, fetchImpl: async () => new Response("upstream says secret stuff", { status: 500 }) });
   const orig = console.error; console.error = () => {};

@@ -5,7 +5,9 @@
 // Needs ANTHROPIC_API_KEY in the Netlify environment (server-side only). Without it the route answers 503 and the
 // widget says the key is not configured.
 
-const API = "https://api.anthropic.com/v1/messages";
+// Netlify AI Gateway injects ANTHROPIC_API_KEY + ANTHROPIC_BASE_URL into functions; that key only works through the
+// gateway URL. A key you set yourself (no base URL) goes straight to the Anthropic API.
+const apiUrl = (env) => `${String(env.ANTHROPIC_BASE_URL || "https://api.anthropic.com").replace(/\/+$/, "")}/v1/messages`;
 const DEFAULT_MODEL = "claude-sonnet-5-5";
 const MAX_TOOL_ROUNDS = 4;
 const FARM_IDS = ["carumas", "samegua", "algarrobal"];
@@ -213,7 +215,7 @@ export function createChatHandler({ data, env = process.env, fetchImpl = fetch, 
     const trace = [];
     try {
       for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
-        const r = await fetchImpl(API, { method: "POST", headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" }, body: JSON.stringify({ ...params, messages: history }) });
+        const r = await fetchImpl(apiUrl(env), { method: "POST", headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" }, body: JSON.stringify({ ...params, messages: history }) });
         if (!r.ok) {
           console.error("ceres chat: model API", r.status, (await r.text()).slice(0, 200));
           return json(502, { error: "model_unavailable" });
