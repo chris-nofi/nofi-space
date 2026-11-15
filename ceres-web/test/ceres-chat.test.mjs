@@ -58,7 +58,7 @@ test("tool loop: grounded answer, proof chip for the anchored record, key only i
   assert.equal(fc.calls[0].headers["x-api-key"], "test-key");
   assert.ok(!JSON.stringify(j).includes("test-key"), "key never echoed to the browser");
   assert.match(fc.calls[0].req.system.map(s => s.text).join("\n"), /CONTEXTO: el usuario está viendo la parcela 'algarrobal'/);
-  assert.ok(fc.calls[0].req.tools.length === 4);
+  assert.ok(fc.calls[0].req.tools.length === 5);
 });
 
 test("tools return public data only: no canonical evidence, granules or paid score inputs", () => {
@@ -138,4 +138,16 @@ test("slider priorities from /app reach the model as context; junk priorities ar
   const sys = fc.calls[0].req.system.map(s => s.text).join("\n");
   assert.match(sys, /PRIORIDADES DEL USUARIO/);
   assert.match(sys, /MODO VOZ/);
+});
+
+test("backtest tool: public 1981–2025 hindcast summary, labelled as a model, no invented counts", () => {
+  const T = makeTools(data);
+  const b = T.get_backtest({ farm_id: "carumas" });
+  assert.match(b.label, /RETROSIMULACIÓN CON MODELO/);
+  assert.equal(b.strategies.length, 4);
+  for (const s of b.strategies) assert.equal(s.seasons_tested, 44);
+  const cur = b.strategies.find(s => s.current);
+  assert.deepEqual(cur.failed_seasons, ["1982/83", "1991/92"]);
+  assert.equal(T.get_backtest({ farm_id: "algarrobal" }).strategies.find(s => s.id === "drip").seasons_failed, 1);
+  assert.ok(T.get_backtest({ farm_id: "nope" }).error);
 });

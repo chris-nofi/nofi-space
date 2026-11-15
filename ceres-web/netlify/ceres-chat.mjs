@@ -77,6 +77,11 @@ const TOOLS = [
     description: "Calendario de riesgo mes a mes (helada, calor, falta de agua, suelo desnudo, salinidad) para una estrategia, los meses vulnerables y las ventanas de suelo desnudo, más la cobertura NDVI mensual observada.",
     input_schema: { type: "object", properties: { farm_id: { type: "string", enum: FARM_IDS }, strategy_id: { type: "string" } }, required: ["farm_id"] },
   },
+  {
+    name: "get_backtest",
+    description: "Retrosimulación 1981–2025 con NASA POWER diario (modelo, NO rendimientos observados): para cada estrategia de la parcela, cuántas temporadas habrían fallado por agua o helada, temporadas con estrés, la peor temporada, la división por El Niño / neutral / La Niña con pruebas estadísticas, y las historias de años con nombre (El Niño 1982–83, 2015–16, 2023–24). Úsala para preguntas de historia, El Niño, sequías pasadas, '¿cuántas veces habría fallado?' o '¿esta rotación aguanta años malos?'. Di siempre que es un modelo y cuántas temporadas se probaron (44 para cultivos oct.–abr., 45 para año calendario).",
+    input_schema: { type: "object", properties: { farm_id: { type: "string", enum: FARM_IDS } }, required: ["farm_id"] },
+  },
 ];
 
 const MONTHS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
@@ -144,6 +149,20 @@ export function makeTools(D) {
           farm_id !== "algarrobal" ? "Carumas y Samegua comparten una celda de NASA POWER a gran altura: para Samegua se prefiere ERA5-Land en temperatura." : null,
           "GPM IMERG pendiente: la lluvia viene de CHIRPS v3 (con POWER y ERA5 como rango).",
         ].filter(Boolean),
+      };
+    },
+    get_backtest({ farm_id }) {
+      const B = D.backtest, f = B?.farms?.[farm_id];
+      if (!f) return { error: "retrosimulación no disponible para esta parcela" };
+      return {
+        farm_id, label: B.label.es, source: B.source, seasons_note: B.seasonsNote.es, method: B.method.es,
+        failure_metric: f.metric === "wrsi_anomaly" ? "anomalía de WRSI (% de la mediana 1991–2020 del cultivo)" : "WRSI absoluto (oferta modelada vs demanda)",
+        strategies: Object.entries(f.strategies).map(([id, s]) => ({ id, name_es: s.name?.es, current: s.current, recommended: s.recommended,
+          seasons_tested: s.seasons, range: `${s.first}–${s.last}`, seasons_failed: s.failAny, water_failures: s.failWater, frost_failures: s.failFrost,
+          stress_seasons_wrsi_lt80: s.stress, worst_season: s.worstSeason, worst_wrsi: s.worstWrsi, enso: s.enso,
+          tests: s.tests, failed_seasons: s.strip.filter(x => x[2]).map(x => x[0]) })),
+        raw_power_tmin_without_altitude_correction: f.rawTminFrost,
+        named_years: (B.namedYears ?? []).map(n => ({ title: n.title, text_es: n.text.es })),
       };
     },
     get_risk_calendar({ farm_id, strategy_id }) {

@@ -40,7 +40,7 @@ const T = {
 };
 
 const LS = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
-const state = { lang: LS.get("ceres.lang") || "es", farm: null, period: null, pri: null, site: null, scores: {}, map: null };
+const state = { lang: LS.get("ceres.lang") || "es", farm: null, period: null, pri: null, site: null, scores: {}, map: null, btStrat: null };
 const $ = (s) => document.querySelector(s);
 const t = () => T[state.lang];
 const MONTHS = { es: ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], en: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"] };
@@ -130,6 +130,48 @@ function disagree(S, ranked) {
     : `With your priorities, #1 is <b>${a}</b>. The SI engine suggests <b>${b}</b> because it also weighs modelled water deficit and risk, which these cards don't show. This field's figures are still example data: check with the Agencia Agraria or INIA.`}</small></p>`;
 }
 
+// 1981–2025 backtest (Kepler): a model hindcast on NASA POWER daily, labelled as such. Hidden if the file is missing.
+function backtestSection(farmId) {
+  const B = state.site.backtest, F = B?.farms?.[farmId], es = state.lang === "es";
+  if (!F) return "";
+  const S = state.site.strategies[farmId];
+  const order = (S?.list ?? []).map(s => s.id).filter(id => F.strategies[id]);
+  const ids = order.length ? order : Object.keys(F.strategies);
+  const sel = F.strategies[state.btStrat] ? state.btStrat : (ids.find(id => F.strategies[id].recommended) ?? ids[0]);
+  const s = F.strategies[sel];
+  const maxN = Math.max(...ids.map(id => F.strategies[id].seasons));
+  const rows = ids.map(id => {
+    const x = F.strategies[id];
+    return `<tr class="${id === sel ? "on" : ""}" data-bt="${esc(id)}" tabindex="0" role="button" aria-pressed="${id === sel}">
+      <td>${esc(L(x.name, state.lang))}${x.current ? ` <span class="pill">${es ? "Actual" : "Current"}</span>` : ""}${x.recommended ? ` <span class="pill ok">${es ? "Motor SI" : "SI engine"}</span>` : ""}</td>
+      <td class="bn"><b>${x.failAny}</b><span class="dim"> / ${x.seasons}</span></td><td class="bn">${x.stress ?? "—"}</td><td class="bn">${x.worstSeason ? `${esc(x.worstSeason)}<br><span class="dim">WRSI ${fmt(x.worstWrsi, 1, state.lang)}</span>` : "—"}</td></tr>`;
+  }).join("");
+  const cell = ([lab, w, fail, e]) => {
+    const v = Math.max(0, Math.min(1, (w ?? 0) / 110));
+    const bg = fail ? "var(--coral)" : (w ?? 0) < 80 ? "var(--amber)" : `hsl(${Math.round(150 + v * 20)} 55% ${Math.round(24 + v * 22)}%)`;
+    return `<i class="${e === "n" ? "nino" : ""}" style="background:${bg}" title="${esc(lab)} · WRSI ${w ?? "—"}${fail ? (es ? " · falla" : " · failure") : ""}${e === "n" ? " · El Niño" : e === "l" ? " · La Niña" : ""}"></i>`;
+  };
+  const en = s.enso ?? {}, ph = (k) => en[k] ? `${es ? { el_nino: "El Niño", neutral: "neutral", la_nina: "La Niña" }[k] : { el_nino: "El Niño", neutral: "neutral", la_nina: "La Niña" }[k]}: ${en[k].fail}/${en[k].n} ${es ? "con falla" : "failed"}, WRSI ${fmt(en[k].medianWrsi, 1, state.lang)}` : "";
+  const p = s.tests?.mannWhitneyP;
+  const raw = F.rawTminFrost?.[sel];
+  const metric = F.metric === "wrsi_anomaly" ? (es ? "WRSI como % de lo normal del cultivo (1991–2020)" : "WRSI as % of the crop's normal (1991–2020)") : (es ? "WRSI: agua del cultivo cubierta por lluvia + dotación de riego modelada" : "WRSI: crop water met by rain + modelled irrigation allotment");
+  const stories = (B.namedYears ?? []).map(n => `<li><b>${esc(n.title)}</b><br>${esc(L(n.text, state.lang))}</li>`).join("");
+  return `<section class="dsec" aria-labelledby="h-bt"><h2 id="h-bt">${es ? `${maxN} temporadas · 1981–2025` : `${maxN} seasons · 1981–2025`}</h2>
+    <p class="bt-label">${esc(L(B.label, state.lang))}</p>
+    <p class="muted" style="margin:.2em 0 10px;font-size:.88rem">${es ? "Cada opción pasada por cada temporada desde 1981 con datos diarios de NASA POWER: ¿cuántas veces habría fallado el cultivo?" : "Every option replayed through every season since 1981 with NASA POWER daily data: how often would the crop have failed?"}</p>
+    <div class="bt-wrap"><table class="bt"><thead><tr><th>${es ? "Opción" : "Option"}</th><th class="bn">${es ? "Fallas" : "Failures"}</th><th class="bn">${es ? "Estrés" : "Stress"}</th><th class="bn">${es ? "Peor año" : "Worst year"}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p style="margin:12px 0 4px;font-size:.86rem"><b>${esc(L(s.name, state.lang))}</b> · ${s.first}–${s.last}</p>
+    <div class="bt-strip" role="img" aria-label="${es ? "WRSI por temporada" : "WRSI by season"}">${s.strip.map(cell).join("")}</div>
+    <div class="bt-axis"><span>${esc(s.first)}</span><span>${esc(s.last)}</span></div>
+    <div class="legend"><span><i class="sw" style="background:var(--coral)"></i>${es ? "falla (WRSI < 50)" : "failure (WRSI < 50)"}</span><span><i class="sw" style="background:var(--amber)"></i>${es ? "estrés (< 80)" : "stress (< 80)"}</span><span><i class="sw nino"></i>El Niño</span></div>
+    <p class="note" style="margin-top:10px"><small>${[ph("el_nino"), ph("neutral"), ph("la_nina")].filter(Boolean).join(" · ")}${p != null ? ` · ${es ? "WRSI El Niño vs resto" : "WRSI El Niño vs rest"}: Mann-Whitney p = ${p}` : ""}</small></p>
+    ${raw && raw.frost > 0 && s.failFrost === 0 ? `<p><small class="muted">${es ? `Sin corregir la temperatura por altitud, la celda de POWER habría marcado helada en ${raw.frost} de ${raw.seasons} temporadas; corregida (y según ERA5-Land) son ${s.failFrost}.` : `Without the altitude correction, the POWER cell would flag frost in ${raw.frost} of ${raw.seasons} seasons; corrected (and per ERA5-Land) it is ${s.failFrost}.`}</small></p>` : ""}
+    <details class="gaps"><summary>${es ? "Años El Niño con nombre (3)" : "Named El Niño years (3)"}</summary><ul class="bt-stories">${stories}</ul></details>
+    <details class="gaps"><summary>${es ? "Método y límites" : "Method and limits"}</summary><p style="margin:.4rem 0 0"><small class="muted">${esc(metric)}. ${esc(L(B.seasonsNote, state.lang))} ${esc(L(B.method, state.lang))}</small></p></details>
+    <p><small class="dim">${es ? "Fuente" : "Source"}: ${esc(B.source)}</small></p>
+  </section>`;
+}
+
 function seasonSection(farmId) {
   const s = state.site.season[farmId], tt = t();
   if (!s) return "";
@@ -185,6 +227,7 @@ async function renderDrawer() {
     ${strategiesSection(f.id)}
     <section class="dsec" id="ceres" aria-label="CERES"><div id="ceres-chat"></div>
       <p style="margin-top:10px"><small><a href="/legacy/?farm=${esc(f.id)}">${tt.full}</a>${state.lang === "en" ? ` · <a href="/pagar/">${tt.judges} →</a> · <a href="/api-docs/">API docs</a>` : ""}</small></p></section>
+    ${backtestSection(f.id)}
     ${seasonSection(f.id)}
     ${recordSection(sc)}
   </div>`;
@@ -200,7 +243,25 @@ async function renderDrawer() {
     mountCeresFor(f, sc);
   }));
   mountCeresFor(f, sc);
+  wireBacktest(f.id);
   checkRecord(sc);
+}
+
+function wireBacktest(farmId) {
+  document.querySelectorAll("[data-bt]").forEach(tr => {
+    const pick = () => {
+      state.btStrat = tr.dataset.bt;
+      const sec = document.getElementById("h-bt")?.closest("section");
+      if (!sec) return;
+      const tmp = document.createElement("div"); tmp.innerHTML = backtestSection(farmId);
+      const open = sec.querySelector("details")?.open;
+      sec.replaceWith(tmp.firstElementChild);
+      if (open) document.getElementById("h-bt")?.closest("section")?.querySelector("details")?.setAttribute("open", "");
+      wireBacktest(farmId);
+    };
+    tr.addEventListener("click", pick);
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+  });
 }
 
 // CERES in the drawer, pre-loaded with the open farm's score and the #1 option the farmer sees with their sliders.
@@ -217,7 +278,7 @@ function mountCeresFor(f, sc) {
 }
 
 function openFarm(id) {
-  if (id !== state.farm) stopCeres();
+  if (id !== state.farm) { stopCeres(); state.btStrat = null; }
   state.farm = id; state.period = null; state.pri = null;
   const url = new URL(location.href);
   if (id) url.searchParams.set("farm", id); else url.searchParams.delete("farm");

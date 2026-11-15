@@ -195,6 +195,58 @@ for (const id of ["algarrobal", "carumas", "samegua"]) {
 }
 writeJSON(join(DIST, "data", "season.json"), season);
 
+// ── 6b. 1981–2025 backtest (Kepler, data/out/backtest_1981_2025.json) → public ALLOWLIST summary ─────────────────
+// Model-based hindcast on NASA POWER daily, not observed yields. If the file is missing the panel is simply not shown:
+// no counts are ever invented here.
+const BT_SRC = join(SA, "data", "out", "backtest_1981_2025.json");
+let backtest = null;
+if (existsSync(BT_SRC)) {
+  const bt = readJSON(BT_SRC);
+  // Spanish versions of the named-year stories, used only while the English source text is unchanged.
+  const STORY_ES = {
+    el_nino_2023_24: ["Model-based hindcast, not observed yields. Carumas: POWER Nov 2023", "Retrosimulación con modelo, no rendimientos observados. Carumas: la lluvia POWER de nov. 2023 a mar. 2024 fue casi normal (WRSI de la papa 101.4 % de su mediana 1991–2020), así que ninguna rotación muestra falla por agua ni por helada. Valles con riego: el indicador de oferta de agua bajó a 0.58 (Samegua, memoria de 2 campañas) y 0.69 (El Algarrobal) de lo normal. Samegua: la alfalfa continua (hoy) baja a WRSI 67.3 frente a 78.0 de la rotación alfalfa → maíz chala → arveja de CERES. El Algarrobal: el riego por gravedad con suelo desnudo llega a WRSI 82.0 frente a 100.0 del goteo con cobertura en franjas, con la misma dotación del canal. Ninguna estrategia falla del todo en 2024; las recomendadas mantienen cubierta más demanda de agua del cultivo."],
+    el_nino_1982_83: ["Model-based hindcast. Nov 1982", "Retrosimulación con modelo. La lluvia POWER de nov. 1982 a mar. 1983 en la celda altoandina fue la más baja del registro: el WRSI de la papa cayó a 38.8 % de lo normal (falla por agua) y todas las rotaciones de Carumas fallaron por agua. El indicador de oferta de El Algarrobal cayó a 0.10 de lo normal: todas las estrategias del olivo fallan (actual WRSI 23.4, goteo 26.7). Hay sequías que ninguna rotación resuelve; ahí el papel de CERES es la alerta temprana y el ahorro de agua que estira el reservorio, no una garantía."],
+    el_nino_2015_16: ["Model-based hindcast. The 2016 supply proxy", "Retrosimulación con modelo. En 2016 el indicador de oferta de El Algarrobal fue 0.72 de lo normal. Gravedad con suelo desnudo baja a WRSI 80.0 (borde de la banda de estrés), cobertura 72.3, goteo con cobertura en franjas 98.5. El modelo marca estrés, no falla total, así que SUBESTIMA las pérdidas de olivo reportadas (>50 %): la sequía de fines de 2016 (set.–dic.) cae fuera de la ventana de oferta ene.–mar. que usamos. Lo reportamos como limitación."],
+  };
+  const r1 = (x) => (x == null ? null : Math.round(x * 10) / 10);
+  const farmsBT = {};
+  for (const [fid, f] of Object.entries(bt.farms ?? {})) {
+    const strategiesBT = {};
+    for (const [sid, s] of Object.entries(f.strategies ?? {})) {
+      strategiesBT[sid] = {
+        name: s.name, current: !!s.current, recommended: !!s.recommended,
+        seasons: s.seasons_tested, first: s.first_season, last: s.last_season,
+        failAny: s.seasons_with_any_failure, failWater: s.seasons_water_failure, failFrost: s.seasons_frost_failure,
+        stress: s.stress_seasons_wrsi_lt80 ?? null, worstSeason: s.worst_season ?? null, worstWrsi: r1(s.worst_wrsi),
+        enso: Object.fromEntries(Object.entries(s.enso ?? {}).map(([k, v]) => [k, { n: v.n, fail: v.seasons_with_failure, medianWrsi: r1(v.median_wrsi) }])),
+        tests: { fisherP: s.tests?.fisher_p_two_sided ?? null, mannWhitneyP: s.tests?.mannwhitney_wrsi_el_nino_vs_other?.p ?? null, kruskalP: s.tests?.kruskal_wrsi_3phase?.p ?? null },
+        // compact season strip: [label, WRSI, failed 0/1, ENSO phase n|o|l]
+        strip: (s.seasons ?? []).map(x => [x.s, r1(x.wrsi), x.fail ? 1 : 0, x.enso === "el_nino" ? "n" : x.enso === "la_nina" ? "l" : "o"]),
+      };
+    }
+    const raw = bt.sensitivity?.raw_power_tmin_no_lapse?.[fid] ?? null;
+    farmsBT[fid] = { metric: /anomaly/i.test(f.failure_metric ?? "") ? "wrsi_anomaly" : "wrsi_abs", strategies: strategiesBT,
+      rawTminFrost: raw ? Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, { seasons: v.seasons, frost: v.frost }])) : null };
+  }
+  backtest = {
+    schemaVersion: "ceres-public-backtest.v1",
+    label: { en: bt.meta?.label ?? "MODEL-BASED HINDCAST, NOT OBSERVED YIELDS", es: bt.meta?.label_es ?? "RETROSIMULACIÓN CON MODELO, NO RENDIMIENTOS OBSERVADOS" },
+    source: "NASA POWER Daily (AG), 1981–2025", generated: bt.meta?.generated ?? null,
+    seasonsNote: {
+      en: "Seasons are labelled by harvest year. Crops whose season crosses New Year (Oct–Apr, e.g. potato Nov–Mar) have up to 44 complete seasons (1981/82–2024/25); calendar-year crops have 45 (1981–2025). 2025/26 is incomplete and not counted. No season is padded.",
+      es: "Las temporadas se nombran por el año de cosecha. Los cultivos que cruzan el Año Nuevo (oct.–abr., p. ej. papa nov.–mar.) tienen hasta 44 temporadas completas (1981/82–2024/25); los de año calendario, 45 (1981–2025). 2025/26 está incompleta y no se cuenta. No se rellena ninguna temporada.",
+    },
+    method: {
+      en: "Daily FAO-56 crop water balance (WRSI; failure < 50, stress < 80) and FAO frost thresholds, driven by NASA POWER only. Carumas uses the WRSI anomaly (POWER rain is dry-biased there); irrigated farms compare modelled canal supply with crop demand (supply index is a proxy, not canal records). Validated against GPM IMERG Final monthly (333 months), SMAP and ERA5.",
+      es: "Balance hídrico diario FAO-56 (WRSI; falla < 50, estrés < 80) y umbrales de helada FAO, solo con NASA POWER. En Carumas se usa la anomalía de WRSI (la lluvia POWER es seca allí); en las chacras con riego se compara la oferta modelada del canal con la demanda del cultivo (el índice de oferta es un indicador, no registros del canal). Validado con GPM IMERG Final mensual (333 meses), SMAP y ERA5.",
+    },
+    farms: farmsBT,
+    namedYears: (bt.named_years ?? []).map(n => ({ id: n.id, title: n.title,
+      text: { en: n.text, es: STORY_ES[n.id] && String(n.text).startsWith(STORY_ES[n.id][0]) ? STORY_ES[n.id][1] : n.text } })),
+  };
+  writeJSON(join(DIST, "data", "public", "backtest.json"), backtest);
+}
+
 // ── 7. public runtime config ────────────────────────────────────────────────
 const cfg = {
   googleMapsApiKey: env.GOOGLE_MAPS_API_KEY ?? "",
@@ -281,7 +333,7 @@ write(join(FN_LIB, "evidence-bundle.mjs"),
   const KNOW = join(SA, "oracle", "earth_oracle", "ceres", "knowledge");
   const knowledge = existsSync(KNOW) ? readdirSync(KNOW).filter(f => f.endsWith(".md")).sort()
     .map(f => `<documento nombre="${f.replace(/\.md$/, "")}">\n${readFileSync(join(KNOW, f), "utf8").trim()}\n</documento>`).join("\n\n") : "";
-  const ceresData = { index: { farms: farmsIdx }, summaries, farms, strategies, season, si: w.AGUA_SI_FIXTURES ?? {}, climate: w.AGUA_SI_CLIMATE ?? {}, knowledge };
+  const ceresData = { index: { farms: farmsIdx }, summaries, farms, strategies, season, backtest, si: w.AGUA_SI_FIXTURES ?? {}, climate: w.AGUA_SI_CLIMATE ?? {}, knowledge };
   const fp = (await import(pathToFileURL(join(WEB, "scripts", "audit-public.mjs")).href)).fingerprintsOf(Object.values(bundle));
   const blob = JSON.stringify(ceresData);
   for (const id of fp) if (blob.includes(id)) throw new Error(`ceres chat data would expose provenance id ${id}`);

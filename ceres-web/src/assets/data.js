@@ -5,6 +5,7 @@
 //   /data/farms.json             positions (cultivation pixel vs app point), labels
 //   /data/strategies.json        rotation / management options (texts + water figures + sources)
 //   /data/season.json            12-month cover + frost strip
+//   /data/public/backtest.json   1981–2025 model hindcast on NASA POWER daily (failures, El Niño split, named years)
 // The complete canonical evidence (the bytes behind each dataHash) is NOT served statically: it is sold by the
 // x402 Evidence API (/v1/field/:id/evidence). The browser never needs it to render the free dashboard.
 
@@ -19,7 +20,9 @@ export async function loadSite() {
     getJSON("/data/index.json"), getJSON("/data/farms.json"), getJSON("/data/strategies.json"), getJSON("/data/season.json"),
   ]);
   const summaries = await getJSON(index.summaries ?? "/data/public/summaries.json");
-  return { index, summaries: summaries.items ?? {}, farms: farms.farms, facts: farms.facts ?? [], strategies, season };
+  // 1981–2025 model hindcast (optional: absent until the backtest file is in the build; never invented client-side)
+  const backtest = await getJSON("/data/public/backtest.json").catch(() => null);
+  return { index, summaries: summaries.items ?? {}, farms: farms.farms, facts: farms.facts ?? [], strategies, season, backtest };
 }
 
 /** Public summary for a farm-month (latest when period is omitted). Same field names the UI used from the score engine. */
