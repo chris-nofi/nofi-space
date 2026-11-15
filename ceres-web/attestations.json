@@ -3,10 +3,17 @@
   "registry": "0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d",
   "records": {
     "algarrobal/202610": {
-      "tx": "0x9bd56d2d5a944ef51b222385ac3a8b001b5b7848db03526ef559f96846ec9f21",
-      "block": 61085653,
-      "revision": 0,
-      "dataHash": "0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84"
+      "tx": "0xbfbaa0272f55912160bb499f80dbee3f32aa97d97216e927a1351646072d0d50",
+      "block": 61129803,
+      "revision": 1,
+      "dataHash": "0xf585dc40c8673eab49893ed253d6be41484c65f8412fab9182e9a3f82f682304",
+      "previous": {
+        "revision": 0,
+        "tx": "0x9bd56d2d5a944ef51b222385ac3a8b001b5b7848db03526ef559f96846ec9f21",
+        "block": 61085653,
+        "dataHash": "0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84",
+        "note": "CHIRPS rain; superseded by revision 1 (GPM IMERG Late rain)"
+      }
     }
   }
 }
