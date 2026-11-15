@@ -45,15 +45,7 @@
         </div>
         ${S.callStatus ? `<p class="ceres-status">${E(S.callStatus)}</p>` : ""}
         ${S.call && S.live.length ? `<div class="ceres-live">${S.live.map((l) => `<p class="${l.role === "agent" ? "c" : "u"}">${E(l.content)}</p>`).join("")}</div>` : ""}
-        <div class="ceres-log" id="ceres-log">
-          ${log.length ? log.map((m) => `<p class="${m.role === "assistant" ? "c" : "u"}">${E(m.content)}</p>${proofChips(m.proofs)}`).join("") : `<p class="ceres-hint">${ORACLE ? T("Pregúntame por tu rotación, tu suelo, el agua o los datos de la NASA.", "Ask me about your rotation, your soil, water or the NASA data.") : T("Para conversar, conecta el oráculo en config.js. Mientras tanto, puedes escuchar el resumen.", "To chat, connect the oracle in config.js. Meanwhile you can listen to the summary.")}</p>`}
-          ${S.busy ? `<p class="c thinking">${T("Revisando los datos del satélite…", "Checking the satellite data…")}</p>` : ""}
-          ${S.err ? `<p class="ceres-err">${E(S.err)}</p>` : ""}
-        </div>
-        <div class="ceres-chips">${chips.map((q) => `<button type="button" data-ceres-ask="${E(q)}" ${!ORACLE || S.busy ? "disabled" : ""}>${E(q)}</button>`).join("")}</div>
-        <form class="ceres-form" data-ceres-form><label for="ceres-q" class="ceres-sr">${T("Tu pregunta", "Your question")}</label>
-          <input id="ceres-q" maxlength="600" autocomplete="off" placeholder="${T("Escribe tu pregunta", "Type your question")}" ${!ORACLE || S.busy ? "disabled" : ""}>
-          <button type="submit" class="ceres-btn primary" ${!ORACLE || S.busy ? "disabled" : ""}>${T("Enviar", "Send")}</button></form>
+
         <p class="ceres-safe">${T("CERES no reemplaza al técnico de la Agencia Agraria ni al INIA. Nunca pida claves ni frases de recuperación. Voz y respuestas generadas por SI.", "CERES does not replace the Agencia Agraria or INIA technician. Never share keys or recovery phrases. Voice and answers are SI-generated.")}</p>
       </div></section>`;
   }

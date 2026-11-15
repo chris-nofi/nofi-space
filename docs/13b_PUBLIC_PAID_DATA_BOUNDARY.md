@@ -37,7 +37,6 @@ evidence directory, source map or secret → build fails and dist/ is deleted.
 | Paid score: component **inputs**, **weights**, sub-scores, notes + proof + receipt | `GET /v1/field/:id/score` | x402 (0.02 test USDC) |
 | **Complete canonical evidence record** (indicators with granules/pixels/methods, `_context`, engine, extensions as packaged) + dataHash + proof + receipt | `GET /v1/field/:id/evidence`, alias `/v1/earth/:farm/:period` | x402 (0.05 test USDC) |
 | `/v1/farms`, `/health` | Function | Free, sanitized (no evidence, no secrets) |
-| CERES chat `POST /v1/ceres/chat` | Function (needs `ANTHROPIC_API_KEY`) | Free for farmers; grounded only in the public data above (summaries, strategy model, sanitized SI analysis and climate, season). No tool returns the canonical evidence; buyers are pointed to the Evidence API. Best-effort per-IP rate limit (12 questions / 5 min per instance). |
 
 **Honest overlap.** Several values inside a full record are also public in summary form (e.g. the month's NDVI
 median in the season strip, headline indicator values in the legacy dashboard, soil/frost context). What is sold is
