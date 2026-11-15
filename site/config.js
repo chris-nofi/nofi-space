@@ -7,9 +7,9 @@ window.AGUA_CLARA_CONFIG = {
   // Retell PUBLIC key (domain-restricted, starts with "public_key_") and the agent id from oracle/scripts/retell_setup.py
   retellPublicKey: "",
   retellAgentId: "",
-  // Plan v2 (NØFI L1 + x402). Explorer for links, WaterProofRegistry address once deployed,
+  // Demo chain: Avalanche Fuji C-Chain testnet (43113) + x402. Explorer for links, WaterProofRegistry address,
   // and the public URL of the x402 payment demo (avalanche/x402/web/pagar.html) once it is online.
-  explorerUrl: "https://nofiscan.io",
+  explorerUrl: "https://testnet.snowtrace.io",
   registryAddress: "",
   x402PayUrl: "",
 };
