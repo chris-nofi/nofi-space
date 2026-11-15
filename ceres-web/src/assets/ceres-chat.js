@@ -69,7 +69,7 @@ function intro(c) {
 }
 
 // Minimal, safe markdown for answers: escape first, then **bold** only (the model sometimes uses it).
-const md = (t) => esc(t).replace(/\*\*([^*\n]{1,120})\*\*/g, "<b>$1</b>");
+const md = (t) => esc(t).replace(/^[ \t]*[-*][ \t]+/gm, "• ").replace(/\*\*([^*\n]{1,120})\*\*/g, "<b>$1</b>");
 
 function talkLabel() {
   if (S.listening) return tt().listening;
