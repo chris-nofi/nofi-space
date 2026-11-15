@@ -233,3 +233,19 @@ a.ceres-proof:hover { background: #cdebed; }
 @media (max-width: 600px) { .glossary dl { grid-template-columns: minmax(0, 1fr); } }
 .ai-note { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 6px 0 0; max-width: 110ch; }
 .rv-verify { font-size: 11px; font-weight: 700; color: var(--teal); margin-left: 6px; }
+
+/* CERES panel sizing: the chat log gets the space, the summary and chips stay compact (fix: log was crushed to one line). */
+.ceres-panel { width: min(440px, calc(100vw - 32px)); height: min(720px, calc(100vh - 110px)); max-height: none; }
+.ceres-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow: hidden; gap: 10px; }
+.ceres-body > * { flex: none; }
+.ceres-summary { max-height: min(150px, 22vh); overflow-y: auto; }
+.ceres-log { flex: 1 1 auto; min-height: 180px; max-height: none; align-content: start; }
+.ceres-log p { max-width: 88%; }
+.ceres-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.ceres-chips button { flex: none; white-space: nowrap; }
+.ceres-form input { padding: 11px 12px; font-size: 14px; }
+.ceres-safe { line-height: 1.4; }
+@media (max-height: 720px) { .ceres-summary { max-height: 96px; } .ceres-log { min-height: 140px; } }
+@media (max-width: 520px) { .ceres-panel { width: calc(100vw - 20px); height: calc(100dvh - 96px); } }
+/* Once the conversation starts, the summary shrinks to three lines so the messages get the room. */
+.ceres-body:has(.ceres-log p.u) .ceres-summary { max-height: 4.9em; overflow-y: auto; font-size: 13px; }
