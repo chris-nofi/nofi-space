@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ceres Ventures · Registro verificable de agua</title>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:#16302b;background:#f6f8f4}
+  h1{font-size:1.4rem}.card{background:#fff;border-radius:12px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 1px 4px #0001}
+  button{background:#1d6b52;color:#fff;border:0;border-radius:8px;padding:.6rem 1rem;font-size:1rem;cursor:pointer}
+  button.secondary{background:#e3ece6;color:#16302b}.ok{color:#1d6b52;font-weight:700}.bad{color:#b23b2a;font-weight:700}
+  small,code{color:#4c6560;word-break:break-all} select,input{font-size:1rem;padding:.4rem;margin:.2rem 0;width:100%}
+</style>
+</head>
+<body>
+<h1>💧 Registro verificable de agua</h1>
+<p>Cada mes, CERES guarda una huella de los datos NASA de tu parcela (agua usada, lluvia, verdor) y su recomendación.
+Cualquier persona —tú, tu cooperativa o un comprador— puede comprobar que nadie la cambió.</p>
+
+<div class="card">
+  <label>Parcela <select id="farm">
+    <option value="moquegua:carumas">Carumas · papa (secano)</option>
+    <option value="moquegua:samegua">Samegua · alfalfa (riego)</option>
+    <option value="moquegua:algarrobal">El Algarrobal · olivo (riego)</option>
+  </select></label>
+  <label>Mes (AAAAMM) <input id="period" value="202610" /></label>
+  <label>Huella del informe (dataHash) <input id="hash" placeholder="0x…" /></label>
+  <button id="check">Comprobar registro</button>
+  <p id="result"></p>
+</div>
+
+<div class="card">
+  <button class="secondary" id="connect">Conectar Core Wallet (opcional)</button>
+  <p><small id="who">Solo para guardar un registro firmado por CERES o ver tus créditos de ahorro.</small></p>
+  <p id="credits"></p>
+</div>
+
+<p><small>Red: Avalanche Fuji (prueba). Contrato: <code id="addr"></code> ·
+<a id="explorer" target="_blank" rel="noopener">ver en el explorador</a></small></p>
+
+<script type="module">
+import { createPublicClient, createWalletClient, custom, http, keccak256, toHex } from "https://esm.sh/viem@2";
+import { avalancheFuji } from "https://esm.sh/viem@2/chains";
+
+// ← paste the deployed address here after `forge script … --broadcast`
+const REGISTRY = new URLSearchParams(location.search).get("registry") || "0x0000000000000000000000000000000000000000";
+const ABI = [
+  { type:"function", name:"verify", stateMutability:"view", inputs:[{type:"bytes32"},{type:"uint32"},{type:"bytes32"}], outputs:[{type:"bool"}] },
+  { type:"function", name:"creditsOf", stateMutability:"view", inputs:[{type:"address"}], outputs:[{type:"uint256"}] },
+  { type:"function", name:"latest", stateMutability:"view", inputs:[{type:"bytes32"},{type:"uint32"}], outputs:[{type:"tuple", components:[
+    {name:"a",type:"tuple",components:[{name:"farmId",type:"bytes32"},{name:"period",type:"uint32"},{name:"revision",type:"uint32"},{name:"etMmX10",type:"int32"},{name:"et0MmX10",type:"int32"},{name:"precipMmX10",type:"int32"},{name:"ndviX1000",type:"int16"},{name:"strategyId",type:"uint8"},{name:"waterSavedM3",type:"uint32"},{name:"dataHash",type:"bytes32"},{name:"sourcesHash",type:"bytes32"},{name:"uri",type:"string"}]},
+    {name:"oracle",type:"address"},{name:"submitter",type:"address"},{name:"timestamp",type:"uint64"},{name:"creditedTo",type:"address"},{name:"credited",type:"uint256"}]}] },
+];
+const pub = createPublicClient({ chain: avalancheFuji, transport: http() });
+const $ = (id) => document.getElementById(id);
+$("addr").textContent = REGISTRY;
+$("explorer").href = `https://testnet.snowtrace.io/address/${REGISTRY}`;
+
+$("check").onclick = async () => {
+  const farmId = keccak256(toHex($("farm").value)); const period = Number($("period").value);
+  try {
+    const rec = await pub.readContract({ address: REGISTRY, abi: ABI, functionName: "latest", args: [farmId, period] });
+    if (!rec.timestamp) { $("result").innerHTML = `<span class="bad">Aún no hay registro para ese mes.</span>`; return; }
+    const h = $("hash").value.trim();
+    const okHash = h ? await pub.readContract({ address: REGISTRY, abi: ABI, functionName: "verify", args: [farmId, period, h] }) : null;
+    const when = new Date(Number(rec.timestamp) * 1000).toLocaleString("es-PE", { timeZone: "America/Lima" });
+    $("result").innerHTML = `${okHash === null ? "" : okHash ? '<span class="ok">✔ Coincide: el informe no fue alterado.</span><br>' : '<span class="bad">✘ No coincide con lo registrado.</span><br>'}
+      Agua usada (ET): ${rec.a.etMmX10/10} mm · Demanda (ET₀): ${rec.a.et0MmX10/10} mm · Lluvia: ${rec.a.precipMmX10/10} mm · Verdor (NDVI): ${rec.a.ndviX1000/1000}<br>
+      Ahorro estimado: ${rec.a.waterSavedM3} m³ · Versión ${rec.a.revision} · Guardado ${when} (hora Perú)<br>
+      <small>Informe completo: <a href="${rec.a.uri}" target="_blank" rel="noopener">${rec.a.uri}</a></small>`;
+  } catch (e) { $("result").innerHTML = `<span class="bad">No se pudo leer la red de prueba.</span> <small>${e.shortMessage || e.message}</small>`; }
+};
+
+$("connect").onclick = async () => {
+  const provider = window.avalanche || window.ethereum; // Core Wallet injects both
+  if (!provider) { $("who").textContent = "Instala Core Wallet (extensión de Chrome) para continuar."; return; }
+  const wallet = createWalletClient({ chain: avalancheFuji, transport: custom(provider) });
+  const [account] = await wallet.requestAddresses();
+  try { await wallet.switchChain({ id: avalancheFuji.id }); } catch { await wallet.addChain({ chain: avalancheFuji }); }
+  $("who").textContent = `Conectado: ${account.slice(0,6)}…${account.slice(-4)}`;
+  const c = await pub.readContract({ address: REGISTRY, abi: ABI, functionName: "creditsOf", args: [account] });
+  $("credits").textContent = `Créditos de ahorro de agua verificados: ${c} m³`;
+};
+</script>
+</body>
+</html>

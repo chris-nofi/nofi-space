@@ -1,0 +1,16 @@
+{
+  "name": "CERES Ventures by NØFI Labs",
+  "short_name": "CERES",
+  "description": "NASA field scores and verifiable records for Moquegua farms.",
+  "start_url": "/app/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0D303E",
+  "theme_color": "#0D303E",
+  "lang": "es",
+  "icons": [
+    { "src": "/assets/brand/Ceres_PWA_Icon_192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/brand/Ceres_PWA_Icon_512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/brand/Ceres_Ventures_App_Icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

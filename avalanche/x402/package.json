@@ -1,0 +1,17 @@
+{
+  "name": "ceres-earth-oracle-x402",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ceres Ventures Earth oracle (field score + evidence) behind an x402 (HTTP 402) paywall, settled in Circle USDC on Avalanche Fuji C-Chain (eip155:43113) via a self-hosted EIP-3009 facilitator. Same code targets the NØFI L1 (880024).",
+  "scripts": {
+    "server": "node server.mjs",
+    "facilitator": "node facilitator-server.mjs",
+    "client": "node client.mjs",
+    "test": "node --test test/*.test.mjs",
+    "pretest": "cd ../oracle && npm ci --silent --no-audit --no-fund"
+  },
+  "dependencies": {
+    "viem": "^2.57.19"
+  }
+}

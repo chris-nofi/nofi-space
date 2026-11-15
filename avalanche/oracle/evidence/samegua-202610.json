@@ -1,5 +1,5 @@
 {
-  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: WaterProofRegistry on Avalanche Fuji C-Chain testnet (chainId 43113). Monthly rain: GPM IMERG Late daily v07 via data/earthdata/apply_imerg_late.py (CHIRPS v3 kept as crossCheck).",
   "_context": {
     "fieldPixel": {
       "lat": -17.17996,
@@ -12,7 +12,7 @@
   "revision": 0,
   "indicators": {
     "et_mm": {
-      "value": 11.7,
+      "value": 17.1,
       "dataset": "ECOSTRESS_L3T_JET_v002",
       "granules": [
         "ECOv002_L3T_JET_47019_020_19KBB_20261020T181602_0713_01"
@@ -37,16 +37,62 @@
       "gapFilledDays": 0
     },
     "precip_mm": {
-      "value": 7.4,
-      "dataset": "CHIRPS_v3.0_monthly",
-      "scale": "0.05 deg",
-      "substituteFor": "GPM_3IMERGDF_v07",
-      "reason": "GES DISC returned 403 'EULA Acceptance Failure' for this Earthdata token"
+      "value": 2.2,
+      "dataset": "GPM_3IMERGDL_v07",
+      "product": "GPM IMERG Late Run Daily V07 (near-real-time). Final Run for 2026 not yet in CMR.",
+      "run": "Late",
+      "scale": "0.1 deg",
+      "point": [
+        -17.15,
+        -70.95
+      ],
+      "days": 31,
+      "granules": [
+        "3B-DAY-L.MS.MRG.3IMERG.20261001-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261002-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261003-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261004-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261005-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261006-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261007-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261008-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261009-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261010-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261011-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261012-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261013-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261014-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261015-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261016-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261017-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261018-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261019-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261020-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261021-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261022-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261023-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261024-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261025-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261026-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261027-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261028-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261029-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261030-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20261031-S000000-E235959.V07C.nc4"
+      ],
+      "crossCheck": {
+        "value": 7.4,
+        "dataset": "CHIRPS_v3.0_monthly",
+        "scale": "0.05 deg"
+      }
     },
     "ndvi": {
-      "value": 0.04,
-      "dataset": "HLS_S30_v2.0",
+      "value": 0.568,
+      "dataset": "HLS_L30_S30_v2.0",
       "granules": [
+        "HLS.L30.T19KBB.2026279T144733.v2.0",
+        "HLS.L30.T19KBB.2026287T144728.v2.0",
+        "HLS.L30.T19KBB.2026303T144732.v2.0",
         "HLS.S30.T19KBA.2026278T145731.v2.0",
         "HLS.S30.T19KBA.2026280T145941.v2.0",
         "HLS.S30.T19KBA.2026283T145729.v2.0",
@@ -67,7 +113,7 @@
         "HLS.S30.T19KBB.2026300T145931.v2.0",
         "HLS.S30.T19KBB.2026303T145729.v2.0"
       ],
-      "stat": "monthly median of 19 clear 30 m scenes (Fmask)",
+      "stat": "monthly median of 22 clear 30 m scenes (Fmask)",
       "pixel": [
         -17.17996,
         -70.90147
@@ -85,7 +131,7 @@
     "recommendedStrategyId": 2,
     "recommendedStrategy": "maiz-arveja rotation",
     "waterSavedM3": 1647,
-    "waterSavedBasis": "(alfalfa Kc 0.95 - rotation Kc 0.45) x ET0 164.7 mm / 0.60 x 1.2 ha; Kc calendar is an assumption; ET0 from the POWER cell shared with Carumas (3851 m; within 5 % of ERA5 ET0); NDVI 0.04 < 0.20 -> contract anti-abandonment rule would block a credit",
+    "waterSavedBasis": "(alfalfa Kc 0.95 - rotation Kc 0.45) x ET0 164.7 mm / 0.60 x 1.2 ha; Kc calendar is an assumption; ET0 from the POWER cell shared with Carumas (3851 m; within 5 % of ERA5 ET0)",
     "recommendationBasis": "dashboard + SI fixture recommendation; water saving recomputed below with ET0 x FAO-56 Kc",
     "confidence": "low"
   },
@@ -182,9 +228,9 @@
         "power": 0.04,
         "era5": 0.0
       },
-      "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
-      "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+      "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. Rain-intensity climatology from POWER and ERA5-Land daily (both reported). IMERG access now works (Late Run daily is the primary monthly rain in indicators.precip_mm); an IMERG Final daily climatology for this proxy is future work.",
+      "imerg_status": "accessible: GPM_3IMERGDL v07 Late daily used for indicators.precip_mm; erosion climatology still POWER/ERA5-Land"
     },
-    "fieldPixelStatus": "PENDING/PARTIAL: field-pixel HLS+ECOSTRESS re-sampling still running; indicators.ndvi / et_mm here are from the bare app point and understate the crop. extensions.cover (Sentinel-2) already uses the field pixel."
+    "fieldPixelStatus": "complete"
   }
 }

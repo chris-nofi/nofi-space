@@ -1,0 +1,158 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>CERES Project Details</title>
+<style>
+:root{--bg:#f6f8fb;--ink:#14202e;--mut:#5a6b80;--line:#d9e1ea;--acc:#0f8a63}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Arial,Helvetica,sans-serif}
+.bar{position:sticky;top:0;background:#0b1626;color:#fff;padding:12px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;z-index:2}
+.bar b{margin-right:auto} button{font:600 15px Arial;border:0;border-radius:8px;padding:10px 14px;background:#5fe3b0;color:#0b1626;cursor:pointer}
+.wrap{max-width:940px;margin:0 auto;padding:16px} .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 24px 18px;margin:18px 0}
+.lbl{font:700 12px Arial;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:14px 0 0}
+img{max-width:100%;height:auto;border-radius:8px} code{background:#eef2f6;padding:1px 4px;border-radius:4px;word-break:break-all}
+blockquote{border-left:4px solid var(--acc);margin:0;padding:4px 16px;background:#f0f7f4} .ok{color:#5fe3b0;font-size:14px}
+</style></head><body>
+<div class="bar"><b>CERES · Space Apps write-up</b><button data-c="sum">Copy Summary</button><button data-c="det">Copy Project Details (with images)</button><span class="ok" id="ok"></span></div>
+<div class="wrap">
+<p class="lbl">Summary</p><div class="box" id="sum"><p><strong>What we developed:</strong> CERES is a free, voice-first field assistant for farmers in Moquegua, Peru. A farmer opens a map on a phone, taps a field and gets a 0–100 score built from NASA satellite data. The score covers water use, crop greenness, soil, frost and erosion. CERES then compares four ways to farm that field, including what the farmer does today, and replays each one through 45 years of NASA weather. Farmers can ask CERES questions out loud in Spanish or English.</p>
+<p><strong>How it addresses Field Shift:</strong> the challenge asks for better rotation and management decisions from Earth observation. At El Algarrobal, CERES recommends drip irrigation with strip cover: the same olive trees with about a quarter less water. Replayed over 45 years of NASA weather, it got through 44 of 45 seasons, more than today's gravity irrigation (43 of 45).</p>
+<p><strong>Why it matters:</strong> only 7.5% of Peruvian producers receive technical assistance, and a single drought cost Moquegua S/21 million. Each record is fingerprinted on Avalanche Fuji, so co-ops, insurers and buyers can verify that the evidence was not changed. They pay for the full data with x402, while farmers keep using it free.</p></div>
+<p class="lbl">Project Details</p><div class="box" id="det"><h3>1. A farmer, a valley and very little water</h3>
+<p>Picture an olive grower in El Algarrobal, in the Ilo valley of Moquegua. It hardly ever rains there. Every drop of water comes down the river or from the Pasto Grande reservoir, and in dry years the water is rationed. In the 2016 drought, more than half of El Algarrobal's olive plantations were lost, and the region lost about S/21 million. In 2019 the opposite happened: heavy rains put about 90% of the Ilo valley olive harvest at risk.</p>
+<p>The farmer has to decide how to irrigate, whether to keep soil cover between rows and when to cut back water, often without anyone to ask. Only about 7.5% of Peruvian producers receive technical assistance. NASA satellites see this valley every few days, but that data almost never reaches the person who works the field.</p>
+<p>CERES closes that gap. It turns NASA data into one score, four options and an answer the farmer can hear.</p>
+<h3>2. Who it is for</h3>
+<ul>
+<li><strong>Farmers</strong> (smallholders in Moquegua's valleys: El Algarrobal, Carumas, Samegua). <em>Need:</em> a clear answer about their own field, in their language, on a phone. <em>CERES gives:</em> field score, four options ranked by their own priorities, a 45-season replay and voice answers. <strong>Free, no account, no wallet.</strong></li>
+<li><strong>Agronomists, Agencia Agraria de Moquegua, INIA.</strong> <em>Need:</em> evidence they can check before advising. <em>CERES gives:</em> every number with its NASA product, resolution and confidence; example values labelled; data gaps listed. <strong>Free.</strong></li>
+<li><strong>Co-ops, insurers, buyers, lenders.</strong> <em>Need:</em> field evidence they can trust and audit. <em>CERES gives:</em> the full evidence record for a field and month, paid per record with x402 and verified on Avalanche Fuji. <strong>Pay per record</strong> (test USDC in this demo).</li>
+</ul>
+<h3>3. Our mission</h3>
+<p>Give every farmer the same quality of field advice a well-funded farm gets from satellites and agronomists, free and by voice. Make that evidence checkable, so the people who finance and insure farmers can rely on it too.</p>
+<h3>4. How it works</h3>
+<p><img src="https://ceres-ventures.netlify.app/media/00_flowchart.jpg" alt="How CERES works: from NASA satellites to a field decision a farmer can hear, and a record anyone can check." width="900"></p>
+<p><em>How CERES works: from NASA satellites to a field decision a farmer can hear, and a record anyone can check.</em></p>
+
+<ol>
+<li><strong>NASA data in.</strong> For each field and month we collect GPM IMERG rain, ECOSTRESS water use (evapotranspiration), HLS crop greenness (NDVI), SMAP soil moisture where a pixel exists, and NASA POWER daily weather back to 1981.</li>
+<li><strong>One evidence record.</strong> All values go into one record per field and month. Each value carries its source, resolution and confidence. Example values are labelled as examples, and missing data is listed as a gap.</li>
+<li><strong>Score and options.</strong> The engine turns the record into a 0–100 field score with five parts: water, vegetation, soil, climate (frost) and erosion. It then ranks four rotation or management options against what the farmer does today.</li>
+<li><strong>45-season replay.</strong> Each option is run through every season from 1981 to 2025 using NASA POWER weather and the FAO-56 water-balance method (WRSI). This shows how often the crop would have run short of water.</li>
+<li><strong>Ask CERES.</strong> CERES, our AI field assistant, answers questions out loud using only that record and the replay. It always reminds the farmer to confirm with the Agencia Agraria or INIA before changing anything.</li>
+<li><strong>Fingerprint.</strong> The record is hashed (SHA-256) and the fingerprint is written to a smart contract on Avalanche Fuji. Anyone can check that the evidence behind a score was not changed afterwards.</li>
+</ol>
+<h3>5. How to use it, step by step</h3>
+<p><strong>Farmer (about 1 minute, phone):</strong></p>
+<ol>
+<li>Open https://ceres-ventures.netlify.app and tap <strong>Open map</strong>. The first screen shows four steps and who CERES is for.</li>
+<li>Tap a numbered pin, or <strong>Start with El Algarrobal</strong>. Read the field score and its five parts.</li>
+<li>Scroll to <strong>Rotation and management options</strong>. Move the Water, Soil and Income sliders to match your priorities, and the ranking updates instantly.</li>
+<li>Tap <strong>Talk to CERES</strong> and ask out loud, for example "Why is drip first?" CERES answers out loud.</li>
+<li>Check <strong>45 seasons</strong> to see how each option held up since 1981.</li>
+</ol>
+<p><img src="https://ceres-ventures.netlify.app/media/01_onboarding.jpg" alt="Step 1. The map opens with four numbered steps and who CERES is for." width="900"></p>
+<p><em>Step 1. The map opens with four numbered steps and who CERES is for.</em></p>
+
+<p><img src="https://ceres-ventures.netlify.app/media/02_field_score.jpg" alt="Step 2. El Algarrobal scores 58/100. Each part of the score names its NASA product and resolution." width="900"></p>
+<p><em>Step 2. El Algarrobal scores 58/100. Each part of the score names its NASA product and resolution.</em></p>
+
+<p><img src="https://ceres-ventures.netlify.app/media/03_options.jpg" alt="Step 3. Four options ranked by the farmer&#x27;s own priorities. Drip + strip cover uses about a quarter less water." width="900"></p>
+<p><em>Step 3. Four options ranked by the farmer&#x27;s own priorities. Drip + strip cover uses about a quarter less water.</em></p>
+
+<p><img src="https://ceres-ventures.netlify.app/media/04_ask_ceres.jpg" alt="Step 4. A farmer asks CERES about El Niño years and gets an answer out loud, with its limits." width="900"></p>
+<p><em>Step 4. A farmer asks CERES about El Niño years and gets an answer out loud, with its limits.</em></p>
+
+<p><img src="https://ceres-ventures.netlify.app/media/05_45_seasons.jpg" alt="Step 5. Every option replayed through 45 seasons of NASA POWER weather since 1981. Drip failed once (1983)." width="900"></p>
+<p><em>Step 5. Every option replayed through 45 seasons of NASA POWER weather since 1981. Drip failed once (1983).</em></p>
+
+<p><strong>Agronomist or Agencia Agraria technician:</strong> open the same field with the farmer and review the source chips under the score (NASA product, resolution, Late Run or Final Run). Open <strong>Data gaps</strong> and <strong>Method and limits</strong>. Use CERES as a starting point for the conversation, not a replacement for it.</p>
+<p><strong>Co-op, insurer or buyer:</strong> on the landing page, open <strong>For buyers</strong>. Request the full record for a field and month. The server replies <code>402 Payment Required</code>. Sign the payment in Core Wallet and pay in test USDC on Avalanche Fuji. You receive the full data, plus a proof that its fingerprint matches the one on chain.</p>
+<p><img src="https://ceres-ventures.netlify.app/media/06_verifiable_record.jpg" alt="The evidence fingerprint is anchored on Avalanche Fuji. The check mark means the data has not changed." width="900"></p>
+<p><em>The evidence fingerprint is anchored on Avalanche Fuji. The check mark means the data has not changed.</em></p>
+
+<h3>6. A real example: El Algarrobal</h3>
+<p>The olive grove at El Algarrobal scores <strong>58/100 (medium confidence)</strong> for October 2026. Water is 46.3 and vegetation 22.4. The soil between the trees is bare.</p>
+<p>The engine ranks four options:</p>
+<ul>
+<li>Gravity irrigation, bare soil (today): 17,070 m³/ha/yr; failed 2 of 45 seasons</li>
+<li>Deficit irrigation guided by ECOSTRESS: 12,800 m³/ha/yr; failed 2 of 45</li>
+<li>Olive + winter legume cover: 20,210 m³/ha/yr; failed 3 of 45</li>
+<li><strong>Drip + strip cover (engine's pick): 12,890 m³/ha/yr; failed 1 of 45</strong></li>
+</ul>
+<p>In plain words: <strong>same olives, a quarter less water, and it held up in 44 of 45 past seasons.</strong></p>
+<p>Here is a real exchange with CERES (abridged):</p>
+<blockquote>
+<p><strong>Farmer:</strong> How would drip have done in El Niño years?</p>
+<p><strong>CERES:</strong> Drip with strip cover held up best in El Niño years. This comes from a model run on past weather, not from observed yields. It covers 45 seasons from 1981 to 2025, and 15 of them were El Niño years. Drip failed from water shortage in 1 of the 15, which was 1983. Today's gravity irrigation failed in 2, in 1983 and 1992. In 1982–83 every option failed; no irrigation method beats a drought that severe. What CERES can offer there is early warning and water savings that stretch the reservoir. … Please review this with the Agencia Agraria de Moquegua, INIA or a trusted technician before changing anything. They can also arrange a soil conductivity test for salinity.</p>
+</blockquote>
+<p>CERES states its uncertainty, names what it does not know (drip cost, measured salinity) and sends the farmer to a local expert.</p>
+<h3>7. NASA data, and what each product changes on screen</h3>
+<ul>
+<li><strong>GPM IMERG Late Run, daily v07</strong> (GPM_3IMERGDL): Rainfall, 0.1°. <em>On screen:</em> Water part of the score; rain in the season strip.</li>
+<li><strong>ECOSTRESS L3T JET v002</strong>: Evapotranspiration (crop water use), 70 m. <em>On screen:</em> Water score; the "deficit irrigation guided by ECOSTRESS" option.</li>
+<li><strong>HLS L30 / S30 v2.0</strong> (Landsat + Sentinel-2, harmonized): Crop greenness (NDVI), 30 m. <em>On screen:</em> Vegetation score; bare-soil flag.</li>
+<li><strong>SMAP L3 Enhanced (SPL3SMP_E v006)</strong>: Soil moisture, 9 km, where available. <em>On screen:</em> Water score when a pixel exists; otherwise listed as a gap.</li>
+<li><strong>NASA POWER Daily (AG), 1981–2025</strong>: Temperature, rain, radiation, evapotranspiration. <em>On screen:</em> The 45-season replay and frost risk.</li>
+<li><strong>SRTM GL1</strong>: Elevation and slope, 30 m. <em>On screen:</em> Erosion score.</li>
+</ul>
+<p>Partner and open data: ESA Sentinel-2 L2A (NDVI cross-check, 10 m), CHIRPS v3 (rain cross-check), ISRIC SoilGrids 2.0 (soil, a machine-learning model; labelled non-NASA on screen).</p>
+<h3>8. How we use blockchain, and why</h3>
+<p>Farmers never touch the blockchain. It exists for the people who need to <strong>trust</strong> the evidence: co-ops, insurers, buyers and lenders.</p>
+<p><strong>Integrity: fingerprints on Avalanche Fuji.</strong></p>
+<ul>
+<li>The evidence record is written as canonical JSON and hashed with SHA-256.</li>
+<li>A smart contract, <code>WaterProofRegistry</code> at <code>0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d</code> on Avalanche Fuji (chain 43113), stores the hash, the field, the month and a revision number.</li>
+<li>When data is corrected (for example, switching rain from CHIRPS to IMERG), a new revision is written. The old one stays visible as "superseded", so history cannot be quietly rewritten.</li>
+<li>The site checks the live record against the chain with a read-only call. A green badge means it matches. Anyone can follow the link to Snowtrace and see the transaction.</li>
+<li>Live example: El Algarrobal, October 2026, revision 1, transaction <code>0xbfbaa0272f55912160bb499f80dbee3f32aa97d97216e927a1351646072d0d50</code>, block 61129803.</li>
+</ul>
+<p><strong>Payments: x402.</strong></p>
+<ul>
+<li>Public data (score, options, replay) is free. The full evidence record is paid.</li>
+<li>A buyer requests it, and the server answers <code>402 Payment Required</code> with the price.</li>
+<li>The buyer signs an EIP-3009 authorization in <strong>Core Wallet</strong>. A facilitator settles it in test USDC on Avalanche Fuji, and the server returns the data with a proof.</li>
+<li>There is no account, subscription or card. An automated leak audit checks every build so that no paid field is ever served for free.</li>
+</ul>
+<p><strong>Why this matters:</strong> buyers' payments can fund the free farmer service, and an insurer can rely on evidence that provably was not edited after a bad season.</p>
+<h3>9. Design principles</h3>
+<ul>
+<li><strong>Voice first.</strong> Many farmers are more comfortable speaking than typing. CERES listens and answers out loud, and every screen also works by touch.</li>
+<li><strong>One idea per screen.</strong> The map opens with four numbered steps, and the field panel follows the same numbers. People learn better from words plus pictures than from words alone (Mayer, multimedia principle).</li>
+<li><strong>Plain numbers first, units in the details.</strong> "A quarter less water" comes first; m³/ha/yr is one tap away.</li>
+<li><strong>Honest by default.</strong> Every value names its source and confidence. Example values are labelled, and CERES points to local experts.</li>
+</ul>
+<h3>10. Honest limits</h3>
+<ul>
+<li>The 45-season replay is a <strong>model hindcast</strong> from weather data, not observed yields. It understates real losses: the model shows olives surviving 2016, when farmers lost more than half their plantations.</li>
+<li>The water-supply index is a proxy, and the gaps between options are small (one or two seasons out of 45). For drip, El Niño years did not differ significantly from other years (Mann-Whitney p = 0.56).</li>
+<li>Income figures are example values. Drip installation cost is not yet included.</li>
+<li>Soil comes from SoilGrids, a model, not lab tests. Salinity risk is inferred.</li>
+<li>The blockchain layer runs on the Avalanche Fuji <strong>testnet</strong> with test USDC.</li>
+<li>CERES supports the Agencia Agraria and INIA; it does not replace them.</li>
+</ul>
+<h3>11. What's next</h3>
+<p>Validate with farmers and the Agencia Agraria de Moquegua, add drip cost and financing data, cover every valley in Moquegua and then Peru, and move from Fuji testnet to mainnet once buyers commit. It stays free for farmers.</p>
+<h3>12. Team</h3>
+<p>CERES Ventures is a team of fintech entrepreneurs and blockchain specialists with a deep passion for the space industry and for advancing humanity. We are long-time supporters of NASA's programs, and we built CERES to bring that science to the farmers who feed our region.</p>
+<h3>13. Use of AI</h3>
+<p>CERES uses Claude (Anthropic) to answer farmer questions from the evidence record. Its answers are labelled "AI-generated" on screen. Voice uses the browser's speech engine. The demo video uses an AI-generated voiceover. AI tools also helped write code and text, and the team reviewed all of it. All data, scores and replay counts come from NASA data and our open code, not from AI.</p>
+<h3>References</h3>
+<ol>
+<li>ProActivo (1 Dec 2016). Sequía en el sur: Moquegua pierde 21 millones de soles por falta de agua. https://proactivo.com.pe/sequia-en-el-sur-moquegua-pierde-21-millones-de-soles-por-falta-de-agua/</li>
+<li>Agraria.pe (22 Feb 2019). El 90% de la cosecha de aceituna está en riesgo de perderse. https://agraria.pe/noticias/el-90-de-la-cosecha-de-aceituna-esta-en-riesgo-de-perderse-e-18476</li>
+<li>Agraria.pe (25 Jun 2018). El agro nacional no tiene las herramientas suficientes. https://agraria.pe/noticias/el-agro-nacional-no-tiene-las-herramientas-suficientes-para--16898</li>
+<li>Allen, R. G., Pereira, L. S., Raes, D. &amp; Smith, M. (1998). Crop evapotranspiration (FAO Irrigation and Drainage Paper 56). FAO.</li>
+<li>Mayer, R. E. (Ed.) (2014). The Cambridge Handbook of Multimedia Learning (2nd ed.). Cambridge University Press.</li>
+<li>NASA GES DISC, GPM IMERG Late Precipitation L3 1 day V07. https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary</li>
+<li>NASA LP DAAC, ECOSTRESS L3T JET v002. https://lpdaac.usgs.gov/products/eco_l3t_jetv002/</li>
+<li>NASA LP DAAC, HLS L30 / S30 v2.0. https://lpdaac.usgs.gov/products/hlsl30v002/ and https://lpdaac.usgs.gov/products/hlss30v002/</li>
+<li>NSIDC, SMAP Enhanced L3 Radiometer Soil Moisture v006. https://nsidc.org/data/spl3smp_e/versions/6</li>
+<li>NASA POWER. https://power.larc.nasa.gov/</li>
+<li>NASA LP DAAC, SRTM GL1 v003. https://lpdaac.usgs.gov/products/srtmgl1v003/</li>
+<li>Live demo: https://ceres-ventures.netlify.app · Code: https://github.com/chris-nofi/nofi-space · Video: https://youtu.be/YROGS1WaWb8</li>
+</ol></div>
+</div>
+<script>
+document.querySelectorAll('button[data-c]').forEach(b=>b.onclick=async()=>{
+ const el=document.getElementById(b.dataset.c); const ok=document.getElementById('ok');
+ try{ await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([el.innerHTML],{type:'text/html'}),'text/plain':new Blob([el.innerText],{type:'text/plain'})})]); ok.textContent='Copied. Now paste into the form.'; }
+ catch(e){ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); ok.textContent='Selected. Press Ctrl+C (Cmd+C on Mac).'; }
+});
+</script></body></html>

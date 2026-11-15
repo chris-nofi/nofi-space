@@ -5,8 +5,8 @@ Inputs (all produced in this repo): data/out/<farm>_daily.csv (POWER + FAO-56 ET
 data/raw/chirps_v3_monthly_points.csv, data/raw/hls_ndvi_points.csv, data/raw/ecostress_jet_points.csv,
 data/out/<farm>_ndvi_mod13q1.csv (fallback), data/out/algarrobal.json strategies_recomputed.
 Output: avalanche/oracle/evidence/<farm>-<YYYYMM>.json  (never signs or sends anything).
-Target chain for the later attestation: NOFI Avalanche L1 testnet, chainId 880024 (pass --chain 880024 to
-build-attestation.mjs). The evidence schema itself has no chain field.
+Target chain for the attestation: Avalanche Fuji C-Chain testnet, chainId 43113 (WaterProofRegistry; build-attestation.mjs
+defaults to 43113). The same schema moves unchanged to the NOFI L1 (880024) later. The evidence schema itself has no chain field.
 usage: data/.venv/bin/python data/build_evidence.py 202607 202608 202609 202610
 """
 import hashlib, json, sys
@@ -149,7 +149,7 @@ def build(fid, period, chirps, hls, eco, smap=None):
                                        baseline_2015_2025_m3m3=round(float(base.sm_am.mean()), 3), dataset="SMAP_SPL3SMP_E_v006",
                                        scale="9 km (regional signal)", granules=sorted(cur_m.granule.str.replace("_Soil_Moisture_Retrieval_Data_AM_soil_moisture_subsetted.nc4", "", regex=False).tolist()))
     ev = {
-        "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: NOFI Avalanche L1 testnet chainId 880024.",
+        "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: WaterProofRegistry on Avalanche Fuji C-Chain testnet (chainId 43113).",
         "_context": ctx,
         "farmKey": f"moquegua:{fid}", "period": period, "revision": 0, "indicators": ind,
         "engine": {"version": f"ceres pull_and_build.py (sha256 {SCRIPT_SHA})", "priorities": PRIORITIES,

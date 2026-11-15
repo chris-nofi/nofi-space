@@ -1,3 +1,4 @@
+# Netlify reads the real config from ceres-web/netlify.toml (build -> ceres-web/dist, functions -> ceres-web/netlify/functions).
+# The previous static site/ (PR #1) stays in the repo as archive and as the source of /legacy/.
 [build]
-  publish = "site"
-  command = ""
+  base = "ceres-web"

@@ -1,0 +1,17 @@
+{
+  "name": "ceres-water-proof-oracle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build-attestation.mjs evidence/algarrobal-202610.json",
+    "check": "node check-digest.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "viem": "^2.57.19"
+  }
+}

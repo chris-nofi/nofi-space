@@ -1,9 +1,14 @@
 # AGENTS.md — instructions for Codex
 
+> **Current architecture (14 Nov 2026): read `docs/12_CERES_SYSTEM_DESIGN.md` first.** It supersedes the chain, deploy and website
+> parts of every other doc here. The deployed website is **`ceres-web/`** (build → `ceres-web/dist`, x402 API as a Netlify Function).
+> The demo chain is **Avalanche Fuji C-Chain (43113)** with Circle Fuji USDC; the NØFI L1 (880024) is the later target, roadmap only.
+> `site/` (PR #1) is archived and served at `/legacy/` until CERES voice moves into `/app` (task C1). Codex tasks: §12 of that doc.
+
 You are improving **CERES Ventures, by NOFI Labs**, a NASA Space Apps 2026 entry (challenge: Field Shift, local event: Moquegua, Perú). Read `docs/09_PLAN_V2.md` first (it overrides older docs on chain and money), then `docs/01_PROJECT_BREAKDOWN.md`, then work through `docs/CODEX_TASKS.md` in order.
 
 ## What this project is
-A crop-rotation explorer focused on water. NASA ECOSTRESS measures how much water each field uses; the farmer compares the existing rotation with three alternatives (evidence, gaps, risks), and CERES explains it by voice or chat. Each monthly record is hashed and anchored in `WaterProofRegistry` on the NØFI L1 (chain 880024); the CERES agent, cooperatives and buyers pay per query with x402. Farmers never pay and never see crypto.
+A crop-rotation explorer focused on water. NASA ECOSTRESS measures how much water each field uses; the farmer compares the existing rotation with three alternatives (evidence, gaps, risks), and CERES explains it by voice or chat. Each monthly record is hashed and anchored in `WaterProofRegistry` on Avalanche Fuji C-Chain (43113) for the demo (NØFI L1 880024 later); the CERES agent, cooperatives and buyers pay per query with x402. Farmers never pay and never see crypto.
 
 ## Ground rules (do not break these)
 1. **NASA data first.** The decision tool is the product. Chain, wallet and x402 are plumbing and must stay visually secondary.

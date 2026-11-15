@@ -12,11 +12,11 @@ Cuando hables con un agricultor, no le hables de x402, tokens, gas ni billeteras
 
 ## Qué es el registro verificable
 Cada mes y por parcela, el oráculo de la Tierra arma un registro con:
-- **ET** (agua que usa el cultivo, de ECOSTRESS), **ET0** (lo que pide el clima, de POWER), **lluvia** (POWER, luego GPM IMERG), **NDVI** (verdor, de HLS);
+- **ET** (agua que usa el cultivo, de ECOSTRESS), **ET0** (lo que pide el clima, de POWER), **lluvia** (GPM IMERG Late; CHIRPS como contraste), **NDVI** (verdor, de HLS);
 - la **estrategia recomendada** y el **agua ahorrada** estimada frente a la práctica actual;
 - los identificadores de los datos de la NASA usados y la versión del motor.
 
-De ese registro se calcula una **huella digital** (dataHash, un sha256). La huella se guarda en un contrato llamado **WaterProofRegistry** en la L1 de NOFI. Si alguien cambia un solo número del registro, la huella ya no coincide y el contrato dice "✘ no coincide". Así **nadie puede inflar el ahorro de agua, ni nosotros**.
+De ese registro se calcula una **huella digital** (dataHash, un sha256). La huella se guarda en un contrato llamado **WaterProofRegistry** en **Avalanche Fuji C-Chain**, la red de prueba de Avalanche (chain ID 43113). Si alguien cambia un solo número del registro, la huella ya no coincide y el contrato dice "✘ no coincide". Así **nadie puede inflar el ahorro de agua, ni nosotros**.
 
 Solo oráculos autorizados pueden escribir registros. Si un extraño lo intenta, el contrato lo rechaza.
 
@@ -29,21 +29,21 @@ Solo oráculos autorizados pueden escribir registros. Si un extraño lo intenta,
 | **Una cooperativa** (olivo, alfalfa) | El reporte mensual verificado de sus socios, para demostrar ahorro de agua ante un MERESE o la Junta de Usuarios | 0.05 por parcela |
 | **Un comprador o auditor** | Un registro y su evidencia para comprobar una declaración de trazabilidad | 0.05 |
 
-No hay suscripción ni cuenta: se paga solo lo que se consulta. Hoy es una **red de prueba (testnet)**: los dólares son de prueba y no tienen valor.
+No hay suscripción ni cuenta: se paga solo lo que se consulta. Hoy es una **red de prueba (testnet)**: el pago es en USDC de prueba de Circle en Fuji y no tiene valor.
 
 ## Cómo funciona x402 (para jueces, socios e instituciones)
 x402 es un estándar abierto para cobrar en internet por consulta, usando el código HTTP 402 "Payment Required".
 1. El comprador pide el dato y el oráculo responde **402** con el precio.
 2. El comprador **firma** una autorización de pago (EIP-3009). No envía una transacción ni paga gas: solo firma.
 3. Un **facilitador** verifica la firma y envía el pago a la cadena (él paga el gas).
-4. El oráculo entrega el dato junto con el enlace a la transacción en el explorador **nofiscan.io** y confirma que el dato vendido es exactamente el que está registrado en la cadena.
+4. El oráculo entrega el dato junto con el enlace a la transacción en el explorador **testnet.snowtrace.io** y confirma que el dato vendido es exactamente el que está registrado en la cadena.
 Lo usa el propio agente CERES: le compra el dato al oráculo de la Tierra como pagaría una API, pero sin claves ni contratos de suscripción.
 
-## La L1 de NOFI (NØFI Chain)
-- Es **una blockchain propia** de NOFI construida con Avalanche (una L1 soberana, ACP-77), red de prueba, chain ID 880024. No es un contrato dentro de una red compartida.
-- **El gas se paga en dólares de prueba (tUSD)**, no en un token volátil. Las tarifas están fijadas por la propia red (alrededor de 0.002 dólares de prueba por pago).
-- Explorador: **nofiscan.io**.
-- Próximo paso (todavía no construido): reflejar los registros en la C-Chain de Avalanche con ICM para compradores que trabajan allí.
+## La red: Avalanche Fuji (testnet)
+- Los registros y los pagos de esta demo corren en **Avalanche Fuji C-Chain**, la red de prueba pública de Avalanche (chain ID 43113).
+- Contrato WaterProofRegistry: 0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d. Explorador: **testnet.snowtrace.io**.
+- El pago x402 usa **USDC de prueba de Circle en Fuji**; el gas (AVAX de prueba) lo paga el facilitador, no el comprador.
+- La L1 propia de NØFI (chain 880024, gas en stablecoin) es un **plan futuro**: hoy no está en uso. No digas que los registros están en la L1 de NØFI ni des enlaces de nofiscan.
 No digas cifras de velocidad de la red que no estén medidas.
 
 ## La regla que protege a todos

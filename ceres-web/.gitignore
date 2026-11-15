@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.netlify/
+.env.local
+netlify/functions/_x402/
+.audit/

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0D303E">
+<meta name="description" content="Mapa de chacras de Moquegua con puntaje de suelo y agua a partir de datos NASA, opciones de rotación y registro verificable.">
+<title>Ceres · Mapa de chacras</title>
+<link rel="icon" href="/assets/brand/Ceres_Ventures_App_Icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/Ceres_Favicon_32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/brand/Ceres_Apple_Touch_Icon_180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="CERES Ventures by NØFI Labs">
+<meta property="og:image" content="https://ceres-ventures.netlify.app/assets/brand/Ceres_Ventures_Logo_Dark.png">
+<meta property="og:image:alt" content="CERES Ventures by NØFI Labs">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  html,body{height:100%}
+  body{display:flex;flex-direction:column;overflow:hidden}
+  .nav{position:relative}
+  .shell{flex:1;display:grid;grid-template-columns:1fr 440px;min-height:0}
+  .mapcol{position:relative;min-height:0;min-width:0}
+  .shell>*{min-width:0}
+  .mapcol .mapbox{position:absolute;inset:0;border-radius:0;border:0}
+  .mapcol .map-fallback{padding-top:68px}
+  .navtitle{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  @media (max-width:440px){.navtitle{display:none}}
+  .farmbar{position:absolute;z-index:5;top:12px;left:12px;right:12px;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+  .farmbar button{pointer-events:auto;display:flex;align-items:center;gap:8px;background:rgba(9,38,50,.92);border:1px solid var(--line2);color:var(--ink);border-radius:10px;padding:6px 10px 6px 6px;font:600 .85rem var(--font);cursor:pointer}
+  .farmbar button[aria-pressed="true"]{border-color:var(--mint)}
+  .farmbar .badge{min-width:30px;height:30px;font-size:.85rem;border-radius:9px;box-shadow:none}
+  .drawer{background:var(--bg2);border-left:1px solid var(--line);overflow-y:auto;min-height:0;overscroll-behavior:contain}
+  .drawer .inner{padding:18px 18px 40px}
+  .dhead{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+  .dhead h1{font-size:1.35rem;margin:0}
+  .close{background:none;border:1px solid var(--line2);color:var(--ink);border-radius:8px;width:34px;height:34px;cursor:pointer;flex:none;font-size:1.1rem}
+  .dsec{margin-top:22px;padding:0;border-top:0}
+  .dsec>h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:0 0 10px}
+  .scorehead{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .scorehead .badge{min-width:66px;height:66px;font-size:1.9rem;border-radius:18px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  details.gaps summary{cursor:pointer;color:var(--muted);font-size:.88rem;margin-top:10px}
+  details.gaps ul{margin:.4rem 0 0 1.1rem;padding:0;font-size:.85rem;color:var(--muted)}
+  .sliders{display:grid;gap:8px;margin-bottom:12px}
+  .slider{display:grid;grid-template-columns:70px 1fr 34px;gap:10px;align-items:center;font-size:.86rem}
+  .slider input{width:100%;accent-color:var(--mint)}
+  .strat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+  .strat.top{border-color:var(--mint)}
+  .strat h3{font-size:1rem;margin:0 0 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .strat .rank{font:800 .8rem var(--font);color:var(--navy);background:var(--mint);border-radius:6px;padding:1px 7px}
+  .strat dl{display:grid;grid-template-columns:max-content 1fr;gap:3px 10px;margin:8px 0 0;font-size:.86rem}
+  .strat dt{color:var(--dim)} .strat dd{margin:0;color:#cfe3e1}
+  .kpis{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem;margin-top:4px}
+  .kpis b{font-variant-numeric:tabular-nums}
+  .season{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:6px}
+  .season .m{height:42px;border-radius:5px;position:relative;border:1px solid transparent}
+  .season .m.bare{border-color:var(--amber)}
+  .season .m .fz{position:absolute;top:3px;right:3px;font-size:.7rem}
+  .season .lbl{font-size:.68rem;color:var(--dim);text-align:center}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.76rem;color:var(--muted);margin-top:8px}
+  .record{display:flex;gap:10px;align-items:flex-start}
+  .record .ic{font-size:1.4rem;line-height:1}
+  .empty{padding:28px 18px;color:var(--muted)}
+  @media (max-width:900px){
+    body{overflow:auto}
+    .shell{grid-template-columns:1fr;grid-template-rows:auto auto}
+    .mapcol{height:56vh;min-height:320px}
+    .drawer{border-left:0;border-top:1px solid var(--line);overflow:visible}
+  }
+  @media (max-width:600px){.farmbar{flex-wrap:nowrap;overflow-x:auto;pointer-events:auto;scrollbar-width:none;padding-bottom:2px}.farmbar::-webkit-scrollbar{display:none}.farmbar button{flex:none}}
+</style>
+<script src="/assets/config.js"></script>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap" style="max-width:none">
+    <a class="brand" href="/" aria-label="CERES Ventures by NØFI Labs · inicio / home"><img class="brand-full" src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="" width="153" height="50"><img class="brand-icon" src="/assets/brand/Ceres_Ventures_App_Icon.svg" alt="" width="34" height="34"></a>
+    <span class="muted navtitle" data-t="title">Mapa de chacras</span>
+    <div class="nav-actions">
+      <a class="btn ghost sm" href="#ceres" data-ceres-nav data-t="ceres">Hablar con CERES</a>
+      <button class="lang" id="lang" type="button" aria-label="Cambiar idioma / Change language">EN</button>
+    </div>
+  </div>
+</header>
+<div class="shell">
+  <div class="mapcol">
+    <div class="mapbox" id="map"></div>
+    <div class="farmbar" id="farmbar" role="toolbar" aria-label="Chacras"></div>
+  </div>
+  <aside class="drawer" id="drawer" aria-live="polite" aria-label="Detalle de la parcela">
+    <div class="empty" id="empty">Cargando…</div>
+  </aside>
+</div>
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

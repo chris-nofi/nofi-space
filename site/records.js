@@ -1,12 +1,12 @@
 /* CERES Ventures — "Registro verificable" view (plan v2).
    Farmer side: monthly NASA records with their fingerprint (dataHash) and status. No wallet, token or price.
-   Partner side: how cooperatives, buyers and the CERES agent pay per query with x402 on the NØFI L1.
+   Partner side: how cooperatives, buyers and the CERES agent pay per query with x402 on Avalanche Fuji C-Chain (testnet, 43113).
    Data: GET {oracleUrl}/v1/records/{farm} when config.oracleUrl is set, else window.AGUA_SI_RECORDS. */
 (() => {
   "use strict";
   const CFG = window.AGUA_CLARA_CONFIG || {};
   const ORACLE = (CFG.oracleUrl || "").replace(/\/$/, "");
-  const EXPLORER = (CFG.explorerUrl || "https://nofiscan.io").replace(/\/$/, "");
+  const EXPLORER = (CFG.explorerUrl || "https://testnet.snowtrace.io").replace(/\/$/, "");
   const BUNDLED = window.AGUA_SI_RECORDS || {};
   const S = { live: {}, err: "", copied: "" };
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -89,17 +89,17 @@
       </article>
 
       <article class="card rv-partners">
-        <div class="card-header"><div><span class="eyeline">02 / ${T(lang, "PARA COOPERATIVAS, COMPRADORES Y JUECES", "FOR COOPERATIVES, BUYERS AND JUDGES")}</span><h3>${T(lang, "Pago por consulta con x402 en nuestra propia L1", "Pay per query with x402 on our own L1")}</h3></div></div>
+        <div class="card-header"><div><span class="eyeline">02 / ${T(lang, "PARA COOPERATIVAS, COMPRADORES Y JUECES", "FOR COOPERATIVES, BUYERS AND JUDGES")}</span><h3>${T(lang, "Pago por consulta con x402 en Avalanche Fuji (testnet)", "Pay per query with x402 on Avalanche Fuji (testnet)")}</h3></div></div>
         <ol class="rv-steps">
           <li><b>402</b><span>${T(lang, "Pides el registro de una parcela y un mes; el oráculo responde «Payment Required» con el precio.", "Request one field-month record; the oracle answers “Payment Required” with the price.")}</span></li>
           <li><b>${T(lang, "Firma", "Sign")}</b><span>${T(lang, "Tu billetera firma una autorización (EIP-3009). No envías una transacción ni pagas gas.", "Your wallet signs an authorization (EIP-3009). No transaction to send, no gas.")}</span></li>
-          <li><b>200</b><span>${T(lang, "El facilitador liquida el pago en la NØFI L1 y recibes el dato con el enlace a la transacción en nofiscan.", "The facilitator settles on the NØFI L1 and you get the data plus the nofiscan transaction link.")}</span></li>
+          <li><b>200</b><span>${T(lang, "El facilitador liquida el pago en Avalanche Fuji C-Chain y recibes el dato con el enlace a la transacción en Snowtrace.", "The facilitator settles on Avalanche Fuji C-Chain and you get the data plus the Snowtrace transaction link.")}</span></li>
           <li><b>✔</b><span>${T(lang, "El contrato WaterProofRegistry confirma que lo que compraste es exactamente lo registrado.", "The WaterProofRegistry contract confirms what you bought is exactly what was recorded.")}</span></li>
         </ol>
         <div class="rv-facts">
-          <span><small>${T(lang, "Red", "Network")}</small>NØFI Chain · ${T(lang, "Avalanche L1 testnet", "Avalanche L1 testnet")} · 880024</span>
-          <span><small>${T(lang, "Gas", "Gas")}</small>${T(lang, "tUSD (dólar de prueba)", "tUSD (test dollar)")}</span>
-          <span><small>${T(lang, "Precio", "Price")}</small>0.05 tUSDCx ${T(lang, "por registro", "per record")}</span>
+          <span><small>${T(lang, "Red", "Network")}</small>Avalanche Fuji C-Chain · ${T(lang, "testnet", "testnet")} · 43113</span>
+          <span><small>${T(lang, "Gas", "Gas")}</small>${T(lang, "AVAX de prueba (lo paga el facilitador)", "test AVAX (paid by the facilitator)")}</span>
+          <span><small>${T(lang, "Precio", "Price")}</small>0.05 USDC ${T(lang, "de prueba (Circle, Fuji) por registro", "test (Circle, Fuji) per record")}</span>
           <span><small>${T(lang, "Explorador", "Explorer")}</small><a href="${E(EXPLORER)}" target="_blank" rel="noopener noreferrer">${E(EXPLORER.replace(/^https?:\/\//, ""))}</a></span>
         </div>
         <div class="rv-actions">

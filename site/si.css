@@ -233,3 +233,50 @@ a.ceres-proof:hover { background: #cdebed; }
 @media (max-width: 600px) { .glossary dl { grid-template-columns: minmax(0, 1fr); } }
 .ai-note { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 6px 0 0; max-width: 110ch; }
 .rv-verify { font-size: 11px; font-weight: 700; color: var(--teal); margin-left: 6px; }
+
+/* CERES panel sizing: the chat log gets the space, the summary and chips stay compact (fix: log was crushed to one line). */
+.ceres-panel { width: min(440px, calc(100vw - 32px)); height: min(720px, calc(100vh - 110px)); max-height: none; }
+.ceres-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow: hidden; gap: 10px; }
+.ceres-body > * { flex: none; }
+.ceres-summary { max-height: min(150px, 22vh); overflow-y: auto; }
+.ceres-log { flex: 1 1 auto; min-height: 180px; max-height: none; align-content: start; }
+.ceres-log p { max-width: 88%; }
+.ceres-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.ceres-chips button { flex: none; white-space: nowrap; }
+.ceres-form input { padding: 11px 12px; font-size: 14px; }
+.ceres-safe { line-height: 1.4; }
+@media (max-height: 720px) { .ceres-summary { max-height: 96px; } .ceres-log { min-height: 140px; } }
+@media (max-width: 520px) { .ceres-panel { width: calc(100vw - 20px); height: calc(100dvh - 96px); } }
+/* Once the conversation starts, the summary shrinks to three lines so the messages get the room. */
+.ceres-body:has(.ceres-log p.u) .ceres-summary { max-height: 4.9em; overflow-y: auto; font-size: 13px; }
+
+/* CERES voice: a big, obvious "Talk to CERES" button, a listen button on every answer, an orb that breathes when CERES speaks. */
+.ceres-row { align-items: center; }
+.ceres-row .ceres-say { padding: 8px 12px 8px 10px; }
+.ceres-talk { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border-radius: 14px; text-align: left; color: #eafff9; background: linear-gradient(135deg, #0f6b72 0%, #0d4552 100%); box-shadow: 0 10px 24px -14px rgba(9,44,57,.75), inset 0 0 0 1px rgba(98,225,200,.25); transition: transform .15s ease, box-shadow .2s ease; }
+.ceres-talk:hover { transform: translateY(-1px); box-shadow: 0 14px 28px -14px rgba(9,44,57,.8), inset 0 0 0 1px rgba(98,225,200,.45); }
+.ceres-talk:focus-visible { outline: 3px solid #62e1c8; outline-offset: 2px; }
+.ceres-talk-ic { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; flex: none; background: #62e1c8; color: #0b3543; }
+.ceres-talk-ic svg { width: 22px; height: 22px; }
+.ceres-talk-tx { display: grid; gap: 2px; min-width: 0; }
+.ceres-talk-tx b { font-size: 15px; letter-spacing: .2px; }
+.ceres-talk-tx small { font-size: 11.5px; color: #a8efe0; }
+.ceres-talk.live { background: linear-gradient(135deg, #0d5c63 0%, #0b3543 100%); }
+.ceres-talk.listening .ceres-talk-ic { background: #ffb4a2; color: #5a1d0e; animation: ceres-ping 1.4s ease-out infinite; }
+.ceres-wave { margin-left: auto; display: flex; align-items: center; gap: 3px; height: 22px; }
+.ceres-wave i { display: block; width: 4px; height: 8px; border-radius: 2px; background: #62e1c8; animation: ceres-wave 1s ease-in-out infinite; }
+.ceres-wave i:nth-child(2) { animation-delay: .15s; } .ceres-wave i:nth-child(3) { animation-delay: .3s; } .ceres-wave i:nth-child(4) { animation-delay: .45s; }
+.ceres-say { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #0d5c63; background: #e3f6f2; border: 1px solid rgba(13,92,99,.15); }
+.ceres-say svg { width: 15px; height: 15px; }
+.ceres-say:hover { background: #d2f1ea; }
+.ceres-say.on { color: #fff; background: #0d5c63; }
+.ceres-msg { display: grid; gap: 4px; justify-items: start; }
+.ceres-msg-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding-left: 2px; }
+.ceres-msg-foot .ceres-proofs { margin: 0; }
+.ceres-log p.interim { opacity: .65; font-style: italic; }
+.ceres-orb.talking { animation: ceres-breathe 1.6s ease-in-out infinite; }
+.ceres-orb.listening { box-shadow: 0 0 0 4px rgba(255,180,162,.45); }
+@keyframes ceres-breathe { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(90,241,211,.18); } 50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(90,241,211,.28); } }
+@keyframes ceres-ping { 0% { box-shadow: 0 0 0 0 rgba(255,180,162,.7); } 100% { box-shadow: 0 0 0 14px rgba(255,180,162,0); } }
+@keyframes ceres-wave { 0%, 100% { height: 6px; } 50% { height: 20px; } }
+@media (prefers-reduced-motion: reduce) { .ceres-orb.talking, .ceres-talk.listening .ceres-talk-ic, .ceres-wave i { animation: none; } }

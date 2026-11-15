@@ -15,3 +15,16 @@ contracts/lib/
 
 oracle/data/models/
 web/tsconfig.tsbuildinfo
+
+# avalanche (Foundry + node)
+avalanche/lib/
+avalanche/out/
+avalanche/cache/
+avalanche/broadcast/
+avalanche/oracle/out/
+# ceres-web
+ceres-web/dist/
+ceres-web/.env.local
+ceres-web/.netlify/
+ceres-web/netlify/functions/_x402/
+.netlify/
