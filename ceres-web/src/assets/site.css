@@ -226,3 +226,17 @@ table.bt .pill{font-size:.68rem;padding:0 6px}
 .legend .sw.nino{width:5px;height:5px;border-radius:50%;background:var(--mint);margin-right:6px;vertical-align:1px}
 .bt-stories li{margin-bottom:8px;line-height:1.45}
 @media (max-width:420px){.bt-strip i{height:24px}table.bt{font-size:.8rem}}
+
+/* Map onboarding (first screen) and numbered drawer steps, matching the project write-up */
+.onboard h1{font-size:1.5rem;margin:.2em 0 .6em}
+.onboard h2{font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}
+.howsteps{counter-reset:hs;list-style:none;padding:0;margin:0 0 18px;display:grid;gap:12px}
+.howsteps li{counter-increment:hs;position:relative;padding:4px 0 4px 46px;line-height:1.45;color:var(--ink)}
+.howsteps li::before{content:counter(hs);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--mint);color:var(--navy);font-weight:800;display:grid;place-items:center}
+.who{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.who li{background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;display:grid;gap:2px}
+.who b{color:var(--ink)}.who span{color:var(--muted);font-size:.9rem}
+#drawer .inner{counter-reset:dstep}
+#drawer .dsec>h2{display:flex;align-items:center;gap:10px}
+#drawer .dsec>h2::before{counter-increment:dstep;content:counter(dstep);flex:none;width:26px;height:26px;border-radius:50%;background:var(--mint);color:var(--navy);font-size:.8rem;font-weight:800;display:grid;place-items:center;letter-spacing:0}
+.whofor .card h3{margin-top:0}.whofor .card .btn{margin-top:10px}

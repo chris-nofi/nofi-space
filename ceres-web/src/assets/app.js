@@ -7,11 +7,14 @@ const cfg = window.CERES_CONFIG ?? {};
 const T = {
   es: {
     title: "Mapa de chacras", ceres: "Hablar con CERES", pick: "Elige una chacra en el mapa para ver su puntaje, sus opciones de rotación y su registro.",
+    howTitle: "Cómo usar CERES", howSteps: ["Elige una chacra en el mapa (los puntos con número).", "Lee su puntaje de 0 a 100, calculado con datos de la NASA.", "Compara 4 opciones con tus prioridades y mira cómo le fue a cada una en 45 temporadas pasadas.", "Pregúntale a CERES en voz alta, en español."],
+    whoTitle: "¿Para quién es?", who: [["Agricultores", "Gratis, sin cuenta ni billetera."], ["Agrónomos, Agencia Agraria e INIA", "Cada número muestra su fuente NASA y su confianza."], ["Cooperativas y aseguradoras", "Compran la evidencia completa por registro con x402 y la verifican en Avalanche Fuji."]],
+    start: "Empezar con El Algarrobal", askTitle: "Pregúntale a CERES", scoreHint: "De 0 a 100, calculado con datos de la NASA. Más alto = chacra más sana y con menos riesgo.",
     close: "Cerrar", month: "Mes", score: "Puntaje de la parcela", of: "de 100", conf: { low: "confianza baja", medium: "confianza media" },
     why: "Por qué la confianza es baja", gaps: "Vacíos de datos", comps: { water: "Agua", vegetation: "Vegetación", soil: "Suelo*", climate: "Clima (helada)", erosion: "Erosión" },
     soilNote: "*Suelo: ISRIC SoilGrids 2.0, modelo de aprendizaje automático, no es un producto NASA. Índice interno, no es un análisis de laboratorio.",
     disclaimer: "Índice de apoyo a decisiones (anclas en borrador). No es una calificación de crédito ni de seguro, ni predice rendimiento. Apoya, no reemplaza, el criterio del agricultor.",
-    strat: "Opciones de rotación y manejo", pri: "Tus prioridades (reordena sin conexión)", priW: "Agua", priS: "Suelo", priI: "Ingreso",
+    strat: "Opciones de rotación y manejo", pri: "Mueve las barras según lo que más te importa: la opción nº 1 cambia al instante.", priW: "Agua", priS: "Suelo", priI: "Ingreso",
     engine: "Recomendada por el motor", current: "Actual", whyL: "Por qué", evL: "Evidencia", gapsL: "Vacíos", risksL: "Riesgos", mainRisk: "Riesgo principal",
     water: "Agua", soilIdx: "Suelo", income: "Ingreso", vsCur: "vs actual", unitM3: "m³/ha/año", unitIdx: "índice (dato de ejemplo)",
     season: "Temporada (12 meses)", bare: "suelo desnudo (NDVI < umbral)", frost: "≥5 días con helada (<2 °C)", ndvi: "verdor NDVI",
@@ -23,11 +26,14 @@ const T = {
   },
   en: {
     title: "Field map", ceres: "Talk to CERES", pick: "Pick a field on the map to see its score, rotation options and record.",
+    howTitle: "How to use CERES", howSteps: ["Pick a field on the map (the numbered pins).", "Read its 0–100 score, computed from NASA data.", "Compare 4 options with your priorities and see how each held up over 45 past seasons.", "Ask CERES out loud, in Spanish or English."],
+    whoTitle: "Who it is for", who: [["Farmers", "Free, no account, no wallet."], ["Agronomists, Agencia Agraria and INIA", "Every number shows its NASA source and confidence."], ["Co-ops and insurers", "Buy the full evidence per record with x402 and verify it on Avalanche Fuji."]],
+    start: "Start with El Algarrobal", askTitle: "Ask CERES", scoreHint: "0–100, computed from NASA data. Higher means a healthier field with fewer risks.",
     close: "Close", month: "Month", score: "Field score", of: "of 100", conf: { low: "low confidence", medium: "medium confidence" },
     why: "Why confidence is low", gaps: "Data gaps", comps: { water: "Water", vegetation: "Vegetation", soil: "Soil*", climate: "Climate (frost)", erosion: "Erosion" },
     soilNote: "*Soil: ISRIC SoilGrids 2.0, a machine-learning model, not a NASA product. Internal index, not a lab analysis.",
     disclaimer: "Decision-support index (draft anchors). Not a credit or insurance rating and not a yield prediction. Supports, does not replace, farmer judgment.",
-    strat: "Rotation and management options", pri: "Your priorities (re-ranks offline)", priW: "Water", priS: "Soil", priI: "Income",
+    strat: "Rotation and management options", pri: "Move the sliders to what matters most to you: the #1 option updates instantly.", priW: "Water", priS: "Soil", priI: "Income",
     engine: "Engine's pick", current: "Current", whyL: "Why", evL: "Evidence", gapsL: "Gaps", risksL: "Risks", mainRisk: "Main risk",
     water: "Water", soilIdx: "Soil", income: "Income", vsCur: "vs current", unitM3: "m³/ha/yr", unitIdx: "index (example data)",
     season: "Season (12 months)", bare: "bare soil (NDVI < threshold)", frost: "≥5 frost days (<2 °C)", ndvi: "NDVI greenness",
@@ -78,6 +84,7 @@ function scoreSection(sc) {
     `<div class="bar"><span>${esc(tt.comps[k] ?? k)}</span><div class="track" role="img" aria-label="${esc(tt.comps[k] ?? k)}: ${c.value} / 100"><div class="fill" style="width:${Math.max(0, Math.min(100, c.value))}%"></div></div><span class="v">${fmt(c.value, 1, state.lang)}</span></div>`).join("");
   const missing = ["water", "vegetation", "soil", "climate", "erosion"].filter(k => !s.components[k]);
   return `<section class="dsec" aria-labelledby="h-score"><h2 id="h-score">${tt.score}</h2>
+    <p style="margin:-4px 0 10px"><small class="muted">${tt.scoreHint}</small></p>
     <div class="scorehead"><span class="badge ${band(s.score)}" aria-label="${tt.score} ${s.score} ${tt.of}">${s.score ?? "—"}</span>
       <div><span class="pill ${s.confidence === "low" ? "low" : "med"}">${esc(tt.conf[s.confidence] ?? s.confidence)}</span><br>
       <small>${tt.of} · <span class="mono">${esc(s.formulaVersion)}</span> · ${esc(periodLabel(s.period, state.lang))}</small></div></div>
@@ -216,9 +223,20 @@ async function checkRecord(sc) {
   else { $("#recIc").textContent = "◌"; $("#recTxt").textContent = tt.notAnchored; }
 }
 
+// First screen of the map: how to use it and who it is for (matches the project write-up).
+function emptyState() {
+  const tt = t();
+  return `<div class="inner onboard"><h1>${tt.howTitle}</h1>
+    <ol class="howsteps">${tt.howSteps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+    <button class="btn" type="button" data-start>${tt.start} →</button>
+    <h2 style="margin-top:26px">${tt.whoTitle}</h2>
+    <ul class="who">${tt.who.map(([h, b]) => `<li><b>${esc(h)}</b><span>${esc(b)}</span></li>`).join("")}</ul></div>`;
+}
+document.addEventListener("click", (e) => { if (e.target.closest?.("[data-start]")) openFarm("algarrobal"); });
+
 async function renderDrawer() {
   const tt = t(), f = state.site.farms.find(x => x.id === state.farm);
-  if (!f) { $("#drawer").innerHTML = `<div class="empty">${tt.pick}</div>`; return; }
+  if (!f) { $("#drawer").innerHTML = emptyState(); return; }
   const sc = await scoreFor(state.site.index, f.id, state.period);
   const periods = state.site.index.farms[f.id].periods.map(p => p.period).reverse();
   const coords = `${f.marker.lat.toFixed(4)}, ${f.marker.lon.toFixed(4)}`;
@@ -233,7 +251,7 @@ async function renderDrawer() {
     ${/PENDING|PARTIAL/i.test(f.fieldPixelStatus ?? "") ? `<p class="note warnbox" style="margin-top:12px"><small>${esc(f.fieldPixelStatus)}</small></p>` : ""}
     ${scoreSection(sc)}
     ${strategiesSection(f.id)}
-    <section class="dsec" id="ceres" aria-label="CERES"><div id="ceres-chat"></div>
+    <section class="dsec" id="ceres" aria-labelledby="h-ceres"><h2 id="h-ceres">${tt.askTitle}</h2><div id="ceres-chat"></div>
       <p style="margin-top:10px"><small><a href="/legacy/?farm=${esc(f.id)}">${tt.full}</a>${state.lang === "en" ? ` · <a href="/pagar/">${tt.judges} →</a> · <a href="/api-docs/">API docs</a>` : ""}</small></p></section>
     ${backtestSection(f.id)}
     ${seasonSection(f.id)}
@@ -324,6 +342,6 @@ $("#lang").addEventListener("click", async () => {
   const alias = { "el-algarrobal": "algarrobal" };
   state.farm = q ? (alias[q] ?? q) : null;
   renderFarmbar();
-  if (state.farm) renderDrawer(); else $("#drawer").innerHTML = `<div class="empty">${t().pick}</div>`;
+  if (state.farm) renderDrawer(); else $("#drawer").innerHTML = emptyState();
   await mountMap();
 })();
