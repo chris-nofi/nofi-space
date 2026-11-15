@@ -100,7 +100,9 @@ export function makeTools(D) {
         water_p50: r1(s.water?.p50), water_unit: s.water?.unit, water_range_p10_p90: unc.strategies?.[s.id]?.water ? [r1(unc.strategies[s.id].water.p10), r1(unc.strategies[s.id].water.p90)] : null,
         soil_0_100: s.soil, income_pen_ha_year: s.incomePenHa, deficit_pct: s.deficitPct, vs_current: s.deltas,
         wins_out_of_100_years: unc.rankFirstProbability ? Math.round((unc.rankFirstProbability[s.id] ?? 0) * 100) : null,
-        risk_peak: a.risk?.strategies?.[s.id]?.peak ?? null, main_risk_es: s.mainRisk?.es,
+        // peak is {month, hazard, value}; the ranking needs the number (a whole object here made every custom fit NaN).
+        risk_peak: typeof a.risk?.strategies?.[s.id]?.peak?.value === "number" ? r1(a.risk.strategies[s.id].peak.value) : null,
+        risk_peak_detail: a.risk?.strategies?.[s.id]?.peak ?? null, main_risk_es: s.mainRisk?.es,
         why_es: s.why?.es, benefits_es: s.benefits?.es, information_gaps_es: s.gaps?.es, risks_for_local_review_es: s.risks?.es,
       }));
       const out = {

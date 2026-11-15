@@ -151,3 +151,14 @@ test("backtest tool: public 1981–2025 hindcast summary, labelled as a model, n
   assert.equal(T.get_backtest({ farm_id: "algarrobal" }).strategies.find(s => s.id === "drip").seasons_failed, 1);
   assert.ok(T.get_backtest({ farm_id: "nope" }).error);
 });
+
+test("custom slider priorities give numeric fits and a sensible order (regression: risk object made every fit NaN)", () => {
+  const T = makeTools(data);
+  for (const f of ["algarrobal", "carumas", "samegua"]) {
+    const r = T.get_farm_analysis({ farm_id: f, water: 0.4, soil: 0.25, income: 0.25 }).ranking_with_your_priorities;
+    assert.equal(r.length, 4);
+    for (const x of r) assert.ok(Number.isFinite(x.fit), `${f}/${x.id} fit ${x.fit}`);
+    for (let i = 1; i < r.length; i++) assert.ok(r[i - 1].fit >= r[i].fit, "sorted by fit");
+  }
+  assert.equal(T.get_farm_analysis({ farm_id: "algarrobal", water: 0.4, soil: 0.25, income: 0.25 }).ranking_with_your_priorities[0].id, "drip");
+});
