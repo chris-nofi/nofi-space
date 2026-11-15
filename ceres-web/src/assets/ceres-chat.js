@@ -68,6 +68,9 @@ function intro(c) {
     : `Hi, I'm CERES. ${c.farmName} scores ${c.score ?? "—"} out of 100 for ${c.periodLabel} (${conf}). With your priorities above, the number one option is ${c.topOption}.${eng} Ask me why, what its risks are, or where the data comes from.`;
 }
 
+// Minimal, safe markdown for answers: escape first, then **bold** only (the model sometimes uses it).
+const md = (t) => esc(t).replace(/\*\*([^*\n]{1,120})\*\*/g, "<b>$1</b>");
+
 function talkLabel() {
   if (S.listening) return tt().listening;
   if (S.convo && S.busy) return tt().thinking;
@@ -97,7 +100,7 @@ function paint(focus = false) {
       ${S.listening ? '<span class="cc-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' : ""}</button>` : ""}
     <div class="cc-log" id="cc-log" aria-live="polite">
       ${msgs.map((m, i) => m.role === "assistant"
-        ? `<div class="cc-msg"><p class="c">${esc(m.content)}</p><div class="cc-foot">${sayBtn(i, m.content)}${proofs(m.proofs)}</div></div>`
+        ? `<div class="cc-msg"><p class="c">${md(m.content)}</p><div class="cc-foot">${sayBtn(i, m.content)}${proofs(m.proofs)}</div></div>`
         : `<p class="u">${esc(m.content)}</p>`).join("")}
       ${S.listening && S.interim ? `<p class="u interim">${esc(S.interim)}…</p>` : ""}
       ${S.busy ? `<p class="c thinking">${tt().working}</p>` : ""}

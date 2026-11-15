@@ -79,7 +79,7 @@
         ${S.call && S.live.length ? `<div class="ceres-live">${S.live.map((l) => `<p class="${l.role === "agent" ? "c" : "u"}">${E(l.content)}</p>`).join("")}</div>` : ""}
         <div class="ceres-log" id="ceres-log" aria-live="polite">
           ${log.length ? log.map((m, i) => m.role === "assistant"
-            ? `<div class="ceres-msg"><p class="c">${E(m.content)}</p><div class="ceres-msg-foot">${sayBtn(i, m.content)}${proofChips(m.proofs)}</div></div>`
+            ? `<div class="ceres-msg"><p class="c">${E(m.content).replace(/\*\*([^*\n]{1,120})\*\*/g, "<b>$1</b>")}</p><div class="ceres-msg-foot">${sayBtn(i, m.content)}${proofChips(m.proofs)}</div></div>`
             : `<p class="u">${E(m.content)}</p>`).join("") : `<p class="ceres-hint">${hint}</p>`}
           ${S.listening && S.interim ? `<p class="u interim">${E(S.interim)}…</p>` : ""}
           ${S.busy ? `<p class="c thinking">${T("Revisando los datos del satélite…", "Checking the satellite data…")}</p>` : ""}
