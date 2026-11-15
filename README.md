@@ -45,16 +45,18 @@ The dashboard runs on example data with no network. To use live NASA data, run t
 | `contracts/` | Legacy v1 Foundry contracts (reference only, not deployed in v2) |
 | `avalanche/` | v2 contracts + x402 oracle/facilitator (Apollo's, to be merged) |
 
-## Status
+## Status (15 Nov 2026)
+
+Live: **https://gleaming-sunflower-16cdde.netlify.app** (production; same build at ceres-ventures-preview.netlify.app), built from `ceres-web/` on branch `feat/ceres-web-integration`. Read `docs/12_CERES_SYSTEM_DESIGN.md` and `docs/13b_PUBLIC_PAID_DATA_BOUNDARY.md`.
 
 | Piece | State |
 |---|---|
-| Dashboard | Working on example data |
-| Real data | Kepler's package imported (`data/`): POWER 1981–2026, CHIRPS v3, ERA5, ECOSTRESS 2019–2026, MODIS 2001–2026, SRTM, 12 monthly evidence files. HLS, IMERG, SMAP, DSWx pending |
-| ECOSTRESS / HLS / DSWx extraction | Search code written; extraction needs Earthdata Login and a test run |
-| NØFI L1 | RPC answers but **no blocks since 29 Oct**: validator P-Chain balance is 0. Top up first (plan v2 §0) |
-| Earth records | `export-evidence` writes one hashed JSON per farm-month; `placeholder: true` until real NASA pulls |
-| x402 | CERES agent buyer (EIP-3009, eip155:880024) built and tested against a fake facilitator; the paid server lives in `avalanche/x402/` |
-| Legacy contracts (`contracts/`) | WaterEscrow etc., compile with solc 0.8.24; not deployed in v2 |
-| SI engine | Runs on **real** NASA POWER ET₀, CHIRPS rain (POWER/ERA5 range), ECOSTRESS and MODIS; reproduces Kepler's El Algarrobal numbers. SI water-use model still trained on synthetic data (labeled) |
-| CERES chat + voice | Claude tool loop + Retell WebSocket built, tests with fakes; needs ANTHROPIC_API_KEY / Retell keys for live use. Tools: analysis, risk calendar, verified record (x402) |
+| Website `/` + `/app/` map | Live. Static public JSON built from real NASA/partner pulls (the browser does not call NASA at runtime) |
+| Evidence (12 farm-months, Jul–Oct 2026) | ECOSTRESS, HLS/MODIS, POWER (FAO-56 ET₀), SMAP (Carumas), **GPM IMERG Late daily v07 rain** (CHIRPS v3 as cross-check), Sentinel-2 (ESA), SRTM, SoilGrids (non-NASA). IMERG Final for 2026 not yet published |
+| 1981–2025 backtest | Kepler's model hindcast on NASA POWER daily (`data/out/backtest_1981_2025.json`, methods in `data/backtest_methods.md`): 44 seasons for Oct–Apr crops, 45 for calendar crops. Shown in the `/app` drawer, labelled as a model |
+| CERES | Text chat + voice in the `/app` drawer (`POST /v1/ceres/chat`, Claude, public data only). Voice: browser speech, or natural voice via `/v1/ceres/voice` when `ELEVENLABS_API_KEY` is set. Retell is **not** configured |
+| Fuji registry | `WaterProofRegistry` `0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d`. Badges use a live `eth_call verify()`; `ceres-web/attestations.json` lists the txs and the hash each one anchored |
+| x402 Evidence API | Netlify Function, HTTP 402 → Fuji USDC (EIP-3009) → full canonical record + proof. Real payment proven on Fuji |
+| Public/paid boundary | Canonical evidence never in `dist/`; build-time leak audit fails closed (`ceres-web/scripts/audit-public.mjs`) |
+| NØFI L1 (880024) | Roadmap only; not producing blocks |
+| Legacy | `site/` (archived dashboard, served at `/legacy/`), `web/` (old React app), `contracts/` (WaterEscrow, do not deploy) |

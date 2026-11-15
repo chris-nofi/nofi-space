@@ -5,7 +5,7 @@
 **For:** Codex and Chris's devs. **Written by:** Claude, Saturday 14 November 2026, ~05:45 Peru time (UTC-5).
 **Deadline:** Sunday 15 November 2026, 23:59 Peru time.
 **State:** the website, map, score, x402 API (as a Netlify Function) and Fuji contracts are **built and tested locally**.
-Nothing has been deployed to Netlify or Fuji yet; that is Chris-gated (§9).
+Live since 14 Nov 2026 at https://gleaming-sunflower-16cdde.netlify.app (production) and ceres-ventures-preview.netlify.app, Git-deployed from `feat/ceres-web-integration` with base `ceres-web`. Fuji registry live; deploys, keys and attestations stay Chris-gated (§9). C1 (CERES in `/app`) is done.
 
 **Update ~06:10 (after the architecture reconciliation review):**
 - **Evidence regenerated** (Gate B). `_note` now targets Fuji 43113 (D2 resolved). Regenerating also picked up the field-pixel

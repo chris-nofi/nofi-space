@@ -1,7 +1,7 @@
 # 13b · Public vs paid data boundary (CERES web + x402)
 
 Branch: `feat/ceres-commercial-data-boundary` (based on `feat/ceres-branding`, which is based on `feat/ceres-web-integration`).
-Status: implemented and tested locally. **Not deployed.** Both live Netlify sites still build `feat/ceres-web-integration`.
+Status: **live** on both Netlify sites (built from `feat/ceres-web-integration`) since 14 Nov 2026.
 
 ## 1. What changed and why
 
