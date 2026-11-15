@@ -4,7 +4,7 @@ Desde el 14 de noviembre de 2026 el motor usa datos reales (paquete de Kepler, c
 
 ## Qué es real
 - **Clima y ET0:** NASA POWER diario (1981-2026). La ET0 (lo que el clima le pide al cultivo) se calcula con FAO-56 Penman-Monteith y coincide con ERA5 dentro de ±5 %.
-- **Lluvia:** CHIRPS v3 (satélite + estaciones). Reemplaza a GPM IMERG hasta que se apruebe el acceso de GES DISC.
+- **Lluvia:** NASA GPM IMERG Late Run diario v07 (0,1°), sumado por mes, jul.–oct. 2026. Es casi en tiempo real; la versión Final de 2026 aún no está publicada. CHIRPS v3 (satélite + estaciones) queda como contraste. Ejemplo: Carumas octubre 2026 = 5,2 mm en IMERG Late vs 12,1 mm en CHIRPS.
 - **Agua usada por las plantas:** ECOSTRESS (70 m), cientos de pasadas desde 2019.
 - **Verdor:** MODIS (250 m, 2001-2026). HLS (30 m) todavía no está en el paquete.
 - **Relieve:** SRTM 30 m.

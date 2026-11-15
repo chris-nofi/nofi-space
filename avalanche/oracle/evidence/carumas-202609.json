@@ -1,5 +1,5 @@
 {
-  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: WaterProofRegistry on Avalanche Fuji C-Chain testnet (chainId 43113).",
+  "_note": "REAL values from data/build_evidence.py. Nulls are explained by 'reason'. Not signed, not sent. Target: WaterProofRegistry on Avalanche Fuji C-Chain testnet (chainId 43113). Monthly rain: GPM IMERG Late daily v07 via data/earthdata/apply_imerg_late.py (CHIRPS v3 kept as crossCheck).",
   "_context": {
     "soilMoisture": {
       "value_m3m3": 0.083,
@@ -56,11 +56,53 @@
       "gapFilledDays": 1
     },
     "precip_mm": {
-      "value": 2.1,
-      "dataset": "CHIRPS_v3.0_monthly",
-      "scale": "0.05 deg",
-      "substituteFor": "GPM_3IMERGDF_v07",
-      "reason": "GES DISC returned 403 'EULA Acceptance Failure' for this Earthdata token"
+      "value": 3.6,
+      "dataset": "GPM_3IMERGDL_v07",
+      "product": "GPM IMERG Late Run Daily V07 (near-real-time). Final Run for 2026 not yet in CMR.",
+      "run": "Late",
+      "scale": "0.1 deg",
+      "point": [
+        -16.85,
+        -70.65
+      ],
+      "days": 30,
+      "granules": [
+        "3B-DAY-L.MS.MRG.3IMERG.20260901-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260902-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260903-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260904-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260905-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260906-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260907-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260908-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260909-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260910-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260911-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260912-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260913-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260914-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260915-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260916-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260917-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260918-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260919-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260920-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260921-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260922-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260923-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260924-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260925-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260926-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260927-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260928-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260929-S000000-E235959.V07C.nc4",
+        "3B-DAY-L.MS.MRG.3IMERG.20260930-S000000-E235959.V07C.nc4"
+      ],
+      "crossCheck": {
+        "value": 2.1,
+        "dataset": "CHIRPS_v3.0_monthly",
+        "scale": "0.05 deg"
+      }
     },
     "ndvi": {
       "value": 0.349,
@@ -190,8 +232,8 @@
         "power": 0.04,
         "era5": 0.04
       },
-      "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. IMERG was the requested rain source but GES DISC returns 403 EULA Acceptance Failure for this Earthdata account; POWER and ERA5-Land daily used as substitutes and both reported.",
-      "imerg_status": "blocked: Earthdata account must accept the GES DISC EULA (urs.earthdata.nasa.gov > Applications > Authorized Apps / EULAs)"
+      "method": "Erosion-risk proxy (relative, unitless, NOT soil loss): tan(mean slope over 90x90 m SRTM window) x (a) mean annual count of days >10 mm, (b) mean intensity on days above the wet-day (>=1 mm) 95th percentile. Rain-intensity climatology from POWER and ERA5-Land daily (both reported). IMERG access now works (Late Run daily is the primary monthly rain in indicators.precip_mm); an IMERG Final daily climatology for this proxy is future work.",
+      "imerg_status": "accessible: GPM_3IMERGDL v07 Late daily used for indicators.precip_mm; erosion climatology still POWER/ERA5-Land"
     }
   }
 }

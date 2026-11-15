@@ -147,9 +147,10 @@ export function fieldScore(ev) {
       inputs: { slope_window_mean_deg: slope, p95_power: pw, p95_era5: e5, p95_used: p === null ? null : Number(p.toFixed(4)), proxy_mode: proxyMode },
       note: "unitless proxy, not soil loss" };
     else gaps.push("erosion inputs missing");
-    if (x.erosion?.imerg_status) gaps.push("IMERG blocked; CHIRPS/POWER/ERA5 substitutes");
+    if (/^blocked/i.test(x.erosion?.imerg_status ?? "")) gaps.push("IMERG blocked; CHIRPS/POWER/ERA5 substitutes");
   }
 
+  if (ev.indicators?.precip_mm?.run === "Late") gaps.push("rain: GPM IMERG Late Run (near-real-time); Final Run for this month not yet published");
   if (pixelPending) { gaps.push("fieldPixelStatus PENDING/PARTIAL"); lowReasons.push("field pixel pending"); }
   if (ev.engine?.confidence === "low") lowReasons.push("engine confidence low");
 

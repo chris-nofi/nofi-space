@@ -52,8 +52,8 @@ test("tool loop: grounded answer, proof chip for the anchored record, key only i
   assert.match(j.reply, /58/);
   assert.deepEqual(j.toolCalls.map(t => t.name), ["get_field_score", "get_farm_analysis"]);
   assert.equal(j.proofs.length, 1);
-  assert.equal(j.proofs[0].dataHash, "0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84");
-  assert.equal(j.proofs[0].recordedOnChain, true);
+  assert.equal(j.proofs[0].dataHash, data.index.farms.algarrobal.periods.find(p => p.period === 202610).dataHash);
+  assert.equal(j.proofs[0].recordedOnChain, Boolean(data.summaries["algarrobal/202610"].onChain?.tx), "on-chain flag follows the current record, not a superseded tx");
   assert.equal(fc.calls.length, 2);
   assert.equal(fc.calls[0].headers["x-api-key"], "test-key");
   assert.ok(!JSON.stringify(j).includes("test-key"), "key never echoed to the browser");

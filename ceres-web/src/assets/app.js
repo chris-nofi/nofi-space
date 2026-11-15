@@ -196,7 +196,15 @@ function recordSection(sc) {
   return `<section class="dsec" aria-labelledby="h-rec"><h2 id="h-rec">${tt.record}</h2>
     <div class="record"><span class="ic" id="recIc" aria-hidden="true">◌</span><div><p id="recTxt">${cfg.registry ? tt.checking : tt.noReg}</p>
       <p><small class="muted">${tt.fingerprint}: <span class="mono">${esc(sc.meta.dataHash.slice(0, 18))}…</span></small> ${tx}
-      · <a href="/verify/${esc(sc.meta.dataHash)}">${tt.seeRecord}</a></p></div></div></section>`;
+      · <a href="/verify/${esc(sc.meta.dataHash)}">${tt.seeRecord}</a></p>${superseded(key)}</div></div></section>`;
+}
+
+function superseded(key) {
+  const o = state.site.index.supersededAttestations?.[key];
+  if (!o?.tx) return "";
+  return `<p><small class="dim">${state.lang === "es"
+    ? `Una revisión anterior de este mes (otra huella) quedó registrada en <a href="${esc(cfg.explorer)}/tx/${esc(o.tx)}" target="_blank" rel="noopener">Snowtrace ↗</a>. El registro se corrigió (lluvia GPM IMERG en lugar de CHIRPS); la nueva revisión aún no se ancla.`
+    : `An earlier revision of this month (different fingerprint) was recorded in <a href="${esc(cfg.explorer)}/tx/${esc(o.tx)}" target="_blank" rel="noopener">Snowtrace ↗</a>. The record was corrected (GPM IMERG rain instead of CHIRPS); the new revision is not anchored yet.`}</small></p>`;
 }
 
 async function checkRecord(sc) {

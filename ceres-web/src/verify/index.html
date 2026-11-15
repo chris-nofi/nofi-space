@@ -72,7 +72,9 @@ async function check() {
     no_registry: `<p><span class="pill low">sin registro</span> El contrato aún no está desplegado. ${match ? "La huella corresponde al registro de Ceres para ese mes." : ""}</p>`,
     error: `<p><span class="pill warn">error</span> No se pudo leer Fuji: ${esc(r.detail ?? "")}</p>`,
   }[r.status];
-  $("res").innerHTML = msg + (att?.tx ? `<p><a href="${esc(cfg.explorer)}/tx/${esc(att.tx)}" target="_blank" rel="noopener">Ver transacción en Snowtrace ↗</a></p>` : "");
+  const old = index.supersededAttestations?.[`${f}/${p}`];
+  $("res").innerHTML = msg + (att?.tx ? `<p><a href="${esc(cfg.explorer)}/tx/${esc(att.tx)}" target="_blank" rel="noopener">Ver transacción en Snowtrace ↗</a></p>` : "")
+    + (old?.tx ? `<p class="muted"><small>Una revisión anterior de este mes (rev ${esc(old.revision ?? 0)}, otra huella: <span class="mono">${esc(String(old.dataHash ?? "").slice(0, 12))}…</span>) se ancló en <a href="${esc(cfg.explorer)}/tx/${esc(old.tx)}" target="_blank" rel="noopener">esta transacción ↗</a>. El registro se corrigió (lluvia GPM IMERG en lugar de CHIRPS) y la nueva revisión aún no se ancla. · An earlier revision of this month (different fingerprint) was anchored in that tx; the record was corrected (GPM IMERG rain instead of CHIRPS) and the new revision is not anchored yet.</small></p>` : "");
 }
 </script>
 </body>

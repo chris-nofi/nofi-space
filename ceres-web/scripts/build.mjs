@@ -78,6 +78,17 @@ for (const f of evidenceFiles) {
 if (!Object.keys(bundle).length) throw new Error(`no non-placeholder evidence in ${EVID_SRC}; refusing to build a site with invented numbers`);
 for (const f of Object.values(farmsIdx)) { f.periods.sort((a, b) => a.period - b.period); f.latest = f.periods.at(-1).period; }
 const attestations = existsSync(join(WEB, "attestations.json")) ? readJSON(join(WEB, "attestations.json")) : { records: {} };
+// An anchored tx is shown for a farm-month only while it anchored the CURRENT record's hash. When a record is
+// corrected (e.g. IMERG rain replaced CHIRPS) the old tx is kept as "superseded" until the new revision is attested;
+// the live eth_call verify() badge stays authoritative either way.
+const anchoredNow = {}, superseded = {};
+for (const [key, rec] of Object.entries(attestations.records ?? {})) {
+  const [fid, per] = key.split("/");
+  const cur = farmsIdx[fid]?.periods.find(p => p.period === Number(per))?.dataHash;
+  if (rec?.dataHash && cur && rec.dataHash.toLowerCase() !== cur.toLowerCase()) superseded[key] = rec;
+  else anchoredNow[key] = rec;
+}
+if (Object.keys(superseded).length) console.log(JSON.stringify({ supersededAttestations: Object.keys(superseded) }));
 
 /** Dataset labels for the source chips (names + resolution only: no granules, pixels, items or methods). */
 function sourceChips(ev) {
@@ -88,7 +99,8 @@ function sourceChips(ev) {
   add(i.ndvi?.dataset, "30 m");
   if (x.cover) add("Sentinel-2 L2A (ESA)", "10 m");
   if (c.soilMoisture) add(c.soilMoisture.dataset, c.soilMoisture.scale?.split(" ")[0]);
-  add(i.precip_mm?.dataset, i.precip_mm?.scale);
+  add(i.precip_mm?.dataset, [i.precip_mm?.scale, i.precip_mm?.run ? `${i.precip_mm.run} Run` : null].filter(Boolean).join(" · "));
+  if (i.precip_mm?.crossCheck?.dataset) add(`${i.precip_mm.crossCheck.dataset} (cross-check)`, i.precip_mm.crossCheck.scale);
   if (x.slope) add("SRTM GL1", "30 m");
   if (x.soil) add("SoilGrids 2.0 (NON-NASA)", "250 m");
   return out;
@@ -99,7 +111,7 @@ function publicSummary(ev, farm, period) {
   const s = fieldScore(ev);
   const components = {};
   for (const [k, c] of Object.entries(s.components)) components[k] = { value: c.value }; // display value only; inputs/weights/subScores are paid
-  const att = attestations.records?.[`${farm.id}/${ev.period}`];
+  const att = anchoredNow[`${farm.id}/${ev.period}`];
   return {
     schemaVersion: "ceres-public-summary.v1",
     farm: farm.id, farmId: farm.farmId, period: ev.period,
@@ -126,7 +138,8 @@ writeJSON(join(DIST, "data", "index.json"), {
   verifySelector: toFunctionSelector("verify(bytes32,uint32,bytes32)"),
   farms: farmsIdx,              // id, farmKey, farmId, latest, periods[{period, dataHash}] (no file links)
   summaries: "/data/public/summaries.json",
-  attestations: attestations.records ?? {},
+  attestations: anchoredNow,     // txs that anchored the hash shown on the site
+  supersededAttestations: superseded, // earlier revisions (different hash); a new revision must be attested
 });
 
 // ── 4. farms (positions, labels) ────────────────────────────────────────────

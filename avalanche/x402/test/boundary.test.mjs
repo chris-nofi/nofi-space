@@ -7,7 +7,8 @@ import { createHandler } from "../server.mjs";
 import { loadConfig } from "../config.mjs";
 import { loadEvidence, dataHashOf } from "../earth-data.mjs";
 
-const ATTESTED = { key: "algarrobal/202610", dataHash: "0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84" };
+// Revision 1 of El Algarrobal 202610 (monthly rain = GPM IMERG Late; revision 0 with CHIRPS rain was 0x795d6df060…, tx 0x9bd56d2d…).
+const ATTESTED = { key: "algarrobal/202610", dataHash: "0xf585dc40c8673eab49893ed253d6be41484c65f8412fab9182e9a3f82f682304" };
 const evidence = loadEvidence();
 const cfg = { ...loadConfig({ X402_PAY_TO: "0x660F4Bb51B4e7AfA5E8C67ef5dFc0A42113277BD" }), registry: "" }; // no registry → no RPC calls
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64");

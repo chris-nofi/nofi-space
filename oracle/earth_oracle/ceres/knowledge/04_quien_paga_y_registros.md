@@ -12,7 +12,7 @@ Cuando hables con un agricultor, no le hables de x402, tokens, gas ni billeteras
 
 ## Qué es el registro verificable
 Cada mes y por parcela, el oráculo de la Tierra arma un registro con:
-- **ET** (agua que usa el cultivo, de ECOSTRESS), **ET0** (lo que pide el clima, de POWER), **lluvia** (POWER, luego GPM IMERG), **NDVI** (verdor, de HLS);
+- **ET** (agua que usa el cultivo, de ECOSTRESS), **ET0** (lo que pide el clima, de POWER), **lluvia** (GPM IMERG Late; CHIRPS como contraste), **NDVI** (verdor, de HLS);
 - la **estrategia recomendada** y el **agua ahorrada** estimada frente a la práctica actual;
 - los identificadores de los datos de la NASA usados y la versión del motor.
 

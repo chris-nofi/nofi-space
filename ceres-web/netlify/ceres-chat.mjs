@@ -147,7 +147,7 @@ export function makeTools(D) {
         ndvi: pick(c.ndvi, ["monthly", "source", "note"]), smap: c.smap ?? null, provenance: c.provenance,
         warnings: [
           farm_id !== "algarrobal" ? "Carumas y Samegua comparten una celda de NASA POWER a gran altura: para Samegua se prefiere ERA5-Land en temperatura." : null,
-          "GPM IMERG pendiente: la lluvia viene de CHIRPS v3 (con POWER y ERA5 como rango).",
+          "Lluvia del mes: NASA GPM IMERG Late Run diario (casi en tiempo real; la versión Final de 2026 aún no se publica). CHIRPS v3 queda como contraste; POWER y ERA5 dan el rango.",
         ].filter(Boolean),
       };
     },

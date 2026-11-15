@@ -13,7 +13,8 @@ const ES = {
   "hero.eyebrow": "NASA Space Apps 2026 · Field Shift · Moquegua, Perú",
   "hero.h1": "Un mapa de las chacras de Moquegua, con puntaje de datos NASA y un registro que se puede comprobar.",
   "hero.sub": "Cada chacra recibe un puntaje de suelo y agua con datos NASA y un registro verificable. El agricultor compara opciones de rotación y salud del suelo, y puede preguntarle a CERES por voz en español, gratis. La API de pago por consulta está pensada para aseguradoras, bancos, cooperativas y agroexportadoras.",
-  "hero.open": "Abrir el mapa", "hero.ceres": "Hablar con CERES", "hero.buyers": "Para compradores", "trust.pending": "pendiente",
+  "hero.open": "Abrir el mapa", "hero.ceres": "Hablar con CERES", "hero.buyers": "Para compradores", "trust.imerg": "Late Run",
+  "trust.pending": "pendiente",
   "prob.eyebrow": "El problema", "prob.h2": "Falta agua, el suelo está cansado y un solo cultivo carga todo el riesgo.",
   "how.eyebrow": "Cómo funciona", "how.h2": "Cuatro pasos, del satélite a una decisión que se puede comprobar.",
   "how.s1h": "Elige una chacra", "how.s1": "Abre el mapa y elige una de las chacras piloto: un olivar en la costa de Ilo, alfalfa en Samegua o papa en la zona alta de Carumas.",
@@ -27,7 +28,7 @@ const ES = {
   "data.hls": "Reflectancia armonizada para el verdor NDVI en el píxel de cultivo, contrastada con Sentinel-2 de la ESA a 10 m.",
   "data.smap": "Humedad del suelo frente a su línea base 2015–2025. Hoy se usa en Carumas; es una señal regional, no una lectura de la chacra.",
   "data.srtm": "Elevación y pendiente alrededor de cada chacra. Junto con la intensidad de lluvias fuertes da un indicador relativo de erosión, no pérdida de suelo.",
-  "data.other": "Historia larga de NDVI, lluvia (CHIRPS reemplaza a GPM IMERG mientras se aprueba el acceso) y series de helada donde la celda de POWER queda muy alta.",
+  "data.other": "Historia larga de NDVI, lluvia de contraste (CHIRPS, junto a GPM IMERG) y series de helada donde la celda de POWER queda muy alta.",
   "data.note": "Los satélites ven un píxel de 30 m a 9 km; una chacra tiene 1–2 ha. Ceres muestra los vacíos y la confianza de cada puntaje. Apoya, no reemplaza, el criterio del agricultor. La textura y el carbono del suelo vienen de ISRIC SoilGrids, que no es un producto NASA.",
   "ver.eyebrow": "Verificable por diseño · Avalanche", "ver.h2": "Cada puntaje apunta a una evidencia que nadie puede cambiar en silencio.",
   "ver.lead": "El agricultor ve una insignia simple de «registro verificable». Por debajo, el archivo de evidencia se resume en una huella que se guarda en el contrato WaterProofRegistry, en la red de prueba Fuji C-Chain de Avalanche.",
@@ -48,10 +49,10 @@ const ES = {
   "ceres.p": "CERES lee la misma evidencia y explica el puntaje y las opciones en español sencillo. Funciona desde el navegador del celular; el agricultor nunca ve una billetera.",
   "ceres.cta": "Hablar con CERES", "road.h": "Hoja de ruta",
   "road.1": "Confirmar cada píxel de cultivo con su agricultor y trazar el linde real de la chacra.",
-  "road.2": "Lluvia GPM IMERG cuando se apruebe el acceso; estrés por calor en el puntaje (v2).",
+  "road.2": "Lluvia GPM IMERG Final (cuando NASA publique 2026) y su climatología diaria para la erosión; estrés por calor en el puntaje (v2).",
   "road.3": "Más valles de Moquegua, con lindes trazados junto a los agricultores.", "road.4": "Llevar el registro a la L1 de NØFI con gas en stablecoin.",
   "team.eyebrow": "Equipo", "team.lead": "líder del equipo", "team.built": "Hecho en el NASA Space Apps Challenge 2026, evento local de Moquegua.",
-  "foot.attr": "Datos: NASA (ECOSTRESS, HLS, SMAP, POWER, MODIS, SRTM; GPM IMERG pendiente), ESA Copernicus Sentinel-2, ECMWF ERA5-Land, ISRIC SoilGrids, CHIRPS (UCSB CHC). Imágenes del mapa © Google.",
+  "foot.attr": "Datos: NASA (ECOSTRESS, HLS, SMAP, POWER, MODIS, SRTM, GPM IMERG Late), ESA Copernicus Sentinel-2, ECMWF ERA5-Land, ISRIC SoilGrids, CHIRPS (UCSB CHC). Imágenes del mapa © Google.",
   "foot.nasa": "La NASA no respalda este proyecto. Solo red de prueba: no se mueve dinero real.",
   "foot.ai": "Uso de IA: el equipo usó Claude y otras herramientas de IA para escribir código, procesar datos y redactar textos; el equipo revisó los resultados. CERES usa un modelo de IA para explicar resultados; no cambia los datos.",
   "foot.verify": "Verificar un registro",
@@ -134,7 +135,11 @@ function renderRecords() {
   const el = document.getElementById("records");
   const rows = Object.entries(site.index.attestations ?? {}).filter(([, r]) => r?.tx);
   if (!rows.length) {
-    el.innerHTML = `<p class="muted">${lang === "es" ? "El primer registro en Fuji está pendiente. Las huellas ya están calculadas:" : "The first Fuji record is pending. Fingerprints are already computed:"}</p>
+    const sup = Object.entries(site.index.supersededAttestations ?? {}).filter(([, r]) => r?.tx);
+    const supTxt = sup.map(([k, r]) => `<a class="mono" href="${esc(cfg.explorer)}/tx/${esc(r.tx)}" target="_blank" rel="noopener">${esc(k)} rev ${esc(r.revision ?? 0)} ↗</a>`).join(", ");
+    el.innerHTML = `<p class="muted">${sup.length
+      ? (lang === "es" ? `Los registros se corrigieron con lluvia GPM IMERG; la nueva revisión aún no se ancla en Fuji. Revisión anterior anclada: ${supTxt}. Huellas actuales:` : `Records were corrected with GPM IMERG rain; the new revision is not anchored on Fuji yet. Earlier anchored revision: ${supTxt}. Current fingerprints:`)
+      : (lang === "es" ? "El primer registro en Fuji está pendiente. Las huellas ya están calculadas:" : "The first Fuji record is pending. Fingerprints are already computed:")}</p>
       <table class="t"><thead><tr><th>${lang === "es" ? "Chacra" : "Field"}</th><th>${lang === "es" ? "Mes" : "Month"}</th><th>dataHash</th></tr></thead><tbody>
       ${Object.values(site.index.farms).map(f => { const p = f.periods.at(-1); return `<tr><td>${esc(f.id)}</td><td>${p.period}</td><td><a class="mono" href="/verify/${esc(p.dataHash)}">${esc(p.dataHash.slice(0, 22))}…</a></td></tr>`; }).join("")}</tbody></table>`;
     return;

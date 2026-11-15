@@ -58,7 +58,16 @@ before(async () => {
   // Oracle anchors El Algarrobal 202610 using the real attester's output (same dataHash the API will sell).
   const outText = execFileSync("node", [join(ORACLE_DIR, "build-attestation.mjs"), join(ORACLE_DIR, "evidence", "algarrobal-202610.json"), "--chain", String(CHAIN_ID), "--registry", registry], { encoding: "utf8" });
   const { message } = JSON.parse(outText.slice(0, outText.indexOf("\n\n#")));
-  await pub.waitForTransactionReceipt({ hash: await wallet(oracle).writeContract({ ...reg(oracle), functionName: "attest", args: [message] }) });
+  // Replay the Fuji history on the fresh local registry: earlier revisions first (revision 0 = the CHIRPS-rain record
+  // anchored in tx 0x9bd56d2d…), then the current record, so verify() matches the latest revision as on Fuji.
+  const PRIOR = ["0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84"];
+  for (let rev = 0; rev < message.revision; rev++) {
+    const prior = { ...message, revision: rev, dataHash: PRIOR[rev] ?? keccak256(toHex(`prior-${rev}`)) };
+    const rc = await pub.waitForTransactionReceipt({ hash: await wallet(oracle).writeContract({ ...reg(oracle), functionName: "attest", args: [prior] }) });
+    assert.equal(rc.status, "success", `local revision ${rev} attest`);
+  }
+  const rc = await pub.waitForTransactionReceipt({ hash: await wallet(oracle).writeContract({ ...reg(oracle), functionName: "attest", args: [message] }) });
+  assert.equal(rc.status, "success", "current revision attest");
 
   // Prefund the demo payer with test USDC (on real Fuji: Circle's testnet faucet).
   await pub.waitForTransactionReceipt({ hash: await wallet(payer).writeContract({ address: token, abi: tokenAbi, functionName: "faucet", account: payer }) });

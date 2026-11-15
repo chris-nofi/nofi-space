@@ -17,7 +17,8 @@ import { auditDist, canon } from "../scripts/audit-public.mjs";
 const WEB = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(WEB, "dist");
 const EVID = join(WEB, "..", "avalanche", "oracle", "evidence");
-const ATTESTED = { key: "algarrobal/202610", dataHash: "0x795d6df060ff23036afc664c2ae4955b003c37c59a98cf3eef1eacb9a54cfa84" };
+// Revision 1 (GPM IMERG Late rain). Revision 0 (0x795d6df060…) was anchored in tx 0x9bd56d2d…; it is listed as superseded until rev 1 is attested.
+const ATTESTED = { key: "algarrobal/202610", dataHash: "0xf585dc40c8673eab49893ed253d6be41484c65f8412fab9182e9a3f82f682304" };
 const sha = (s) => "0x" + createHash("sha256").update(s).digest("hex");
 const records = readdirSync(EVID).filter(f => f.endsWith(".json")).map(f => JSON.parse(readFileSync(join(EVID, f), "utf8"))).filter(r => !/PLACEHOLDER/i.test(r._note ?? ""));
 const ENV = { ...process.env, GOOGLE_MAPS_API_KEY: "test-browser-key", WATERPROOF_REGISTRY: "0xa03c3472b8F5F6d6FE1dB23B241DB5A50aa3892d", X402_PAY_TO: "0x660F4Bb51B4e7AfA5E8C67ef5dFc0A42113277BD" };
@@ -65,7 +66,10 @@ test("public summaries: strict allowlist, all 12 farm-months, hashes of the unmo
   }
   assert.equal(items[ATTESTED.key].dataHash, ATTESTED.dataHash);
   assert.equal(items[ATTESTED.key].score, 58);
-  assert.match(items[ATTESTED.key].onChain.tx, /^0x9bd56d2d/);
+  // The old tx anchored revision 0 (different hash): it must NOT be shown as the anchor of the current record.
+  const idx = JSON.parse(readFileSync(join(DIST, "data", "index.json"), "utf8"));
+  if (idx.attestations[ATTESTED.key]) assert.match(items[ATTESTED.key].onChain.tx, /^0x/);
+  else { assert.equal(items[ATTESTED.key].onChain, null); assert.match(idx.supersededAttestations[ATTESTED.key].tx, /^0x9bd56d2d/); }
 });
 
 test("index.json has no file links, only public verification handles", () => {

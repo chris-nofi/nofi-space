@@ -68,7 +68,7 @@
       <div class="trust" aria-label="Datasets">
         <span class="chip"><b>ECOSTRESS</b> ET</span><span class="chip"><b>HLS</b> NDVI</span><span class="chip"><b>SMAP</b> soil moisture</span>
         <span class="chip"><b>NASA POWER</b> ET₀ · climate</span><span class="chip"><b>MODIS</b> NDVI</span><span class="chip"><b>SRTM</b> slope</span>
-        <span class="chip"><b>GPM IMERG</b> <span data-i="trust.pending">pending</span></span><span class="chip"><b>Sentinel-2</b> ESA</span>
+        <span class="chip"><b>GPM IMERG</b> <span data-i="trust.imerg">Late Run</span></span><span class="chip"><b>Sentinel-2</b> ESA</span>
       </div>
     </div>
     <div class="mapbox" id="heroMap"></div>
@@ -114,7 +114,7 @@
       <div class="card tile"><h3>HLS (Landsat + Sentinel) <span class="res">30 m</span></h3><p class="muted" data-i="data.hls">Harmonized surface reflectance for NDVI greenness at the field pixel, cross-checked with ESA Sentinel-2 at 10 m.</p></div>
       <div class="card tile"><h3>SMAP <span class="res">9 km</span></h3><p class="muted" data-i="data.smap">Soil moisture against its 2015–2025 baseline. Used for Carumas today; a regional signal, not a field reading.</p></div>
       <div class="card tile"><h3>SRTM <span class="res">30 m</span></h3><p class="muted" data-i="data.srtm">Elevation and slope around each field. Combined with heavy-rain intensity it gives a relative erosion proxy, not soil loss.</p></div>
-      <div class="card tile"><h3>MODIS · CHIRPS · ERA5-Land <span class="res">250 m · 5 km · 9 km</span></h3><p class="muted" data-i="data.other">Long NDVI history, rainfall (CHIRPS stands in while GPM IMERG access is pending) and frost series where POWER's grid cell is too high.</p></div>
+      <div class="card tile"><h3>MODIS · CHIRPS · ERA5-Land <span class="res">250 m · 5 km · 9 km</span></h3><p class="muted" data-i="data.other">Long NDVI history, cross-check rainfall (CHIRPS, alongside GPM IMERG) and frost series where POWER's grid cell is too high.</p></div>
     </div>
     <p class="note" style="margin-top:16px" data-i="data.note">Satellites see a 30 m to 9 km pixel; a chacra is 1–2 ha. Ceres shows its gaps and confidence on every score. It supports, and does not replace, the farmer's judgment. Soil texture and carbon come from ISRIC SoilGrids, which is not a NASA product.</p>
   </div>
@@ -301,7 +301,7 @@ GET /v1/field/algarrobal/score
       <h3 data-i="road.h">Roadmap</h3>
       <ul class="muted" style="margin:.3rem 0 0 1.1rem;padding:0">
         <li data-i="road.1">Confirm each cultivation pixel with its farmer and trace the real field boundary.</li>
-        <li data-i="road.2">GPM IMERG rainfall once data access is approved; heat stress in the score (v2).</li>
+        <li data-i="road.2">GPM IMERG Final rainfall (once NASA publishes 2026) and its daily climatology for erosion; heat stress in the score (v2).</li>
         <li data-i="road.3">More valleys in Moquegua, with farmer-traced field boundaries.</li>
         <li data-i="road.4">Move the registry to the NØFI L1 for stablecoin gas.</li>
       </ul>
@@ -323,7 +323,7 @@ GET /v1/field/algarrobal/score
   <div class="wrap"><a class="foot-brand" href="/"><img src="/assets/brand/Ceres_Ventures_Logo_Transparent.svg" alt="CERES Ventures by NØFI Labs" width="245" height="80" loading="lazy"></a></div>
   <div class="wrap grid g2">
     <div>
-      <p data-i="foot.attr">Data: NASA (ECOSTRESS, HLS, SMAP, POWER, MODIS, SRTM; GPM IMERG pending), ESA Copernicus Sentinel-2, ECMWF ERA5-Land, ISRIC SoilGrids, CHIRPS (UCSB CHC). Map imagery © Google.</p>
+      <p data-i="foot.attr">Data: NASA (ECOSTRESS, HLS, SMAP, POWER, MODIS, SRTM, GPM IMERG Late), ESA Copernicus Sentinel-2, ECMWF ERA5-Land, ISRIC SoilGrids, CHIRPS (UCSB CHC). Map imagery © Google.</p>
       <p data-i="foot.nasa">NASA does not endorse this project. Testnet only: no real money moves.</p>
     </div>
     <div>
